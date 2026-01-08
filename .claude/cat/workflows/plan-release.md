@@ -12,6 +12,25 @@ Decimal releases enable urgent work insertion without renumbering:
 **Validation:** Integer X must exist and be complete, X+1 must exist, decimal X.Y must not exist, Y >= 1
 </decimal_phase_numbering>
 
+<design_principles>
+**Apply these principles throughout planning:**
+
+**Security by Design:**
+> Assume hostile input on every boundary. Validate, parameterize, authenticate, fail closed.
+
+Plan tasks to incorporate input validation at interfaces, use parameterized approaches to prevent injection, require authentication checks, and default to rejecting requests rather than permitting unknown states.
+
+**Performance by Design:**
+> Assume production load, not demo conditions. Plan for efficient data access, appropriate caching, minimal round trips.
+
+Plan for scale from the start—designing data access patterns for efficiency, implementing caching strategically, and minimizing unnecessary interactions rather than optimizing after deployment.
+
+**Observable by Design:**
+> Plan to debug your own work. Include meaningful error messages, appropriate logging, and clear failure states.
+
+Each task should produce work that's traceable through clear error reporting, sufficient logging for diagnosis, and explicit handling of failure modes rather than silent degradation.
+</design_principles>
+
 <required_reading>
 **Read these files NOW:**
 

@@ -9,7 +9,7 @@
 
 | Component | Version | Date |
 |-----------|---------|------|
-| Upstream (glittercowboy/get-shit-done) | 1.3.27 | 2026-01-07 |
+| Upstream (glittercowboy/get-shit-done) | 1.3.31 | 2026-01-08 |
 | Task Protocol Enhancements | 1.0.0 | 2026-01-07 |
 | Combined Plugin (CAT) | 1.1.1 | 2026-01-08 |
 
@@ -17,7 +17,20 @@
 
 ### 2026-01-08: v1.1.1
 
-**Improvements:**
+**Sync with upstream v1.3.31** (from v1.3.27)
+
+**New commands:**
+- `/cat:remove-release` - Remove future releases with automatic renumbering
+- `/cat:verify-work` - Guide manual UAT of recently built features
+- `/cat:plan-fix` - Create fix change from UAT issues
+
+**Workflow improvements:**
+- Added design principles to plan-release.md workflow:
+  - Security by Design: Assume hostile input, validate, parameterize, authenticate, fail closed
+  - Performance by Design: Plan for production load, efficient data access, caching
+  - Observable by Design: Meaningful error messages, logging, clear failure states
+
+**Other improvements:**
 - learn-from-mistakes: Added explicit Step 5 (Implement) and Step 6 (Verify) for clearer workflow
 - learn-from-mistakes: Renumbered steps 1-7 sequentially, removed awkward "Step 4a" sub-numbering
 - Removed deprecated session-lock.sh hook (lock acquisition moved to execute-release workflow)

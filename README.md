@@ -2,7 +2,7 @@
 
 A Claude Code plugin for specification-driven development with quality gates.
 
-Based on [get-shit-done](https://github.com/glittercowboy/get-shit-done) v1.3.27 with additional task protocol enhancements.
+Based on [get-shit-done](https://github.com/glittercowboy/get-shit-done) v1.3.31 with additional task protocol enhancements.
 
 ## Features
 
@@ -49,6 +49,7 @@ In Claude Code, run:
 | `/cat:map-codebase` | Analyze existing codebase for brownfield projects |
 | `/cat:change-release [N]` | Create detailed change for release N |
 | `/cat:execute-change [path]` | Execute a CHANGE.md file |
+| `/cat:verify-work [N]` | Guide manual UAT of recently built features |
 | `/cat:progress` | Check progress and route to next action |
 | `/cat:cleanup` | Clean up abandoned worktrees and locks |
 | `/cat:help` | Show all available commands |
@@ -59,12 +60,14 @@ In Claude Code, run:
 | `/cat:discuss-release [N]` | Gather context before planning release |
 | `/cat:research-release [N]` | Research unknowns before planning |
 | `/cat:list-release-assumptions [N]` | Surface assumptions about approach |
+| `/cat:plan-fix <N-M>` | Create fix change from UAT issues |
 
 ### Roadmap Management
 | Command | Description |
 |---------|-------------|
 | `/cat:add-release` | Append release to end of current milestone |
 | `/cat:insert-release [N]` | Insert urgent work as decimal release (e.g., 72.1) |
+| `/cat:remove-release <N>` | Remove future release with automatic renumbering |
 | `/cat:consider-issues` | Review deferred issues, close resolved, identify urgent |
 
 ### Milestone Lifecycle
