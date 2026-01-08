@@ -17,6 +17,26 @@ description: Analyze mistakes, identify root causes, and implement prevention
 
 ## Root Cause Analysis Framework
 
+### Step 0: Verify Event Sequence (MANDATORY)
+
+**BEFORE any analysis**, invoke `get-history` skill to access the raw conversation log.
+
+```bash
+# Session ID from context (look for "Session ID: xxx" in system reminders)
+SESSION_ID="<session-id>"
+cat /home/node/.config/projects/-workspace/${SESSION_ID}.jsonl | jq -r 'select(.type == "message") | .content' | tail -100
+```
+
+**Why this is mandatory:**
+- Memory and summaries can be inaccurate about cause-and-effect
+- The actual sequence of events often differs from recalled sequence
+- Root cause analysis based on incorrect sequence leads to wrong prevention
+
+**What to verify:**
+- Exact order of events (what triggered what)
+- Who initiated changes (user feedback vs. code discovery)
+- What was actually said/done vs. what is remembered
+
 ### Step 1: Document the Mistake
 
 ```markdown
@@ -116,10 +136,49 @@ After identifying prevention:
 **Symptom**: Error not caught, causes later confusion
 **Fix**: Add verification step with clear error message
 
+## Step 4: Log to Retrospectives (MANDATORY)
+
+**AFTER implementing prevention**, log the mistake to `${CLAUDE_PROJECT_DIR}/.claude/retrospectives/mistakes.json`.
+
+```json
+{
+  "id": "M0XX",
+  "timestamp": "2026-01-08T00:00:00-05:00",
+  "category": "<category from list>",
+  "pattern_id": null,
+  "description": "<brief description>",
+  "root_cause": "<root cause from 5-whys>",
+  "prevention_type": "<code_fix|hook|validation|config|skill|documentation>",
+  "prevention_path": "${CLAUDE_PROJECT_DIR}/<path to fix>",
+  "pattern_keywords": ["keyword1", "keyword2"],
+  "commit": "<commit hash if applicable>",
+  "recurrence_count": 0,
+  "processed_in_retrospective": null
+}
+```
+
+**CRITICAL: Path format**
+- All paths MUST use `${CLAUDE_PROJECT_DIR}/` prefix, not relative paths
+- Relative paths like `.claude/...` are unreliable because working directory changes
+- Example: `${CLAUDE_PROJECT_DIR}/.claude/hooks/my-hook.sh` (correct)
+- NOT: `.claude/hooks/my-hook.sh` (incorrect - will break)
+
+**Categories**: tdd_violation, detection_gap, bash_error, edit_failure, architecture_issue,
+protocol_violation, worktree_violation, merge_conflict, build_failure, test_failure,
+logical_error, git_operation_failure, giving_up, documentation_violation, other
+
+**Why logging is mandatory:**
+- Enables pattern detection across sessions
+- Allows effectiveness tracking of preventions
+- Provides data for retrospective analysis
+- Creates audit trail for recurring issues
+
 ## Success Criteria
 
+- [ ] Event sequence verified via get-history (Step 0)
 - [ ] Mistake documented with context
 - [ ] Root cause identified (not just symptom)
 - [ ] Prevention implemented at appropriate level
 - [ ] Prevention tested and verified
+- [ ] Mistake logged to retrospectives/mistakes.json (Step 4)
 - [ ] Same mistake won't happen again
