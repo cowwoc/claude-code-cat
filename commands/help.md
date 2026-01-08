@@ -102,7 +102,7 @@ Create detailed execution plan for a specific phase.
 - Multiple plans per phase supported (XX-01, XX-02, etc.)
 
 Usage: `/cat:plan-phase 1`
-Result: Creates `.planning/phases/01-foundation/01-01-PLAN.md`
+Result: Creates `.planning/phases/01-foundation/01-01-setup-project-PLAN.md`
 
 ### Execution
 
@@ -114,7 +114,7 @@ Execute a PLAN.md file directly.
 - Updates STATE.md with accumulated context
 - Fast execution without loading full skill context
 
-Usage: `/cat:execute-plan .planning/phases/01-foundation/01-01-PLAN.md`
+Usage: `/cat:execute-plan .planning/phases/01-foundation/01-01-setup-project-PLAN.md`
 
 ### Roadmap Management
 
@@ -238,11 +238,11 @@ Show this command reference.
 │   └── CONCERNS.md       # Tech debt, known issues
 └── phases/
     ├── 01-foundation/
-    │   ├── 01-01-PLAN.md
-    │   └── 01-01-SUMMARY.md
+    │   ├── 01-01-setup-project-PLAN.md
+    │   └── 01-01-setup-project-SUMMARY.md
     └── 02-core-features/
-        ├── 02-01-PLAN.md
-        └── 02-01-SUMMARY.md
+        ├── 02-01-add-api-routes-PLAN.md
+        └── 02-01-add-api-routes-SUMMARY.md
 ```
 
 ## Workflow Modes
@@ -271,7 +271,7 @@ Change anytime by editing `.planning/config.json`
 /cat:new-project
 /cat:create-roadmap
 /cat:plan-phase 1
-/cat:execute-plan .planning/phases/01-foundation/01-01-PLAN.md
+/cat:execute-plan .planning/phases/01-foundation/01-01-setup-project-PLAN.md
 ```
 
 **Resuming work after a break:**
@@ -285,7 +285,7 @@ Change anytime by editing `.planning/config.json`
 ```
 /cat:insert-phase 5 "Critical security fix"
 /cat:plan-phase 5.1
-/cat:execute-plan .planning/phases/05.1-critical-security-fix/05.1-01-PLAN.md
+/cat:execute-plan .planning/phases/05.1-critical-security-fix/05.1-01-fix-auth-vuln-PLAN.md
 ```
 
 **Completing a milestone:**

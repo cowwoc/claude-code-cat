@@ -1,7 +1,7 @@
 {
   "name": "cat",
   "description": "Spec-driven development with quality gates for Claude Code",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": {
     "name": "cowwoc"
   },

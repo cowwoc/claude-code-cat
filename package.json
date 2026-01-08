@@ -1,6 +1,6 @@
 {
   "name": "claude-code-plugin",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Quality skills and hooks for Claude Code",
   "repository": {
     "type": "git",

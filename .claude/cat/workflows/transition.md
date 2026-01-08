@@ -281,7 +281,7 @@ Before:
 Phase: 2 of 4 (Authentication)
 Plan: 2 of 2 in current phase
 Status: Phase complete
-Last activity: 2025-01-20 — Completed 02-02-PLAN.md
+Last activity: 2025-01-20 — Completed 02-02-add-session-PLAN.md
 
 Progress: ███████░░░ 60%
 ```
@@ -547,8 +547,8 @@ If user wants to move on but phase isn't fully complete:
 
 ```
 Phase [X] has incomplete plans:
-- {phase}-02-PLAN.md (not executed)
-- {phase}-03-PLAN.md (not executed)
+- {phase}-02-{slug}-PLAN.md (not executed)
+- {phase}-03-{slug}-PLAN.md (not executed)
 
 Options:
 1. Mark complete anyway (plans weren't needed)

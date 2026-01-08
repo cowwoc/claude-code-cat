@@ -1,8 +1,8 @@
 # Phase Prompt Template
 
-Template for `.planning/phases/XX-name/{phase}-{plan}-PLAN.md` - executable phase plans.
+Template for `.planning/phases/XX-name/{phase}-{plan}-{slug}-PLAN.md` - executable phase plans.
 
-**Naming:** Use `{phase}-{plan}-PLAN.md` format (e.g., `01-02-PLAN.md` for Phase 1, Plan 2)
+**Naming:** Use `{phase}-{plan}-{slug}-PLAN.md` format (e.g., `01-02-setup-auth-PLAN.md` for Phase 1, Plan 2)
 
 ---
 
@@ -163,7 +163,7 @@ After completion, create `.planning/phases/XX-name/{phase}-{plan}-SUMMARY.md`:
 
 ## Next Step
 
-[If more plans in this phase: "Ready for {phase}-{next-plan}-PLAN.md"]
+[If more plans in this phase: "Ready for {phase}-{next-plan}-{slug}-PLAN.md"]
 [If phase complete: "Phase complete, ready for next phase"]
 </output>
 ```

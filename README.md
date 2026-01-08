@@ -94,8 +94,8 @@ your-project/
 │   ├── config.json       # Workflow configuration
 │   └── phases/
 │       └── 01-foundation/
-│           ├── 01-01-PLAN.md
-│           └── 01-01-SUMMARY.md
+│           ├── 01-01-setup-project-PLAN.md
+│           └── 01-01-setup-project-SUMMARY.md
 └── .claude/
     └── cat/
         ├── references/   # Reference documentation

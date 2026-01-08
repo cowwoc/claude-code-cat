@@ -1,6 +1,6 @@
 # Summary Template
 
-Template for `.planning/phases/XX-name/{phase}-{plan}-SUMMARY.md` - phase completion documentation.
+Template for `.planning/phases/XX-name/{phase}-{plan}-{slug}-SUMMARY.md` - phase completion documentation.
 
 ---
 

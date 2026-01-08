@@ -36,11 +36,15 @@ for PLAN_PATH in $PLAN_FILES; do
   PLAN_DIR=$(dirname "$PLAN_PATH")
   PLAN_FILE=$(basename "$PLAN_PATH")
 
-  # Extract plan ID (e.g., 01-01 from 01-01-PLAN.md)
-  PLAN_ID=$(echo "$PLAN_FILE" | sed 's/-PLAN\.md$//')
+  # Extract plan ID (e.g., 01-01 from 01-01-setup-auth-PLAN.md or 01-01-PLAN.md)
+  PLAN_ID=$(echo "$PLAN_FILE" | grep -oE '^[0-9]+(\.[0-9]+)?-[0-9]+')
 
-  # Check if already completed (SUMMARY exists)
-  SUMMARY_PATH="${PLAN_DIR}/${PLAN_ID}-SUMMARY.md"
+  # Check if already completed (SUMMARY exists with same plan ID prefix)
+  SUMMARY_PATH=$(ls "${PLAN_DIR}/${PLAN_ID}"-*-SUMMARY.md 2>/dev/null | head -1)
+  if [[ -z "$SUMMARY_PATH" ]]; then
+    # Fallback to old format for backwards compatibility
+    SUMMARY_PATH="${PLAN_DIR}/${PLAN_ID}-SUMMARY.md"
+  fi
   if [[ -f "$SUMMARY_PATH" ]]; then
     continue  # Already done, skip
   fi
@@ -62,8 +66,12 @@ for PLAN_PATH in $PLAN_FILES; do
     DEP=$(echo "$DEP" | tr -d ' ')  # Trim whitespace
     [[ -z "$DEP" ]] && continue
 
-    # Find the dependency's SUMMARY.md
-    DEP_SUMMARY=$(find "$PLANNING_DIR/phases" -name "${DEP}-SUMMARY.md" 2>/dev/null | head -1)
+    # Find the dependency's SUMMARY.md (handles both old and new formats)
+    DEP_SUMMARY=$(find "$PLANNING_DIR/phases" -name "${DEP}-*-SUMMARY.md" 2>/dev/null | head -1)
+    if [[ -z "$DEP_SUMMARY" ]]; then
+      # Fallback to old format
+      DEP_SUMMARY=$(find "$PLANNING_DIR/phases" -name "${DEP}-SUMMARY.md" 2>/dev/null | head -1)
+    fi
 
     if [[ -z "$DEP_SUMMARY" || ! -f "$DEP_SUMMARY" ]]; then
       ALL_DEPS_MET=false

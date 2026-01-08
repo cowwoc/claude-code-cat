@@ -104,7 +104,7 @@ Track all state transitions in STATE.md:
 
 | Timestamp | State | Actor | Details |
 |-----------|-------|-------|---------|
-| 2025-01-15T10:00:00Z | PLAN_CREATED | agent | 02-01-PLAN.md created |
+| 2025-01-15T10:00:00Z | PLAN_CREATED | agent | 02-01-setup-auth-PLAN.md created |
 | 2025-01-15T10:05:00Z | PLAN_APPROVED | user | Approved via gate |
 | 2025-01-15T10:06:00Z | EXECUTING | agent | Started task execution |
 | 2025-01-15T10:45:00Z | EXECUTED | agent | 3/3 tasks complete |
@@ -122,7 +122,7 @@ Generated at plan completion:
 ```markdown
 ## Protocol Compliance Report
 
-**Plan:** 02-01-PLAN.md
+**Plan:** 02-01-setup-auth-PLAN.md
 **Risk Level:** HIGH
 **Compliance Status:** COMPLIANT
 

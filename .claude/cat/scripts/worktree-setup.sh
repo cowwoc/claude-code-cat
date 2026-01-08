@@ -24,7 +24,7 @@ LOCK_FILE=".cat-execution.lock"
 PROJECT_DIR="${CLAUDE_PROJECT_DIR:-$(pwd)}"
 PROJECT_NAME=$(basename "$PROJECT_DIR")
 
-# Extract identifiers from plan path (e.g., .planning/phases/02-auth/02-01-PLAN.md)
+# Extract identifiers from plan path (e.g., .planning/phases/02-auth/02-01-setup-jwt-PLAN.md)
 PLAN_ID=$(basename "$PLAN_PATH" | grep -oE '^[0-9]+(\.[0-9]+)?-[0-9]+' || echo "unknown")
 PHASE_NUM=$(echo "$PLAN_ID" | cut -d'-' -f1)
 PHASE_NAME=$(basename "$(dirname "$PLAN_PATH")" | sed 's/^[0-9.]*-//')

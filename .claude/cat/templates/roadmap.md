@@ -103,7 +103,7 @@ Phases execute in numeric order: 2 → 2.1 → 2.2 → 3 → 3.1 → 4
 - Phase count depends on depth setting (quick: 3-5, standard: 5-8, comprehensive: 8-12)
 - Each phase delivers something coherent
 - Phases can have 1+ plans (split if >3 tasks or multiple subsystems)
-- Plans use naming: {phase}-{plan}-PLAN.md (e.g., 01-02-PLAN.md)
+- Plans use naming: {phase}-{plan}-{slug}-PLAN.md (e.g., 01-02-setup-auth-PLAN.md)
 - No time estimates (this isn't enterprise PM)
 - Progress table updated by execute workflow
 - Plan count can be "TBD" initially, refined during planning

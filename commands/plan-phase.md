@@ -17,7 +17,7 @@ allowed-tools:
 Create executable phase prompt with discovery, context injection, and task breakdown.
 
 Purpose: Break down roadmap phases into concrete, executable PLAN.md files that Claude can execute.
-Output: One or more PLAN.md files in the phase directory (.planning/phases/XX-name/{phase}-{plan}-PLAN.md)
+Output: One or more PLAN.md files in the phase directory (.planning/phases/XX-name/{phase}-{plan}-{slug}-PLAN.md)
 </objective>
 
 <execution_context>

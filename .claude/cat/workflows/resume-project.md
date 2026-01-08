@@ -156,7 +156,7 @@ What would you like to do?
 [Primary action based on state - e.g.:]
 1. Resume from checkpoint (/cat:execute-plan .planning/phases/XX-name/.continue-here-02-01.md)
    OR
-1. Execute next plan (/cat:execute-plan .planning/phases/XX-name/02-02-PLAN.md)
+1. Execute next plan (/cat:execute-plan .planning/phases/XX-name/02-02-add-session-PLAN.md)
    OR
 1. Discuss Phase 3 context (/cat:discuss-phase 3) [if CONTEXT.md missing]
    OR
@@ -189,7 +189,7 @@ Based on user selection, route to appropriate workflow:
 
   ## ▶ Next Up
 
-  **{phase}-{plan}: [Plan Name]** — [objective from PLAN.md]
+  **{phase}-{plan}-{slug}: [Plan Name]** — [objective from PLAN.md]
 
   `/cat:execute-plan [path]`
 

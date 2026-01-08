@@ -7,7 +7,7 @@ Decimal phases enable urgent work insertion without renumbering:
 **Rules:**
 - Decimals between consecutive integers (2.1 between 2 and 3)
 - Filesystem sorting works automatically (2 < 2.1 < 2.2 < 3)
-- Directory format: `02.1-description/`, Plan format: `02.1-01-PLAN.md`
+- Directory format: `02.1-description/`, Plan format: `02.1-01-{slug}-PLAN.md`
 
 **Validation:** Integer X must exist and be complete, X+1 must exist, decimal X.Y must not exist, Y >= 1
 </decimal_phase_numbering>
@@ -318,37 +318,56 @@ See ~/.claude/cat/references/scope-estimation.md for complete guidance.
 </step>
 
 <step name="confirm_breakdown">
+**Generate plan slugs from objectives:**
+
+For each plan, generate a slug from its objective (what the plan accomplishes):
+```bash
+# Generate slug: lowercase, replace non-alphanumeric with hyphens, collapse, trim, max 30 chars
+slug=$(echo "$objective" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-//;s/-$//' | cut -c1-30)
+```
+
+**Validate uniqueness within phase:**
+```bash
+# Check if slug already exists in this phase directory
+if ls .planning/phases/${PHASE}-*/*-${slug}-PLAN.md 2>/dev/null | grep -q .; then
+  echo "Slug '${slug}' already exists in this phase. Choose a different name."
+fi
+```
+
+If collision detected: prompt user to provide an alternative slug.
+
 <if mode="yolo">
-Auto-approve and proceed to write_phase_prompt.
+Auto-generate slugs from plan objectives and proceed to write_phase_prompt.
 </if>
 
 <if mode="interactive">
-Present breakdown inline:
+Present breakdown inline with generated slugs:
 
 ```
 Phase [X] breakdown:
 
-### Tasks ({phase}-01-PLAN.md)
+### Plan 01: [objective summary]
+Filename: {phase}-01-{slug}-PLAN.md
 1. [Task] - [brief] [type]
 2. [Task] - [brief] [type]
 
 Autonomous: [yes/no]
 
-Does this look right? (yes / adjust / start over)
+Does this look right? (yes / adjust slug / adjust tasks / start over)
 ```
 
-For multiple plans, show each plan with its tasks.
+For multiple plans, show each plan with its slug and tasks.
 
-Wait for confirmation. If "adjust": revise. If "start over": return to gather_phase_context.
+Wait for confirmation. If "adjust slug": prompt for alternative. If "adjust tasks": revise tasks. If "start over": return to gather_phase_context.
 </if>
 </step>
 
 <step name="write_phase_prompt">
 Use template from `~/.claude/cat/templates/phase-prompt.md`.
 
-**Single plan:** Write to `.planning/phases/XX-name/{phase}-01-PLAN.md`
+**Single plan:** Write to `.planning/phases/XX-name/{phase}-01-{slug}-PLAN.md`
 
-**Multiple plans:** Write separate files ({phase}-01-PLAN.md, {phase}-02-PLAN.md, etc.)
+**Multiple plans:** Write separate files (`{phase}-01-{slug1}-PLAN.md`, `{phase}-02-{slug2}-PLAN.md`, etc.)
 
 Each plan follows template structure with:
 - Frontmatter (phase, plan, type, domain)
@@ -417,16 +436,16 @@ Confirm: "Committed: docs(${PHASE}): create phase plan"
 
 <step name="offer_next">
 ```
-Phase plan created: .planning/phases/XX-name/{phase}-01-PLAN.md
+Phase plan created: .planning/phases/XX-name/{phase}-01-{slug}-PLAN.md
 [X] tasks defined.
 
 ---
 
 ## Next Up
 
-**{phase}-01: [Plan Name]** - [objective summary]
+**{phase}-01-{slug}: [Plan Name]** - [objective summary]
 
-`/cat:execute-plan .planning/phases/XX-name/{phase}-01-PLAN.md`
+`/cat:execute-plan .planning/phases/XX-name/{phase}-01-{slug}-PLAN.md`
 
 <sub>`/clear` first - fresh context window</sub>
 

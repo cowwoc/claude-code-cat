@@ -11,9 +11,18 @@
 |-----------|---------|------|
 | Upstream (glittercowboy/get-shit-done) | 1.3.27 | 2026-01-07 |
 | Task Protocol Enhancements | 1.0.0 | 2026-01-07 |
-| Combined Plugin (CAT) | 1.0.0 | 2026-01-07 |
+| Combined Plugin (CAT) | 1.0.1 | 2026-01-08 |
 
 ## Sync History
+
+### 2026-01-08: v1.0.1
+
+**Enhancement:** Descriptive slugs for PLAN.md filenames
+- Changed naming from `{phase}-{plan}-PLAN.md` to `{phase}-{plan}-{slug}-PLAN.md`
+- Slug derived from plan objective (max 30 chars)
+- Added uniqueness validation per phase
+- Updated all scripts and workflows for new format
+- Backwards compatible with old format
 
 ### 2026-01-07: Initial Release (v1.0.0)
 

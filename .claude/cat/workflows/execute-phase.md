@@ -92,16 +92,16 @@ ls .planning/phases/XX-name/*-SUMMARY.md 2>/dev/null | sort
 
 **Logic:**
 
-- If `01-01-PLAN.md` exists but `01-01-SUMMARY.md` doesn't → execute 01-01
-- If `01-01-SUMMARY.md` exists but `01-02-SUMMARY.md` doesn't → execute 01-02
-- Pattern: Find first PLAN file without matching SUMMARY file
+- If `01-01-setup-auth-PLAN.md` exists but `01-01-setup-auth-SUMMARY.md` doesn't → execute 01-01
+- If `01-01-setup-auth-SUMMARY.md` exists but `01-02-*-SUMMARY.md` doesn't → execute 01-02
+- Pattern: Find first PLAN file without matching SUMMARY file (match by plan ID prefix)
 
 **Decimal phase handling:**
 
 Phase directories can be integer or decimal format:
 
-- Integer: `.planning/phases/01-foundation/01-01-PLAN.md`
-- Decimal: `.planning/phases/01.1-hotfix/01.1-01-PLAN.md`
+- Integer: `.planning/phases/01-foundation/01-01-setup-auth-PLAN.md`
+- Decimal: `.planning/phases/01.1-hotfix/01.1-01-fix-bug-PLAN.md`
 
 Parse phase number from path (handles both formats):
 
@@ -110,10 +110,10 @@ Parse phase number from path (handles both formats):
 PHASE=$(echo "$PLAN_PATH" | grep -oE '[0-9]+(\.[0-9]+)?-[0-9]+')
 ```
 
-SUMMARY naming follows same pattern:
+SUMMARY naming follows same pattern (uses same slug as PLAN):
 
-- Integer: `01-01-SUMMARY.md`
-- Decimal: `01.1-01-SUMMARY.md`
+- Integer: `01-01-setup-auth-SUMMARY.md`
+- Decimal: `01.1-01-fix-bug-SUMMARY.md`
 
 Confirm with user if ambiguous.
 
@@ -125,7 +125,7 @@ cat .planning/config.json 2>/dev/null
 
 <if mode="yolo">
 ```
-⚡ Auto-approved: Execute {phase}-{plan}-PLAN.md
+⚡ Auto-approved: Execute {phase}-{plan}-{slug}-PLAN.md
 [Plan X of Y for Phase Z]
 
 Starting execution...
@@ -138,7 +138,7 @@ Proceed directly to parse_segments step.
 Present:
 
 ```
-Found plan to execute: {phase}-{plan}-PLAN.md
+Found plan to execute: {phase}-{plan}-{slug}-PLAN.md
 [Plan X of Y for Phase Z]
 
 Proceed with execution?
@@ -168,7 +168,7 @@ Plans are divided into segments by checkpoints. Each segment is routed to optima
 
 ```bash
 # Find all checkpoints and their types
-grep -n "type=\"checkpoint" .planning/phases/XX-name/{phase}-{plan}-PLAN.md
+grep -n "type=\"checkpoint" .planning/phases/XX-name/{phase}-{plan}-{slug}-PLAN.md
 ```
 
 **2. Analyze execution strategy:**
@@ -245,7 +245,7 @@ No segmentation benefit - execute entirely in main
 ```
 Use Task tool with subagent_type="general-purpose":
 
-Prompt: "Execute plan at .planning/phases/{phase}-{plan}-PLAN.md
+Prompt: "Execute plan at .planning/phases/{phase}-{plan}-{slug}-PLAN.md
 
 This is an autonomous plan (no checkpoints). Execute all tasks, create SUMMARY.md in phase directory, commit with message following plan's commit guidance.
 
@@ -260,7 +260,7 @@ When complete, report: plan name, tasks completed, SUMMARY path, commit hash."
 Execute segment-by-segment:
 
 For each autonomous segment:
-  Spawn subagent with prompt: "Execute tasks [X-Y] from plan at .planning/phases/{phase}-{plan}-PLAN.md. Read the plan for full context and deviation rules. Do NOT create SUMMARY or commit - just execute these tasks and report results."
+  Spawn subagent with prompt: "Execute tasks [X-Y] from plan at .planning/phases/{phase}-{plan}-{slug}-PLAN.md. Read the plan for full context and deviation rules. Do NOT create SUMMARY or commit - just execute these tasks and report results."
 
   Wait for subagent completion
 
@@ -375,7 +375,7 @@ For Pattern A (fully autonomous) and Pattern C (decision-dependent), skip this s
 
 ````
 
-Plan: 01-02-PLAN.md (8 tasks, 2 verify checkpoints)
+Plan: 01-02-add-user-model-PLAN.md (8 tasks, 2 verify checkpoints)
 
 Parsing segments...
 
@@ -440,7 +440,7 @@ Committing...
 <step name="load_prompt">
 Read the plan prompt:
 ```bash
-cat .planning/phases/XX-name/{phase}-{plan}-PLAN.md
+cat .planning/phases/XX-name/{phase}-{plan}-{slug}-PLAN.md
 ````
 
 This IS the execution instructions. Follow it exactly.
@@ -1191,7 +1191,7 @@ The one-liner must be SUBSTANTIVE:
 
 **Next Step section:**
 
-- If more plans exist in this phase: "Ready for {phase}-{next-plan}-PLAN.md"
+- If more plans exist in this phase: "Ready for {phase}-{next-plan}-{slug}-PLAN.md"
 - If this is the last plan: "Phase complete, ready for transition"
   </step>
 
@@ -1204,7 +1204,7 @@ Update Current Position section in STATE.md to reflect plan completion.
 Phase: [current] of [total] ([phase name])
 Plan: [just completed] of [total in phase]
 Status: [In progress / Phase complete]
-Last activity: [today] - Completed {phase}-{plan}-PLAN.md
+Last activity: [today] - Completed {phase}-{plan}-{slug}-PLAN.md
 
 Progress: [progress bar]
 ```
@@ -1216,7 +1216,7 @@ Progress: [progress bar]
 - Progress = (completed / total) × 100%
 - Render: ░ for incomplete, █ for complete
 
-**Example - completing 02-01-PLAN.md (plan 5 of 10 total):**
+**Example - completing 02-01-setup-jwt-PLAN.md (plan 5 of 10 total):**
 
 Before:
 
@@ -1239,7 +1239,7 @@ After:
 Phase: 2 of 4 (Authentication)
 Plan: 1 of 2 in current phase
 Status: In progress
-Last activity: 2025-01-19 - Completed 02-01-PLAN.md
+Last activity: 2025-01-19 - Completed 02-01-setup-jwt-PLAN.md
 
 Progress: ███████░░░ 50%
 ```
@@ -1283,7 +1283,7 @@ Update Session Continuity section in STATE.md to enable resumption in future ses
 
 ```markdown
 Last session: [current date and time]
-Stopped at: Completed {phase}-{plan}-PLAN.md
+Stopped at: Completed {phase}-{plan}-{slug}-PLAN.md
 Resume file: [path to .continue-here if exists, else "None"]
 ```
 
@@ -1504,9 +1504,9 @@ Summary: .planning/phases/{phase-dir}/{phase}-{plan}-SUMMARY.md
 
 ## ▶ Next Up
 
-**{phase}-{next-plan}: [Plan Name]** — [objective from next PLAN.md]
+**{phase}-{next-plan}-{slug}: [Plan Name]** — [objective from next PLAN.md]
 
-`/cat:execute-plan .planning/phases/{phase-dir}/{phase}-{next-plan}-PLAN.md`
+`/cat:execute-plan .planning/phases/{phase-dir}/{phase}-{next-plan}-{slug}-PLAN.md`
 
 <sub>`/clear` first → fresh context window</sub>
 

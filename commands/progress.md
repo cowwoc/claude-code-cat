@@ -123,7 +123,7 @@ Read its `<objective>` section.
 
 ## ▶ Next Up
 
-**{phase}-{plan}: [Plan Name]** — [objective summary from PLAN.md]
+**{phase}-{plan}-{slug}: [Plan Name]** — [objective summary from PLAN.md]
 
 `/cat:execute-plan [full-path-to-PLAN.md]`
 
