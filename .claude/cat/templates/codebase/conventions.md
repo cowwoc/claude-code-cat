@@ -4,6 +4,8 @@ Template for `.planning/codebase/CONVENTIONS.md` - captures coding style and pat
 
 **Purpose:** Document how code is written in this codebase. Prescriptive guide for Claude to match existing style.
 
+**Load-on-demand pattern:** For complex projects, use index + subdirectory structure. Index stays compact (~100-150 lines), detailed rules in `conventions/` subdirectory.
+
 ---
 
 ## File Template
@@ -12,117 +14,152 @@ Template for `.planning/codebase/CONVENTIONS.md` - captures coding style and pat
 # Coding Conventions
 
 **Analysis Date:** [YYYY-MM-DD]
+**Language:** [Primary language - e.g., Java, TypeScript, Python, Go, Rust]
+
+## Quick Reference
+
+| Category | Key Rules | Details |
+|----------|-----------|---------|
+| Naming | [e.g., camelCase functions, PascalCase types] | [conventions/naming.md or inline below] |
+| Formatting | [e.g., 4-space indent, 120 char lines] | [conventions/style.md or inline below] |
+| Documentation | [e.g., JavaDoc/JSDoc for public API] | [conventions/documentation.md or inline below] |
+| Error Handling | [e.g., fail-fast, no silent failures] | [conventions/errors.md or inline below] |
 
 ## Naming Patterns
 
 **Files:**
-- [Pattern: e.g., "kebab-case for all files"]
-- [Test files: e.g., "*.test.ts alongside source"]
+- [Pattern: e.g., "PascalCase.java", "kebab-case.ts", "snake_case.py"]
+- [Test files: e.g., "*.test.ts alongside source" or "*Test.java in src/test/"]
 - [Components: e.g., "PascalCase.tsx for React components"]
 
-**Functions:**
+**Types (Classes/Interfaces/Records):**
+- [Pattern: e.g., "PascalCase for all types"]
+- [Interfaces: e.g., "no I prefix" or "IPrefix convention"]
+- [Enums: e.g., "PascalCase name, UPPER_CASE values"]
+
+**Functions/Methods:**
 - [Pattern: e.g., "camelCase for all functions"]
-- [Async: e.g., "no special prefix for async functions"]
+- [Async: e.g., "no special prefix" or "async prefix"]
 - [Handlers: e.g., "handleEventName for event handlers"]
 
 **Variables:**
 - [Pattern: e.g., "camelCase for variables"]
-- [Constants: e.g., "UPPER_SNAKE_CASE for constants"]
-- [Private: e.g., "_prefix for private members" or "no prefix"]
-
-**Types:**
-- [Interfaces: e.g., "PascalCase, no I prefix"]
-- [Types: e.g., "PascalCase for type aliases"]
-- [Enums: e.g., "PascalCase for enum name, UPPER_CASE for values"]
+- [Constants: e.g., "UPPER_SNAKE_CASE for static final/const"]
+- [Private: e.g., "no prefix" or "_prefix for private members"]
 
 ## Code Style
 
 **Formatting:**
-- [Tool: e.g., "Prettier with config in .prettierrc"]
-- [Line length: e.g., "100 characters max"]
-- [Quotes: e.g., "single quotes for strings"]
+- [Tool: e.g., "Prettier with .prettierrc" or "Checkstyle" or "black"]
+- [Indentation: e.g., "4 spaces" or "2 spaces" or "tabs"]
+- [Line length: e.g., "100 characters max" or "120 characters"]
+- [Brace style: e.g., "Allman (own line)" or "K&R (same line)"]
+- [Quotes: e.g., "single quotes" or "double quotes"]
 - [Semicolons: e.g., "required" or "omitted"]
 
 **Linting:**
-- [Tool: e.g., "ESLint with eslint.config.js"]
-- [Rules: e.g., "extends airbnb-base, no console in production"]
-- [Run: e.g., "npm run lint"]
+- [Tool: e.g., "ESLint", "PMD", "ruff", "clippy"]
+- [Rules: e.g., "extends recommended, no console in production"]
+- [Run: e.g., "npm run lint" or "./mvnw checkstyle:check pmd:check"]
 
-## Import Organization
+## Import/Dependency Organization
 
 **Order:**
-1. [e.g., "External packages (react, express, etc.)"]
-2. [e.g., "Internal modules (@/lib, @/components)"]
-3. [e.g., "Relative imports (., ..)"]
-4. [e.g., "Type imports (import type {})"]
+1. [e.g., "Standard library (java.*, stdlib)"]
+2. [e.g., "Third-party packages (external dependencies)"]
+3. [e.g., "Internal modules (@/lib, project packages)"]
+4. [e.g., "Relative imports (., ..)"]
+5. [e.g., "Type imports last (import type {})"]
 
 **Grouping:**
 - [Blank lines: e.g., "blank line between groups"]
 - [Sorting: e.g., "alphabetical within each group"]
 
 **Path Aliases:**
-- [Aliases used: e.g., "@/ for src/, @components/ for src/components/"]
+- [Aliases used: e.g., "@/ for src/" or "none"]
 
 ## Error Handling
 
-**Patterns:**
-- [Strategy: e.g., "throw errors, catch at boundaries"]
-- [Custom errors: e.g., "extend Error class, named *Error"]
-- [Async: e.g., "use try/catch, no .catch() chains"]
+**Strategy:**
+- [e.g., "fail-fast with descriptive messages"]
+- [e.g., "throw errors, catch at boundaries"]
+- [e.g., "validate at public API entry points"]
 
-**Error Types:**
-- [When to throw: e.g., "invalid input, missing dependencies"]
-- [When to return: e.g., "expected failures return Result<T, E>"]
-- [Logging: e.g., "log error with context before throwing"]
+**Custom Errors:**
+- [e.g., "extend Error/Exception class, named *Error/*Exception"]
+- [e.g., "include context in error message"]
+
+**Never:**
+- [e.g., "swallow exceptions silently"]
+- [e.g., "return null/empty on invalid input"]
+
+**Async Error Handling:**
+- [e.g., "use try/catch, no .catch() chains"]
+- [e.g., "propagate errors to caller"]
 
 ## Logging
 
 **Framework:**
-- [Tool: e.g., "console.log, pino, winston"]
+- [Tool: e.g., "SLF4J + Logback", "pino", "logging module"]
 - [Levels: e.g., "debug, info, warn, error"]
 
 **Patterns:**
 - [Format: e.g., "structured logging with context object"]
-- [When: e.g., "log state transitions, external calls"]
+- [When: e.g., "log state transitions, external calls, errors"]
 - [Where: e.g., "log at service boundaries, not in utils"]
+- [Avoid: e.g., "no console.log/System.out in production"]
 
-## Comments
+## Comments & Documentation
 
 **When to Comment:**
 - [e.g., "explain why, not what"]
 - [e.g., "document business logic, algorithms, edge cases"]
-- [e.g., "avoid obvious comments like // increment counter"]
+- [e.g., "avoid obvious comments"]
 
-**JSDoc/TSDoc:**
+**Doc Blocks (JavaDoc/JSDoc/docstrings):**
 - [Usage: e.g., "required for public APIs, optional for internal"]
-- [Format: e.g., "use @param, @returns, @throws tags"]
+- [Format: e.g., "use @param, @returns/@return, @throws tags"]
+- [Style: e.g., "summary line first, then details"]
 
 **TODO Comments:**
-- [Pattern: e.g., "// TODO(username): description"]
+- [Pattern: e.g., "// TODO: description" or "# TODO(username): description"]
 - [Tracking: e.g., "link to issue number if available"]
 
-## Function Design
+## Function/Method Design
 
 **Size:**
 - [e.g., "keep under 50 lines, extract helpers"]
+- [e.g., "one level of abstraction per function"]
 
 **Parameters:**
-- [e.g., "max 3 parameters, use object for more"]
+- [e.g., "max 3 parameters, use object/record for more"]
 - [e.g., "destructure objects in parameter list"]
 
 **Return Values:**
-- [e.g., "explicit returns, no implicit undefined"]
+- [e.g., "explicit return statements"]
 - [e.g., "return early for guard clauses"]
+- [e.g., "use Result/Option types for expected failures"]
 
-## Module Design
+## Module/Package Design
 
-**Exports:**
-- [e.g., "named exports preferred, default exports for React components"]
-- [e.g., "export from index.ts for public API"]
+**Exports/Visibility:**
+- [e.g., "named exports preferred, default exports for components"]
+- [e.g., "package-private by default, public for API"]
+- [e.g., "export public API from index/barrel files"]
 
-**Barrel Files:**
-- [e.g., "use index.ts to re-export public API"]
+**Organization:**
+- [e.g., "one class per file" or "related functions grouped"]
 - [e.g., "avoid circular dependencies"]
+- [e.g., "internal packages for implementation details"]
+
+## Style Enforcement
+
+**Automated Tools:**
+- [Tool 1]: [e.g., "./mvnw checkstyle:check" or "npm run lint"]
+- [Tool 2]: [e.g., "./mvnw pmd:check" or "npm run format:check"]
+
+**Manual Rules:**
+- See conventions/ subdirectory for rules not covered by tooling (if applicable)
 
 ---
 
@@ -130,11 +167,221 @@ Template for `.planning/codebase/CONVENTIONS.md` - captures coding style and pat
 *Update when patterns change*
 ```
 
+---
+
+## Subdirectory Structure (For Complex Projects)
+
+For projects with extensive style rules (Java with Checkstyle/PMD, detailed manual rules, tiered violations), use index + subdirectory:
+
+```
+.planning/codebase/
+├── CONVENTIONS.md          # Compact index (~100-150 lines)
+└── conventions/            # Detailed docs (loaded on-demand)
+    ├── naming.md           # File, type, function, variable naming
+    ├── style.md            # Formatting, braces, whitespace, line breaking
+    ├── documentation.md    # Comments, doc blocks, API documentation
+    ├── errors.md           # Exception handling, error types, messages
+    └── validation.md       # Input validation, preconditions, invariants
+```
+
+### When to use subdirectory:
+- Multiple enforcement tools (e.g., Checkstyle + PMD, ESLint + Prettier)
+- Tiered violations (TIER1/TIER2/TIER3 or error/warning/info levels)
+- 20+ distinct style rules observed
+- Custom validation patterns (requireThat, zod, pydantic)
+- Extensive documentation conventions (JavaDoc requirements, etc.)
+
+### When subdirectory is optional:
+- Small projects with simple conventions
+- Projects relying entirely on automated formatting
+- Greenfield projects without legacy patterns
+
+---
+
+## Subdirectory File Templates
+
+### naming.md
+```markdown
+# Naming Conventions
+
+**Language:** [Language]
+
+## Files
+[Detailed file naming rules with examples]
+- Pattern: [e.g., "PascalCase.java matching class name"]
+- Test files: [e.g., "*Test.java in src/test/java/"]
+- Exceptions: [e.g., "package-info.java for package documentation"]
+
+## Types (Classes/Interfaces/Records)
+[Detailed type naming with examples]
+- Classes: [e.g., "PascalCase nouns"]
+- Interfaces: [e.g., "PascalCase, no I prefix"]
+- Enums: [e.g., "PascalCase, values in UPPER_SNAKE_CASE"]
+
+## Functions/Methods
+[Detailed function naming with examples]
+- General: [e.g., "camelCase verbs"]
+- Getters: [e.g., "getPropertyName() or propertyName()"]
+- Boolean: [e.g., "isEnabled(), hasPermission()"]
+
+## Variables
+[Detailed variable naming with examples]
+- Local: [e.g., "camelCase descriptive names"]
+- Constants: [e.g., "UPPER_SNAKE_CASE"]
+- Avoid: [e.g., "single letters except loop indices"]
+
+## Acronym Handling
+[How to handle acronyms - e.g., "HttpClient not HTTPClient"]
+
+---
+*Update when patterns change*
+```
+
+### style.md
+```markdown
+# Code Style Rules
+
+**Language:** [Language]
+**Enforcement:** [Tools used]
+
+## Formatting
+[Detailed formatting rules]
+- Indentation: [specifics]
+- Line length: [limit and exceptions]
+- Trailing whitespace: [policy]
+
+## Brace Placement
+[Brace style with examples - Allman vs K&R vs other]
+
+## Line Breaking
+[When/how to break lines]
+- Break after: [operators, dots, commas]
+- Continuation indent: [spaces]
+
+## Whitespace
+[Spacing rules around operators, brackets, etc.]
+
+## Detection Patterns
+[Commands to find violations - grep/checkstyle/eslint patterns]
+
+---
+*Update when patterns change*
+```
+
+### documentation.md
+```markdown
+# Documentation Conventions
+
+**Language:** [Language]
+
+## Doc Block Format
+[JavaDoc/JSDoc/docstring format]
+- Summary line: [requirements]
+- @param/@returns/@throws: [when required]
+
+## When to Document
+[Required vs optional documentation]
+- Public API: [e.g., "always required"]
+- Internal: [e.g., "when non-obvious"]
+- Tests: [e.g., "describe test purpose"]
+
+## Parameter Documentation
+[How to document parameters]
+- Nullability: [e.g., "(may be null)" markers]
+- Constraints: [e.g., "must be positive"]
+
+## Example Documentation
+[When/how to include code examples]
+
+---
+*Update when patterns change*
+```
+
+### errors.md
+```markdown
+# Error Handling Conventions
+
+**Language:** [Language]
+
+## Exception Types
+[When to use each exception type]
+- NullPointerException/TypeError: [when]
+- IllegalArgumentException/ValueError: [when]
+- IllegalStateException: [when]
+- Custom exceptions: [when to create]
+
+## Error Messages
+[Message format and content]
+- Include: [actual values, expected values, context]
+- Avoid: [generic messages, stack traces in message]
+
+## Exception Propagation
+[When to catch vs propagate]
+- Catch at: [boundaries, recovery points]
+- Propagate: [when caller should handle]
+- Wrap: [checked → unchecked patterns]
+
+## Logging Errors
+[Error logging patterns]
+- Log level: [when error vs warn]
+- Context: [what to include]
+
+---
+*Update when patterns change*
+```
+
+### validation.md
+```markdown
+# Validation Conventions
+
+**Language:** [Language]
+
+## Input Validation
+[When and how to validate]
+- Where: [public API boundaries, external input]
+- How: [validation library, manual checks]
+
+## Preconditions
+[How to check preconditions]
+- Library: [e.g., "requireThat()", "Objects.requireNonNull()", "assert"]
+- Pattern: [fail-fast at method entry]
+
+## Invariants
+[Maintaining class/method invariants]
+- Constructor: [validation pattern]
+- Setters: [validation pattern]
+
+## Validation Library
+[Preferred validation approach with examples]
+
+## @throws Documentation
+[How to document validation exceptions]
+- NullPointerException: [when thrown]
+- IllegalArgumentException: [when thrown]
+
+---
+*Update when patterns change*
+```
+
+---
+
 <good_examples>
+
+### TypeScript Project (Inline Style)
 ```markdown
 # Coding Conventions
 
 **Analysis Date:** 2025-01-20
+**Language:** TypeScript 5.3
+
+## Quick Reference
+
+| Category | Key Rules | Details |
+|----------|-----------|---------|
+| Naming | camelCase functions, PascalCase types | Inline below |
+| Formatting | 2-space, 100 chars, Prettier | Inline below |
+| Documentation | TSDoc for public exports | Inline below |
+| Error Handling | throw at boundaries | Inline below |
 
 ## Naming Patterns
 
@@ -142,6 +389,11 @@ Template for `.planning/codebase/CONVENTIONS.md` - captures coding style and pat
 - kebab-case for all files (command-handler.ts, user-service.ts)
 - *.test.ts alongside source files
 - index.ts for barrel exports
+
+**Types:**
+- PascalCase for interfaces, no I prefix (User, not IUser)
+- PascalCase for type aliases (UserConfig, ResponseData)
+- PascalCase for enum names, UPPER_CASE for values (Status.PENDING)
 
 **Functions:**
 - camelCase for all functions
@@ -152,11 +404,6 @@ Template for `.planning/codebase/CONVENTIONS.md` - captures coding style and pat
 - camelCase for variables
 - UPPER_SNAKE_CASE for constants (MAX_RETRIES, API_BASE_URL)
 - No underscore prefix (no private marker in TS)
-
-**Types:**
-- PascalCase for interfaces, no I prefix (User, not IUser)
-- PascalCase for type aliases (UserConfig, ResponseData)
-- PascalCase for enum names, UPPER_CASE for values (Status.PENDING)
 
 ## Code Style
 
@@ -192,15 +439,18 @@ Template for `.planning/codebase/CONVENTIONS.md` - captures coding style and pat
 
 ## Error Handling
 
-**Patterns:**
+**Strategy:**
 - Throw errors, catch at boundaries (route handlers, main functions)
 - Extend Error class for custom errors (ValidationError, NotFoundError)
 - Async functions use try/catch, no .catch() chains
 
-**Error Types:**
-- Throw on invalid input, missing dependencies, invariant violations
-- Log error with context before throwing: logger.error({ err, userId }, 'Failed to process')
+**Never:**
+- Catch and return fallback values
+- Swallow errors silently
+
+**Error Messages:**
 - Include cause in error message: new Error('Failed to X', { cause: originalError })
+- Log error with context before throwing: logger.error({ err, userId }, 'Failed to process')
 
 ## Logging
 
@@ -214,7 +464,7 @@ Template for `.planning/codebase/CONVENTIONS.md` - captures coding style and pat
 - Log state transitions, external API calls, errors
 - No console.log in committed code
 
-## Comments
+## Comments & Documentation
 
 **When to Comment:**
 - Explain why, not what: // Retry 3 times because API has transient failures
@@ -222,7 +472,7 @@ Template for `.planning/codebase/CONVENTIONS.md` - captures coding style and pat
 - Explain non-obvious algorithms or workarounds
 - Avoid obvious comments: // set count to 0
 
-**JSDoc/TSDoc:**
+**TSDoc:**
 - Required for public API functions
 - Optional for internal functions if signature is self-explanatory
 - Use @param, @returns, @throws tags
@@ -255,22 +505,176 @@ Template for `.planning/codebase/CONVENTIONS.md` - captures coding style and pat
 - Default exports only for React components
 - Export public API from index.ts barrel files
 
-**Barrel Files:**
+**Organization:**
 - index.ts re-exports public API
 - Keep internal helpers private (don't export from index)
 - Avoid circular dependencies (import from specific files if needed)
+
+## Style Enforcement
+
+**Automated Tools:**
+- Lint: `npm run lint`
+- Format: `npm run format:check`
 
 ---
 
 *Convention analysis: 2025-01-20*
 *Update when patterns change*
 ```
+
+### Java Project (Index + Subdirectory Style)
+```markdown
+# Coding Conventions
+
+**Analysis Date:** 2025-01-20
+**Language:** Java 21
+
+## Quick Reference
+
+| Category | Key Rules | Details |
+|----------|-----------|---------|
+| Naming | PascalCase types, camelCase methods | conventions/naming.md |
+| Formatting | 4-space, 120 chars, Allman braces | conventions/style.md |
+| Documentation | JavaDoc for public API | conventions/documentation.md |
+| Error Handling | Fail-fast, requireThat() | conventions/errors.md |
+| Validation | requireThat() library | conventions/validation.md |
+
+## Naming Patterns
+
+**Files:** PascalCase.java matching class name
+**Types:** PascalCase for classes, interfaces, records, enums
+**Methods:** camelCase, no abbreviations (getLineNumber not getLineNr)
+**Constants:** UPPER_SNAKE_CASE for static final fields
+
+## Code Style
+
+**Formatting:** 4 spaces, 120 chars, Allman braces (opening brace on own line)
+**Linting:** Checkstyle + PMD
+
+## Import Organization
+
+**Order:** java.* → javax.* → third-party → internal
+**Grouping:** Blank line between groups, static imports last
+
+## Error Handling
+
+**Strategy:** Fail-fast with requireThat() validation at public API entry points
+**Never:** Return null/empty on invalid input, swallow exceptions silently
+
+## Logging
+
+**Framework:** SLF4J + Logback
+**Pattern:** Structured logging at service boundaries
+
+## Comments & Documentation
+
+**JavaDoc:** Required for public API, @param @return @throws tags
+**Style:** Summary first, no blank lines around <p> tags
+
+## Function Design
+
+**Size:** Keep under 50 lines
+**Parameters:** Max 3, use record for more
+
+## Module Design
+
+**Visibility:** Package-private by default, internal packages not exported
+**Organization:** One class per file
+
+## Style Enforcement
+
+**Automated Tools:**
+- Checkstyle: `./mvnw checkstyle:check`
+- PMD: `./mvnw pmd:check`
+
+**Manual Rules:** See conventions/style.md for TIER1-3 violations
+
+---
+
+*Index generated: 2025-01-20*
+*See conventions/ subdirectory for detailed rules*
+```
+
+### Python Project (Inline Style)
+```markdown
+# Coding Conventions
+
+**Analysis Date:** 2025-01-20
+**Language:** Python 3.12
+
+## Quick Reference
+
+| Category | Key Rules | Details |
+|----------|-----------|---------|
+| Naming | snake_case functions, PascalCase classes | Inline below |
+| Formatting | black + ruff, 88 chars | Inline below |
+| Documentation | Google-style docstrings | Inline below |
+| Error Handling | Custom exceptions, EAFP | Inline below |
+
+## Naming Patterns
+
+**Files:** snake_case.py
+**Classes:** PascalCase
+**Functions:** snake_case
+**Constants:** UPPER_SNAKE_CASE
+**Private:** _single_leading_underscore
+
+## Code Style
+
+**Formatting:** black (88 chars), 4-space indent
+**Linting:** ruff
+**Type Hints:** Required for public API
+
+## Import Organization
+
+**Order:** stdlib → third-party → local
+**Grouping:** Blank line between groups
+**Tool:** isort
+
+## Error Handling
+
+**Strategy:** EAFP (Easier to Ask Forgiveness than Permission)
+**Custom Exceptions:** Inherit from Exception, named *Error
+**Never:** Bare except clauses, silently passing exceptions
+
+## Logging
+
+**Framework:** logging module
+**Pattern:** logger = logging.getLogger(__name__)
+
+## Comments & Documentation
+
+**Docstrings:** Google-style, required for public functions
+**Type Hints:** Preferred over docstring types
+
+## Function Design
+
+**Size:** Keep focused, extract helpers
+**Parameters:** Use *args/**kwargs sparingly, prefer explicit params
+
+## Module Design
+
+**Organization:** Related functions grouped, __all__ for public API
+**Avoid:** Circular imports, star imports
+
+## Style Enforcement
+
+**Automated Tools:**
+- Format: `black .`
+- Lint: `ruff check .`
+- Type check: `mypy .`
+
+---
+
+*Convention analysis: 2025-01-20*
+```
+
 </good_examples>
 
 <guidelines>
 **What belongs in CONVENTIONS.md:**
 - Naming patterns observed in the codebase
-- Formatting rules (Prettier config, linting rules)
+- Formatting rules (tool config, linting rules)
 - Import organization patterns
 - Error handling strategy
 - Logging approach
@@ -284,24 +688,30 @@ Template for `.planning/codebase/CONVENTIONS.md` - captures coding style and pat
 - File organization (that's STRUCTURE.md)
 
 **When filling this template:**
-- Check .prettierrc, .eslintrc, or similar config files
+- Identify primary language first
+- Check config files (.prettierrc, .eslintrc, checkstyle.xml, pyproject.toml)
 - Examine 5-10 representative source files for patterns
 - Look for consistency: if 80%+ follows a pattern, document it
 - Be prescriptive: "Use X" not "Sometimes Y is used"
 - Note deviations: "Legacy code uses Y, new code should use X"
-- Keep under ~150 lines total
 
-**Useful for release planning when:**
-- Writing new code (match existing style)
-- Adding features (follow naming patterns)
-- Refactoring (apply consistent conventions)
-- Code review (check against documented patterns)
-- Onboarding (understand style expectations)
+**Sizing guidelines:**
+- Inline style: Target 150-250 lines, max 300
+- Index style: Target 80-120 lines, max 150
+- Subdirectory files: 100-300 lines each
 
 **Analysis approach:**
-- Scan src/ directory for file naming patterns
-- Check package.json scripts for lint/format commands
-- Read 5-10 files to identify function naming, error handling
-- Look for config files (.prettierrc, eslint.config.js)
-- Note patterns in imports, comments, function signatures
+1. Identify primary language and version
+2. Find style enforcement tools (config files)
+3. Scan 5-10 files for patterns
+4. Determine complexity (inline vs subdirectory)
+5. Fill template with specific findings
+
+**Load-on-demand pattern:**
+- For simple projects: all conventions inline
+- For complex projects: index always in context, subdirectory read when needed
+- Claude reads subdirectory files only when:
+  - Working on code in that category
+  - User asks about specific conventions
+  - Style violations detected
 </guidelines>

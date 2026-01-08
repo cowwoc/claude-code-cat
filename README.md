@@ -2,7 +2,7 @@
 
 A Claude Code plugin for specification-driven development with quality gates.
 
-Based on [get-shit-done](https://github.com/glittercowboy/get-shit-done) v1.3.31 with additional task protocol enhancements.
+Based on [get-shit-done](https://github.com/glittercowboy/get-shit-done) v1.3.31 with additional workflow enhancements.
 
 ## Features
 
@@ -11,7 +11,7 @@ Based on [get-shit-done](https://github.com/glittercowboy/get-shit-done) v1.3.31
 - **Context engineering**: Fresh 200k token contexts for task execution
 - **Atomic commits**: One commit per task for git bisect capability
 
-### Task Protocol Enhancements
+### Workflow Enhancements
 - **Deviation handling**: Automatic bug fixes, critical additions, architectural decisions
 - **TDD support**: RED → GREEN → REFACTOR cycle with dedicated changes
 - **Risk classification**: AUTO/HIGH/MEDIUM/LOW based on file patterns and keywords

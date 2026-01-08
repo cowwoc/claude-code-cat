@@ -173,33 +173,56 @@ Prompt:
 ```
 Analyze this codebase for coding conventions and testing practices.
 
-IMPORTANT: Always include actual file paths in your findings. Use backtick formatting like `vitest.config.ts`. This makes the output actionable for planning.
+IMPORTANT: Always include actual file paths in your findings. Use backtick formatting like `src/main/java/Config.java` or `vitest.config.ts`. This makes the output actionable for planning.
+
+**First: Identify primary language(s)**
+- Check file extensions, package manifests, build files
+- Report primary language and version if detectable
 
 Focus areas:
-1. Code style (indentation, quotes, semicolons, formatting)
-2. File naming conventions (kebab-case, PascalCase, etc.)
-3. Function/variable naming patterns
-4. Comment and documentation style
-5. Test framework and structure
-6. Test organization (unit, integration, e2e)
-7. Test coverage approach
-8. Linting and formatting tools
+1. Code style (indentation, line length, brace placement, formatting)
+2. File naming conventions (PascalCase, kebab-case, snake_case, etc.)
+3. Type/class/function/variable naming patterns
+4. Comment and documentation style (JavaDoc, JSDoc, docstrings, etc.)
+5. Import/dependency organization
+6. Error handling patterns
+7. Test framework and structure
+8. Test organization (unit, integration, e2e)
+9. Linting and formatting tools
 
-Search for:
-- Config files: .eslintrc, .prettierrc, tsconfig.json
-- Test files: *.test.*, *.spec.*, __tests__/
-- Test setup: vitest.config, jest.config
-- Code patterns across multiple files
-- README or CONTRIBUTING docs
+Search for config files by language:
+- Java/Kotlin: pom.xml, build.gradle, checkstyle.xml, pmd.xml, .editorconfig
+- JavaScript/TypeScript: package.json, .eslintrc*, .prettierrc*, tsconfig.json
+- Python: pyproject.toml, setup.py, .flake8, ruff.toml, mypy.ini
+- Go: go.mod, .golangci.yml
+- Rust: Cargo.toml, rustfmt.toml, clippy.toml
+- C/C++: CMakeLists.txt, .clang-format, .clang-tidy
 
-Output findings for populating these sections:
-- CONVENTIONS.md: Code Style, Naming, Patterns, Documentation
+Search for test files:
+- Java: *Test.java, *IT.java in src/test/
+- JS/TS: *.test.*, *.spec.*, __tests__/
+- Python: test_*.py, *_test.py, tests/
+- Go: *_test.go
+- Rust: #[test], tests/
+
+Output findings for populating:
+- CONVENTIONS.md (index): Language, Critical Rules, Style Enforcement commands
+- conventions/ subdirectory: Detailed rules IF complexity warrants (see below)
 - TESTING.md: Framework, Structure, Coverage, Tools
 
+**Complexity assessment** - recommend conventions/ subdirectory if ANY of:
+- Multiple enforcement tools (e.g., Checkstyle + PMD, ESLint + Prettier)
+- Tiered violations (TIER1/TIER2/TIER3 or error/warning/info levels)
+- 20+ distinct style rules observed
+- Custom validation patterns (requireThat, zod, pydantic)
+- Extensive documentation conventions (JavaDoc requirements, etc.)
+
 For each finding, include file paths. Examples:
-- "Prettier config: `.prettierrc`"
-- "Test pattern: `src/**/*.test.ts` (co-located with source)"
-- "Example of naming convention: `src/services/user-service.ts`"
+- "Language: Java 21 - detected from `pom.xml` maven.compiler.release"
+- "Checkstyle config: `config/checkstyle/checkstyle.xml`"
+- "Test pattern: `src/test/java/**/*Test.java`"
+- "Naming: PascalCase classes - see `src/main/java/com/example/UserService.java`"
+- "Complexity: HIGH - recommend conventions/ subdirectory (Checkstyle + PMD + manual rules)"
 
 Look at actual code files to infer conventions if config files are missing.
 ```
@@ -273,8 +296,17 @@ From Agent 2 output, extract:
 - STRUCTURE.md sections: Directory Layout, Key Locations, Organization
 
 From Agent 3 output, extract:
-- CONVENTIONS.md sections: Code Style, Naming Conventions, Common Patterns, Documentation Style
+- CONVENTIONS.md (index): Language, Critical Rules, Style Enforcement commands
+- conventions/ subdirectory: IF complexity assessment is HIGH (see Agent 3 prompt)
 - TESTING.md sections: Framework, Structure, Coverage, Tools
+
+**Conventions complexity routing:**
+- If Agent 3 reports "Complexity: HIGH" or "recommend conventions/ subdirectory"
+  → Create CONVENTIONS.md index + conventions/ subdirectory with detailed files
+- If Agent 3 reports moderate complexity (10-20 rules)
+  → Create CONVENTIONS.md with inline details, no subdirectory
+- If Agent 3 reports low complexity (<10 rules, automated tools only)
+  → Create minimal CONVENTIONS.md, no subdirectory
 
 From Agent 4 output, extract:
 - CONCERNS.md sections: Technical Debt, Known Issues, Security, Performance, Missing
@@ -333,8 +365,30 @@ Filled result:
 3. **ARCHITECTURE.md** (from architecture.md template + Agent 2 findings)
 4. **STRUCTURE.md** (from structure.md template + Agent 2 findings)
 5. **CONVENTIONS.md** (from conventions.md template + Agent 3 findings)
+   - If HIGH complexity: create as index, then create conventions/ subdirectory
 6. **TESTING.md** (from testing.md template + Agent 3 findings)
 7. **CONCERNS.md** (from concerns.md template + Agent 4 findings)
+
+**Conventions subdirectory (HIGH complexity only):**
+
+If Agent 3 recommended conventions/ subdirectory:
+
+```bash
+mkdir -p .planning/codebase/conventions
+```
+
+Create these files from Agent 3 detailed findings:
+- `conventions/naming.md` - File, type, function, variable naming patterns
+- `conventions/style.md` - Formatting, braces, whitespace, line breaking
+- `conventions/documentation.md` - Comments, doc blocks, API documentation
+- `conventions/errors.md` - Exception handling, error types, messages
+- `conventions/validation.md` - Input validation, preconditions, invariants
+
+Each conventions/ file should:
+- Be 100-300 lines
+- Include detection patterns/commands where applicable
+- Show violation examples and correct examples
+- Reference specific files from the codebase
 
 After all documents written, continue to verify_output.
 </step>
@@ -345,12 +399,15 @@ Verify all documents created successfully:
 ```bash
 ls -la .planning/codebase/
 wc -l .planning/codebase/*.md
+# If conventions/ subdirectory exists:
+ls -la .planning/codebase/conventions/ 2>/dev/null && wc -l .planning/codebase/conventions/*.md 2>/dev/null
 ```
 
 **Verification checklist:**
-- All 7 documents exist
+- All 7 core documents exist
 - No empty documents
 - Templates populated with findings
+- If HIGH complexity: conventions/ subdirectory exists with detail files
 
 If any checks fail, report issues to user.
 
@@ -361,14 +418,14 @@ Continue to commit_codebase_map.
 Commit the codebase map:
 
 ```bash
-git add .planning/codebase/*.md
+git add .planning/codebase/
 git commit -m "$(cat <<'EOF'
 docs: map existing codebase
 
 - STACK.md - Technologies and dependencies
 - ARCHITECTURE.md - System design and patterns
 - STRUCTURE.md - Directory layout
-- CONVENTIONS.md - Code style and patterns
+- CONVENTIONS.md - Code style and patterns (index)
 - TESTING.md - Test structure
 - INTEGRATIONS.md - External services
 - CONCERNS.md - Technical debt and issues
@@ -382,7 +439,7 @@ Continue to offer_next.
 <step name="offer_next">
 Present completion summary and next steps.
 
-**Output format:**
+**Output format (without conventions/ subdirectory):**
 
 ```
 Codebase mapping complete.
@@ -395,8 +452,34 @@ Created .planning/codebase/:
 - TESTING.md ([N] lines) - Test structure and practices
 - INTEGRATIONS.md ([N] lines) - External services and APIs
 - CONCERNS.md ([N] lines) - Technical debt and issues
+```
 
+**Output format (with conventions/ subdirectory):**
 
+```
+Codebase mapping complete.
+
+Created .planning/codebase/:
+- STACK.md ([N] lines) - Technologies and dependencies
+- ARCHITECTURE.md ([N] lines) - System design and patterns
+- STRUCTURE.md ([N] lines) - Directory layout and organization
+- CONVENTIONS.md ([N] lines) - Code style index (load-on-demand)
+  └── conventions/ - Detailed rules:
+      - naming.md ([N] lines)
+      - style.md ([N] lines)
+      - documentation.md ([N] lines)
+      - errors.md ([N] lines)
+      - validation.md ([N] lines)
+- TESTING.md ([N] lines) - Test structure and practices
+- INTEGRATIONS.md ([N] lines) - External services and APIs
+- CONCERNS.md ([N] lines) - Technical debt and issues
+
+Convention details loaded on-demand when working on specific areas.
+```
+
+**Common footer:**
+
+```
 ---
 
 ## ▶ Next Up
@@ -429,6 +512,7 @@ End workflow.
 - TaskOutput used to collect all agent results
 - All 7 codebase documents written using template filling
 - Documents follow template structure with actual findings
+- If HIGH complexity: conventions/ subdirectory created with detail files
 - Clear completion summary with line counts
 - User offered clear next steps in CAT style
 </success_criteria>
