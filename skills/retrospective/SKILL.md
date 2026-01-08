@@ -25,7 +25,7 @@ generates new action items for systemic fixes.
 
 ## Workflow
 
-### Phase 1: Data Collection
+### Release 1: Data Collection
 
 1. Read all mistakes from `.planning/retrospectives/mistakes.json`
 2. Read retrospective history from `.planning/retrospectives/retrospectives.json`
@@ -41,12 +41,12 @@ jq --arg date "$LAST_RETRO" '[.mistakes[] | select(.timestamp > $date)] | length
   .planning/retrospectives/mistakes.json
 ```
 
-### Phase 2: Pattern Analysis
+### Release 2: Pattern Analysis
 
 For each mistake since last retrospective:
 
 1. **Categorize by type** (from schema):
-   - `tdd_violation` - Skipped test phases
+   - `tdd_violation` - Skipped test releases
    - `detection_gap` - Validation missed issue
    - `bash_error` - Shell command failure
    - `edit_failure` - String not found
@@ -71,7 +71,7 @@ jq '.mistakes | group_by(.category) | map({category: .[0].category, count: lengt
   .planning/retrospectives/mistakes.json
 ```
 
-### Phase 3: Effectiveness Analysis (CRITICAL)
+### Release 3: Effectiveness Analysis (CRITICAL)
 
 For each COMPLETED action item, check if the fix was effective:
 
@@ -99,7 +99,7 @@ jq --arg pattern "PATTERN-003" --arg completed "2025-11-28" '
    - Reference the ineffective action item
    - Propose deeper architectural change
 
-### Phase 3b: Escalation Protocol (for INEFFECTIVE fixes)
+### Release 3b: Escalation Protocol (for INEFFECTIVE fixes)
 
 When an action item is marked `ineffective` (2+ post-fix mistakes), escalation is **MANDATORY**.
 
@@ -159,7 +159,7 @@ When fixes prove ineffective, the solution is NEVER "add more documentation". Th
 2. Implement stronger enforcement mechanism
 3. Add multiple layers of defense
 
-### Phase 4: Cross-Retrospective Analysis
+### Release 4: Cross-Retrospective Analysis
 
 Compare current patterns with ALL previous retrospectives:
 
@@ -173,7 +173,7 @@ Compare current patterns with ALL previous retrospectives:
    - Check `occurrences_after_fix` (mistakes after last action date)
    - If `occurrences_after_fix` >= `recurrence_after_fix_threshold`: escalate
 
-### Phase 4.7: Action Item Coverage Validation (MANDATORY)
+### Release 4.7: Action Item Coverage Validation (MANDATORY)
 
 **⚠️ CRITICAL: Every recurring pattern with new occurrences MUST have an action item.**
 
@@ -210,7 +210,7 @@ Before generating the report, validate action item coverage:
    | Previous action item marked INEFFECTIVE | MUST create escalation |
    | Pattern has escalated status | MUST create action item |
 
-4. **Self-check before Phase 5**:
+4. **Self-check before Release 5**:
    ```
    □ Every pattern with 3+ new occurrences has a pending action item?
    □ The most frequent pattern has an action item?
@@ -219,7 +219,7 @@ Before generating the report, validate action item coverage:
    ```
 
 5. **If validation fails**:
-   - DO NOT proceed to Phase 5
+   - DO NOT proceed to Release 5
    - Generate missing action items
    - Re-validate
    - Only proceed when all patterns are covered
@@ -230,9 +230,9 @@ RETRO-2025-12-01-001 missed creating action items for PATTERN-002 (Detection Gap
 - Previous escalation (ESCALATE-2025-11-29-001) marked INEFFECTIVE
 - Being the most frequent pattern
 
-This validation phase prevents that oversight.
+This validation release prevents that oversight.
 
-### Phase 5: Action Item Generation
+### Release 5: Action Item Generation
 
 For each RECURRING pattern (occurs 2+ times):
 
@@ -264,7 +264,7 @@ For each RECURRING pattern (occurs 2+ times):
 }
 ```
 
-### Phase 6: Report & Update
+### Release 6: Report & Update
 
 1. **Display summary**:
 
@@ -373,11 +373,11 @@ User: Run a retrospective
 
 Claude: I'll run a retrospective analysis.
 
-[Phase 1: Reading mistake and retrospective files...]
-[Phase 2: Analyzing 5 new mistakes...]
-[Phase 3: Checking effectiveness of 4 action items...]
-[Phase 4: Cross-referencing with 3 known patterns...]
-[Phase 5: Generating action items for recurring patterns...]
+[Release 1: Reading mistake and retrospective files...]
+[Release 2: Analyzing 5 new mistakes...]
+[Release 3: Checking effectiveness of 4 action items...]
+[Release 4: Cross-referencing with 3 known patterns...]
+[Release 5: Generating action items for recurring patterns...]
 
 ================================================================================
 📊 RETROSPECTIVE REPORT: 2025-11-28

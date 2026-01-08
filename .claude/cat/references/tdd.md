@@ -3,13 +3,13 @@ TDD is about design quality, not coverage metrics. The red-green-refactor cycle 
 
 **Principle:** If you can describe the behavior as `expect(fn(input)).toBe(output)` before writing `fn`, TDD improves the result.
 
-**Key insight:** TDD work is fundamentally heavier than standard tasks—it requires 2-3 execution cycles (RED → GREEN → REFACTOR), each with file reads, test runs, and potential debugging. TDD features get dedicated plans to ensure full context is available throughout the cycle.
+**Key insight:** TDD work is fundamentally heavier than standard tasks—it requires 2-3 execution cycles (RED → GREEN → REFACTOR), each with file reads, test runs, and potential debugging. TDD features get dedicated changes to ensure full context is available throughout the cycle.
 </overview>
 
 <when_to_use_tdd>
 ## When TDD Improves Quality
 
-**TDD candidates (create a TDD plan):**
+**TDD candidates (create a TDD change):**
 - Business logic with defined inputs/outputs
 - API endpoints with request/response contracts
 - Data transformations, parsing, formatting
@@ -18,7 +18,7 @@ TDD is about design quality, not coverage metrics. The red-green-refactor cycle 
 - State machines and workflows
 - Utility functions with clear specifications
 
-**Skip TDD (use standard plan with `type="auto"` tasks):**
+**Skip TDD (use standard change with `type="auto"` tasks):**
 - UI layout, styling, visual components
 - Configuration changes
 - Glue code connecting existing components
@@ -27,19 +27,19 @@ TDD is about design quality, not coverage metrics. The red-green-refactor cycle 
 - Exploratory prototyping
 
 **Heuristic:** Can you write `expect(fn(input)).toBe(output)` before writing `fn`?
-→ Yes: Create a TDD plan
-→ No: Use standard plan, add tests after if needed
+→ Yes: Create a TDD change
+→ No: Use standard change, add tests after if needed
 </when_to_use_tdd>
 
 <tdd_plan_structure>
-## TDD Plan Structure
+## TDD Change Structure
 
-Each TDD plan implements **one feature** through the full RED-GREEN-REFACTOR cycle.
+Each TDD change implements **one feature** through the full RED-GREEN-REFACTOR cycle.
 
 ```markdown
 ---
-phase: XX-name
-plan: NN
+release: XX-name
+change: NN
 type: tdd
 ---
 
@@ -85,7 +85,7 @@ After completion, create SUMMARY.md with:
 </output>
 ```
 
-**One feature per TDD plan.** If features are trivial enough to batch, they're trivial enough to skip TDD—use a standard plan and add tests after.
+**One feature per TDD change.** If features are trivial enough to batch, they're trivial enough to skip TDD—use a standard change and add tests after.
 </tdd_plan_structure>
 
 <execution_flow>
@@ -109,7 +109,7 @@ After completion, create SUMMARY.md with:
 2. Run tests - MUST still pass
 3. Only commit if changes made: `refactor: clean up [feature]`
 
-**Result:** Each TDD plan produces 2-3 atomic commits.
+**Result:** Each TDD change produces 2-3 atomic commits.
 </execution_flow>
 
 <test_quality>
@@ -136,7 +136,7 @@ After completion, create SUMMARY.md with:
 <framework_setup>
 ## Test Framework Setup (If None Exists)
 
-When executing a TDD plan but no test framework is configured, set it up as part of the RED phase:
+When executing a TDD change but no test framework is configured, set it up as part of the RED release:
 
 **1. Detect project type:**
 ```bash
@@ -182,23 +182,23 @@ Follow project conventions for test location:
 - `__tests__/` directory
 - `tests/` directory at root
 
-Framework setup is a one-time cost included in the first TDD plan's RED phase.
+Framework setup is a one-time cost included in the first TDD change's RED release.
 </framework_setup>
 
 <error_handling>
 ## Error Handling
 
-**Test doesn't fail in RED phase:**
+**Test doesn't fail in RED release:**
 - Feature may already exist - investigate
 - Test may be wrong (not testing what you think)
 - Fix before proceeding
 
-**Test doesn't pass in GREEN phase:**
+**Test doesn't pass in GREEN release:**
 - Debug implementation
 - Don't skip to refactor
 - Keep iterating until green
 
-**Tests fail in REFACTOR phase:**
+**Tests fail in REFACTOR release:**
 - Undo refactor
 - Commit was premature
 - Refactor in smaller steps
@@ -210,9 +210,9 @@ Framework setup is a one-time cost included in the first TDD plan's RED phase.
 </error_handling>
 
 <commit_pattern>
-## Commit Pattern for TDD Plans
+## Commit Pattern for TDD Changes
 
-TDD plans produce 2-3 atomic commits (one per phase):
+TDD changes produce 2-3 atomic commits (one per release):
 
 ```
 test: add failing test for email validation
@@ -234,9 +234,9 @@ refactor: extract regex to constant (optional)
 - Tests still pass
 ```
 
-**Comparison with standard plans:**
-- Standard plans: 1 commit per task, 2-4 commits per plan
-- TDD plans: 2-3 commits for single feature
+**Comparison with standard changes:**
+- Standard changes: 1 commit per task, 2-4 commits per change
+- TDD changes: 2-3 commits for single feature
 
 Both follow same format: `{type}: {description}`
 
@@ -250,14 +250,14 @@ Both follow same format: `{type}: {description}`
 <context_budget>
 ## Context Budget
 
-TDD plans target **~40% context usage** (lower than standard plans' ~50%).
+TDD changes target **~40% context usage** (lower than standard changes' ~50%).
 
 Why lower:
-- RED phase: write test, run test, potentially debug why it didn't fail
-- GREEN phase: implement, run test, potentially iterate on failures
-- REFACTOR phase: modify code, run tests, verify no regressions
+- RED release: write test, run test, potentially debug why it didn't fail
+- GREEN release: implement, run test, potentially iterate on failures
+- REFACTOR release: modify code, run tests, verify no regressions
 
-Each phase involves reading files, running commands, analyzing output. The back-and-forth is inherently heavier than linear task execution.
+Each release involves reading files, running commands, analyzing output. The back-and-forth is inherently heavier than linear task execution.
 
 Single feature focus ensures full quality throughout the cycle.
 </context_budget>

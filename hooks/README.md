@@ -145,13 +145,13 @@ Detects:
 
 Features:
 - Removes lock file if it exists when session ends
-- Fallback cleanup for locks not released on plan completion
+- Fallback cleanup for locks not released on change completion
 
 ## Deprecated Hooks
 
 #### session-lock.sh
 Was previously triggered on SessionStart. Lock acquisition now happens in
-execute-phase.md workflow when /cat:execute-plan is invoked.
+execute-release.md workflow when /cat:execute-change is invoked.
 
 ## Customization
 

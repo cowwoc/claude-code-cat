@@ -5,16 +5,16 @@
 1. `.planning/STATE.md`
 2. `.planning/PROJECT.md`
 3. `.planning/ROADMAP.md`
-4. Current phase's plan files (`*-PLAN.md`)
-5. Current phase's summary files (`*-SUMMARY.md`)
+4. Current release's change files (`*-CHANGE.md`)
+5. Current release's summary files (`*-SUMMARY.md`)
 
 </required_reading>
 
 <purpose>
 
-Mark current phase complete and advance to next. This is the natural point where progress tracking and PROJECT.md evolution happen.
+Mark current release complete and advance to next. This is the natural point where progress tracking and PROJECT.md evolution happen.
 
-"Planning next phase" = "current phase is done"
+"Planning next release" = "current release is done"
 
 </purpose>
 
@@ -29,25 +29,25 @@ cat .planning/STATE.md 2>/dev/null
 cat .planning/PROJECT.md 2>/dev/null
 ```
 
-Parse current position to verify we're transitioning the right phase.
+Parse current position to verify we're transitioning the right release.
 Note accumulated context that may need updating after transition.
 
 </step>
 
 <step name="verify_completion">
 
-Check current phase has all plan summaries:
+Check current release has all change summaries:
 
 ```bash
-ls .planning/phases/XX-current/*-PLAN.md 2>/dev/null | sort
-ls .planning/phases/XX-current/*-SUMMARY.md 2>/dev/null | sort
+ls .planning/releases/XX-current/*-CHANGE.md 2>/dev/null | sort
+ls .planning/releases/XX-current/*-SUMMARY.md 2>/dev/null | sort
 ```
 
 **Verification logic:**
 
-- Count PLAN files
+- Count CHANGE files
 - Count SUMMARY files
-- If counts match: all plans complete
+- If counts match: all changes complete
 - If counts don't match: incomplete
 
 <config-check>
@@ -58,13 +58,13 @@ cat .planning/config.json 2>/dev/null
 
 </config-check>
 
-**If all plans complete:**
+**If all changes complete:**
 
 <if mode="yolo">
 
 ```
-⚡ Auto-approved: Transition Phase [X] → Phase [X+1]
-Phase [X] complete — all [Y] plans finished.
+⚡ Auto-approved: Transition Release [X] → Release [X+1]
+Release [X] complete — all [Y] changes finished.
 
 Proceeding to mark done and advance...
 ```
@@ -75,30 +75,30 @@ Proceed directly to cleanup_handoff step.
 
 <if mode="interactive" OR="custom with gates.confirm_transition true">
 
-Ask: "Phase [X] complete — all [Y] plans finished. Ready to mark done and move to Phase [X+1]?"
+Ask: "Release [X] complete — all [Y] changes finished. Ready to mark done and move to Release [X+1]?"
 
 Wait for confirmation before proceeding.
 
 </if>
 
-**If plans incomplete:**
+**If changes incomplete:**
 
 **SAFETY RAIL: always_confirm_destructive applies here.**
-Skipping incomplete plans is destructive — ALWAYS prompt regardless of mode.
+Skipping incomplete changes is destructive — ALWAYS prompt regardless of mode.
 
 Present:
 
 ```
-Phase [X] has incomplete plans:
-- {phase}-01-SUMMARY.md ✓ Complete
-- {phase}-02-SUMMARY.md ✗ Missing
-- {phase}-03-SUMMARY.md ✗ Missing
+Release [X] has incomplete changes:
+- {release}-01-SUMMARY.md ✓ Complete
+- {release}-02-SUMMARY.md ✗ Missing
+- {release}-03-SUMMARY.md ✗ Missing
 
-⚠️ Safety rail: Skipping plans requires confirmation (destructive action)
+⚠️ Safety rail: Skipping changes requires confirmation (destructive action)
 
 Options:
-1. Continue current phase (execute remaining plans)
-2. Mark complete anyway (skip remaining plans)
+1. Continue current release (execute remaining changes)
+2. Mark complete anyway (skip remaining changes)
 3. Review what's left
 ```
 
@@ -111,10 +111,10 @@ Wait for user decision.
 Check for lingering handoffs:
 
 ```bash
-ls .planning/phases/XX-current/.continue-here*.md 2>/dev/null
+ls .planning/releases/XX-current/.continue-here*.md 2>/dev/null
 ```
 
-If found, delete them — phase is complete, handoffs are stale.
+If found, delete them — release is complete, handoffs are stale.
 
 </step>
 
@@ -128,24 +128,24 @@ ROADMAP_FILE=".planning/ROADMAP.md"
 
 Update the file:
 
-- Mark current phase: `[x] Complete`
+- Mark current release: `[x] Complete`
 - Add completion date
-- Update plan count to final (e.g., "3/3 plans complete")
+- Update change count to final (e.g., "3/3 changes complete")
 - Update Progress table
-- Keep next phase as `[ ] Not started`
+- Keep next release as `[ ] Not started`
 
 **Example:**
 
 ```markdown
-## Phases
+## Releases
 
-- [x] Phase 1: Foundation (completed 2025-01-15)
-- [ ] Phase 2: Authentication ← Next
-- [ ] Phase 3: Core Features
+- [x] Release 1: Foundation (completed 2025-01-15)
+- [ ] Release 2: Authentication ← Next
+- [ ] Release 3: Core Features
 
 ## Progress
 
-| Phase             | Plans Complete | Status      | Completed  |
+| Release             | Changes Complete | Status      | Completed  |
 | ----------------- | -------------- | ----------- | ---------- |
 | 1. Foundation     | 3/3            | Complete    | 2025-01-15 |
 | 2. Authentication | 0/2            | Not started | -          |
@@ -156,26 +156,26 @@ Update the file:
 
 <step name="archive_prompts">
 
-If prompts were generated for the phase, they stay in place.
+If prompts were generated for the release, they stay in place.
 The `completed/` subfolder pattern from create-meta-prompts handles archival.
 
 </step>
 
 <step name="evolve_project">
 
-Evolve PROJECT.md to reflect learnings from completed phase.
+Evolve PROJECT.md to reflect learnings from completed release.
 
-**Read phase summaries:**
+**Read release summaries:**
 
 ```bash
-cat .planning/phases/XX-current/*-SUMMARY.md
+cat .planning/releases/XX-current/*-SUMMARY.md
 ```
 
 **Assess requirement changes:**
 
 1. **Requirements validated?**
-   - Any Active requirements shipped in this phase?
-   - Move to Validated with phase reference: `- ✓ [Requirement] — Phase X`
+   - Any Active requirements shipped in this release?
+   - Move to Validated with release reference: `- ✓ [Requirement] — Release X`
 
 2. **Requirements invalidated?**
    - Any Active requirements discovered to be unnecessary or wrong?
@@ -199,7 +199,7 @@ Make the edits inline. Update "Last updated" footer:
 
 ```markdown
 ---
-*Last updated: [date] after Phase [X]*
+*Last updated: [date] after Release [X]*
 ```
 
 **Example evolution:**
@@ -218,12 +218,12 @@ Before:
 - OAuth2 — complexity not needed for v1
 ```
 
-After (Phase 2 shipped JWT auth, discovered rate limiting needed):
+After (Release 2 shipped JWT auth, discovered rate limiting needed):
 
 ```markdown
 ### Validated
 
-- ✓ JWT authentication — Phase 2
+- ✓ JWT authentication — Release 2
 
 ### Active
 
@@ -238,7 +238,7 @@ After (Phase 2 shipped JWT auth, discovered rate limiting needed):
 
 **Step complete when:**
 
-- [ ] Phase summaries reviewed for learnings
+- [ ] Release summaries reviewed for learnings
 - [ ] Validated requirements moved from Active
 - [ ] Invalidated requirements moved to Out of Scope with reason
 - [ ] Emerged requirements added to Active
@@ -250,38 +250,38 @@ After (Phase 2 shipped JWT auth, discovered rate limiting needed):
 
 <step name="update_current_position_after_transition">
 
-Update Current Position section in STATE.md to reflect phase completion and transition.
+Update Current Position section in STATE.md to reflect release completion and transition.
 
 **Format:**
 
 ```markdown
-Phase: [next] of [total] ([Next phase name])
-Plan: Not started
-Status: Ready to plan
-Last activity: [today] — Phase [X] complete, transitioned to Phase [X+1]
+Release: [next] of [total] ([Next release name])
+Change: Not started
+Status: Ready to change
+Last activity: [today] — Release [X] complete, transitioned to Release [X+1]
 
 Progress: [updated progress bar]
 ```
 
 **Instructions:**
 
-- Increment phase number to next phase
-- Reset plan to "Not started"
-- Set status to "Ready to plan"
+- Increment release number to next release
+- Reset change to "Not started"
+- Set status to "Ready to change"
 - Update last activity to describe transition
-- Recalculate progress bar based on completed plans
+- Recalculate progress bar based on completed changes
 
-**Example — transitioning from Phase 2 to Phase 3:**
+**Example — transitioning from Release 2 to Release 3:**
 
 Before:
 
 ```markdown
 ## Current Position
 
-Phase: 2 of 4 (Authentication)
-Plan: 2 of 2 in current phase
-Status: Phase complete
-Last activity: 2025-01-20 — Completed 02-02-add-session-PLAN.md
+Release: 2 of 4 (Authentication)
+Change: 2 of 2 in current release
+Status: Release complete
+Last activity: 2025-01-20 — Completed 02-02-add-session-CHANGE.md
 
 Progress: ███████░░░ 60%
 ```
@@ -291,21 +291,21 @@ After:
 ```markdown
 ## Current Position
 
-Phase: 3 of 4 (Core Features)
-Plan: Not started
-Status: Ready to plan
-Last activity: 2025-01-20 — Phase 2 complete, transitioned to Phase 3
+Release: 3 of 4 (Core Features)
+Change: Not started
+Status: Ready to change
+Last activity: 2025-01-20 — Release 2 complete, transitioned to Release 3
 
 Progress: ███████░░░ 60%
 ```
 
 **Step complete when:**
 
-- [ ] Phase number incremented to next phase
-- [ ] Plan status reset to "Not started"
-- [ ] Status shows "Ready to plan"
+- [ ] Release number incremented to next release
+- [ ] Change status reset to "Not started"
+- [ ] Status shows "Ready to change"
 - [ ] Last activity describes the transition
-- [ ] Progress bar reflects total completed plans
+- [ ] Progress bar reflects total completed changes
 
 </step>
 
@@ -319,7 +319,7 @@ Update Project Reference section in STATE.md.
 See: .planning/PROJECT.md (updated [today])
 
 **Core value:** [Current core value from PROJECT.md]
-**Current focus:** [Next phase name]
+**Current focus:** [Next release name]
 ```
 
 Update the date and current focus to reflect the transition.
@@ -332,21 +332,21 @@ Review and update Accumulated Context section in STATE.md.
 
 **Decisions:**
 
-- Note recent decisions from this phase (3-5 max)
+- Note recent decisions from this release (3-5 max)
 - Full log lives in PROJECT.md Key Decisions table
 
 **Blockers/Concerns:**
 
-- Review blockers from completed phase
-- If addressed in this phase: Remove from list
-- If still relevant for future: Keep with "Phase X" prefix
-- Add any new concerns from completed phase's summaries
+- Review blockers from completed release
+- If addressed in this release: Remove from list
+- If still relevant for future: Keep with "Release X" prefix
+- Add any new concerns from completed release's summaries
 
 **Deferred Issues:**
 
 - Count open issues in ISSUES.md
 - Update count: "[N] open issues — see ISSUES.md"
-- If many accumulated, note: "Consider addressing ISS-XXX, ISS-YYY in next phase"
+- If many accumulated, note: "Consider addressing ISS-XXX, ISS-YYY in next release"
 
 **Example:**
 
@@ -355,33 +355,33 @@ Before:
 ```markdown
 ### Blockers/Concerns
 
-- ⚠️ [Phase 1] Database schema not indexed for common queries
-- ⚠️ [Phase 2] WebSocket reconnection behavior on flaky networks unknown
+- ⚠️ [Release 1] Database schema not indexed for common queries
+- ⚠️ [Release 2] WebSocket reconnection behavior on flaky networks unknown
 
 ### Deferred Issues
 
-- ISS-001: Rate limiting on sync endpoint (Phase 2) — Medium
+- ISS-001: Rate limiting on sync endpoint (Release 2) — Medium
 ```
 
-After (if database indexing was addressed in Phase 2):
+After (if database indexing was addressed in Release 2):
 
 ```markdown
 ### Blockers/Concerns
 
-- ⚠️ [Phase 2] WebSocket reconnection behavior on flaky networks unknown
+- ⚠️ [Release 2] WebSocket reconnection behavior on flaky networks unknown
 
 ### Deferred Issues
 
-- ISS-001: Rate limiting on sync endpoint (Phase 2) — Medium
-- ISS-002: Better sync error messages (Phase 2) — Quick
+- ISS-001: Rate limiting on sync endpoint (Release 2) — Medium
+- ISS-002: Better sync error messages (Release 2) — Quick
 ```
 
 **Step complete when:**
 
 - [ ] Recent decisions noted (full log in PROJECT.md)
 - [ ] Resolved blockers removed from list
-- [ ] Unresolved blockers kept with phase prefix
-- [ ] New concerns from completed phase added
+- [ ] Unresolved blockers kept with release prefix
+- [ ] New concerns from completed release added
 - [ ] Deferred issues count updated
 
 </step>
@@ -394,14 +394,14 @@ Update Session Continuity section in STATE.md to reflect transition completion.
 
 ```markdown
 Last session: [today]
-Stopped at: Phase [X] complete, ready to plan Phase [X+1]
+Stopped at: Release [X] complete, ready to change Release [X+1]
 Resume file: None
 ```
 
 **Step complete when:**
 
 - [ ] Last session timestamp updated to current date and time
-- [ ] Stopped at describes phase completion and next phase
+- [ ] Stopped at describes release completion and next release
 - [ ] Resume file confirmed as None (transitions don't use resume files)
 
 </step>
@@ -410,69 +410,69 @@ Resume file: None
 
 **MANDATORY: Verify milestone status before presenting next steps.**
 
-**Step 1: Read ROADMAP.md and identify phases in current milestone**
+**Step 1: Read ROADMAP.md and identify releases in current milestone**
 
 Read the ROADMAP.md file and extract:
-1. Current phase number (the phase just transitioned from)
-2. All phase numbers in the current milestone section
+1. Current release number (the release just transitioned from)
+2. All release numbers in the current milestone section
 
-To find phases, look for:
-- Phase headers: lines starting with `### Phase` or `#### Phase`
-- Phase list items: lines like `- [ ] **Phase X:` or `- [x] **Phase X:`
+To find releases, look for:
+- Release headers: lines starting with `### Release` or `#### Release`
+- Release list items: lines like `- [ ] **Release X:` or `- [x] **Release X:`
 
-Count total phases and identify the highest phase number in the milestone.
+Count total releases and identify the highest release number in the milestone.
 
-State: "Current phase is {X}. Milestone has {N} phases (highest: {Y})."
+State: "Current release is {X}. Milestone has {N} releases (highest: {Y})."
 
 **Step 2: Route based on milestone status**
 
 | Condition | Meaning | Action |
 |-----------|---------|--------|
-| current phase < highest phase | More phases remain | Go to **Route A** |
-| current phase = highest phase | Milestone complete | Go to **Route B** |
+| current release < highest release | More releases remain | Go to **Route A** |
+| current release = highest release | Milestone complete | Go to **Route B** |
 
 ---
 
-**Route A: More phases remain in milestone**
+**Route A: More releases remain in milestone**
 
-Read ROADMAP.md to get the next phase's name and goal.
+Read ROADMAP.md to get the next release's name and goal.
 
-**If next phase exists:**
+**If next release exists:**
 
 <if mode="yolo">
 
 ```
-Phase [X] marked complete.
+Release [X] marked complete.
 
-Next: Phase [X+1] — [Name]
+Next: Release [X+1] — [Name]
 
-⚡ Auto-continuing: Plan Phase [X+1] in detail
+⚡ Auto-continuing: Change Release [X+1] in detail
 ```
 
-Exit skill and invoke SlashCommand("/cat:plan-phase [X+1]")
+Exit skill and invoke SlashCommand("/cat:change-release [X+1]")
 
 </if>
 
 <if mode="interactive" OR="custom with gates.confirm_transition true">
 
 ```
-## ✓ Phase [X] Complete
+## ✓ Release [X] Complete
 
 ---
 
 ## ▶ Next Up
 
-**Phase [X+1]: [Name]** — [Goal from ROADMAP.md]
+**Release [X+1]: [Name]** — [Goal from ROADMAP.md]
 
-`/cat:plan-phase [X+1]`
+`/cat:change-release [X+1]`
 
 <sub>`/clear` first → fresh context window</sub>
 
 ---
 
 **Also available:**
-- `/cat:discuss-phase [X+1]` — gather context first
-- `/cat:research-phase [X+1]` — investigate unknowns
+- `/cat:discuss-release [X+1]` — gather context first
+- `/cat:research-release [X+1]` — investigate unknowns
 - Review roadmap
 
 ---
@@ -482,14 +482,14 @@ Exit skill and invoke SlashCommand("/cat:plan-phase [X+1]")
 
 ---
 
-**Route B: Milestone complete (all phases done)**
+**Route B: Milestone complete (all releases done)**
 
 <if mode="yolo">
 
 ```
-Phase {X} marked complete.
+Release {X} marked complete.
 
-🎉 Milestone {version} is 100% complete — all {N} phases finished!
+🎉 Milestone {version} is 100% complete — all {N} releases finished!
 
 ⚡ Auto-continuing: Complete milestone and archive
 ```
@@ -501,9 +501,9 @@ Exit skill and invoke SlashCommand("/cat:complete-milestone {version}")
 <if mode="interactive" OR="custom with gates.confirm_transition true">
 
 ```
-## ✓ Phase {X}: {Phase Name} Complete
+## ✓ Release {X}: {Release Name} Complete
 
-🎉 Milestone {version} is 100% complete — all {N} phases finished!
+🎉 Milestone {version} is 100% complete — all {N} releases finished!
 
 ---
 
@@ -533,8 +533,8 @@ Exit skill and invoke SlashCommand("/cat:complete-milestone {version}")
 
 Progress tracking is IMPLICIT:
 
-- "Plan phase 2" → Phase 1 must be done (or ask)
-- "Plan phase 3" → Phases 1-2 must be done (or ask)
+- "Change release 2" → Release 1 must be done (or ask)
+- "Change release 3" → Releases 1-2 must be done (or ask)
 - Transition workflow makes it explicit in ROADMAP.md
 
 No separate "update progress" step. Forward motion IS progress.
@@ -543,25 +543,25 @@ No separate "update progress" step. Forward motion IS progress.
 
 <partial_completion>
 
-If user wants to move on but phase isn't fully complete:
+If user wants to move on but release isn't fully complete:
 
 ```
-Phase [X] has incomplete plans:
-- {phase}-02-{slug}-PLAN.md (not executed)
-- {phase}-03-{slug}-PLAN.md (not executed)
+Release [X] has incomplete changes:
+- {release}-02-{slug}-CHANGE.md (not executed)
+- {release}-03-{slug}-CHANGE.md (not executed)
 
 Options:
-1. Mark complete anyway (plans weren't needed)
-2. Defer work to later phase
-3. Stay and finish current phase
+1. Mark complete anyway (changes weren't needed)
+2. Defer work to later release
+3. Stay and finish current release
 ```
 
 Respect user judgment — they know if work matters.
 
-**If marking complete with incomplete plans:**
+**If marking complete with incomplete changes:**
 
-- Update ROADMAP: "2/3 plans complete" (not "3/3")
-- Note in transition message which plans were skipped
+- Update ROADMAP: "2/3 changes complete" (not "3/3")
+- Note in transition message which changes were skipped
 
 </partial_completion>
 
@@ -569,9 +569,9 @@ Respect user judgment — they know if work matters.
 
 Transition is complete when:
 
-- [ ] Current phase plan summaries verified (all exist or user chose to skip)
+- [ ] Current release change summaries verified (all exist or user chose to skip)
 - [ ] Any stale handoffs deleted
-- [ ] ROADMAP.md updated with completion status and plan count
+- [ ] ROADMAP.md updated with completion status and change count
 - [ ] PROJECT.md evolved (requirements, decisions, description if needed)
 - [ ] STATE.md updated (position, project reference, context, session)
 - [ ] Progress table updated

@@ -9,71 +9,71 @@ This template is used by the complete-milestone workflow to create archive files
 # Milestone v{{VERSION}}: {{MILESTONE_NAME}}
 
 **Status:** ✅ SHIPPED {{DATE}}
-**Phases:** {{PHASE_START}}-{{PHASE_END}}
-**Total Plans:** {{TOTAL_PLANS}}
+**Releases:** {{RELEASE_START}}-{{RELEASE_END}}
+**Total Changes:** {{TOTAL_CHANGES}}
 
 ## Overview
 
 {{MILESTONE_DESCRIPTION}}
 
-## Phases
+## Releases
 
 {{PHASES_SECTION}}
 
-[For each phase in this milestone, include:]
+[For each release in this milestone, include:]
 
-### Phase {{PHASE_NUM}}: {{PHASE_NAME}}
+### Release {{RELEASE_NUM}}: {{RELEASE_NAME}}
 
-**Goal**: {{PHASE_GOAL}}
+**Goal**: {{RELEASE_GOAL}}
 **Depends on**: {{DEPENDS_ON}}
-**Plans**: {{PLAN_COUNT}} plans
+**Changes**: {{CHANGE_COUNT}} changes
 
-Plans:
+Changes:
 
-- [x] {{PHASE}}-01: {{PLAN_DESCRIPTION}}
-- [x] {{PHASE}}-02: {{PLAN_DESCRIPTION}}
-      [... all plans ...]
+- [x] {{RELEASE}}-01: {{CHANGE_DESCRIPTION}}
+- [x] {{RELEASE}}-02: {{CHANGE_DESCRIPTION}}
+      [... all changes ...]
 
 **Details:**
-{{PHASE_DETAILS_FROM_ROADMAP}}
+{{RELEASE_DETAILS_FROM_ROADMAP}}
 
-**For decimal phases, include (INSERTED) marker:**
+**For decimal releases, include (INSERTED) marker:**
 
-### Phase 2.1: Critical Security Patch (INSERTED)
+### Release 2.1: Critical Security Patch (INSERTED)
 
 **Goal**: Fix authentication bypass vulnerability
-**Depends on**: Phase 2
-**Plans**: 1 plan
+**Depends on**: Release 2
+**Changes**: 1 change
 
-Plans:
+Changes:
 
 - [x] 2.1-01: Patch auth vulnerability
 
 **Details:**
-{{PHASE_DETAILS_FROM_ROADMAP}}
+{{RELEASE_DETAILS_FROM_ROADMAP}}
 
 ---
 
 ## Milestone Summary
 
-**Decimal Phases:**
+**Decimal Releases:**
 
-- Phase 2.1: Critical Security Patch (inserted after Phase 2 for urgent fix)
-- Phase 5.1: Performance Hotfix (inserted after Phase 5 for production issue)
+- Release 2.1: Critical Security Patch (inserted after Release 2 for urgent fix)
+- Release 5.1: Performance Hotfix (inserted after Release 5 for production issue)
 
 **Key Decisions:**
 {{DECISIONS_FROM_PROJECT_STATE}}
 [Example:]
 
 - Decision: Use ROADMAP.md split (Rationale: Constant context cost)
-- Decision: Decimal phase numbering (Rationale: Clear insertion semantics)
+- Decision: Decimal release numbering (Rationale: Clear insertion semantics)
 
 **Issues Resolved:**
 {{ISSUES_RESOLVED_DURING_MILESTONE}}
 [Example:]
 
-- Fixed context overflow at 100+ phases
-- Resolved phase insertion confusion
+- Fixed context overflow at 100+ releases
+- Resolved release insertion confusion
 
 **Issues Deferred:**
 {{ISSUES_DEFERRED_TO_LATER}}
@@ -85,7 +85,7 @@ Plans:
 {{SHORTCUTS_NEEDING_FUTURE_WORK}}
 [Example:]
 
-- Some workflows still have hardcoded paths (fix in Phase 5)
+- Some workflows still have hardcoded paths (fix in Release 5)
 
 ---
 
@@ -97,15 +97,15 @@ _For current project status, see .planning/ROADMAP.md_
 
 <guidelines>
 **When to create milestone archives:**
-- After completing all phases in a milestone (v1.0, v1.1, v2.0, etc.)
+- After completing all releases in a milestone (v1.0, v1.1, v2.0, etc.)
 - Triggered by complete-milestone workflow
 - Before planning next milestone work
 
 **How to fill template:**
 
 - Replace {{PLACEHOLDERS}} with actual values
-- Extract phase details from ROADMAP.md
-- Document decimal phases with (INSERTED) marker
+- Extract release details from ROADMAP.md
+- Document decimal releases with (INSERTED) marker
 - Include key decisions from PROJECT-STATE.md or SUMMARY files
 - List issues resolved vs deferred
 - Capture technical debt for future reference
@@ -119,5 +119,5 @@ _For current project status, see .planning/ROADMAP.md_
 
 - Update ROADMAP.md to collapse completed milestone in `<details>` tag
 - Update PROJECT.md to brownfield format with Current State section
-- Continue phase numbering in next milestone (never restart at 01)
+- Continue release numbering in next milestone (never restart at 01)
   </guidelines>

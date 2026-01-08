@@ -1,10 +1,10 @@
 # Discovery Template
 
-Template for `.planning/phases/XX-name/DISCOVERY.md` - shallow research for library/option decisions.
+Template for `.planning/releases/XX-name/DISCOVERY.md` - shallow research for library/option decisions.
 
-**Purpose:** Answer "which library/option should we use" questions during mandatory discovery in plan-phase.
+**Purpose:** Answer "which library/option should we use" questions during mandatory discovery in change-release.
 
-For deep ecosystem research ("how do experts build this"), use `/cat:research-phase` which produces RESEARCH.md.
+For deep ecosystem research ("how do experts build this"), use `/cat:research-release` which produces RESEARCH.md.
 
 ---
 
@@ -12,7 +12,7 @@ For deep ecosystem research ("how do experts build this"), use `/cat:research-ph
 
 ```markdown
 ---
-phase: XX-name
+release: XX-name
 type: discovery
 topic: [discovery-topic]
 ---
@@ -26,7 +26,7 @@ Example: If today is 2025-11-22, search for "2025" not "2024".
 </session_initialization>
 
 <discovery_objective>
-Discover [topic] to inform [phase name] implementation.
+Discover [topic] to inform [release name] implementation.
 
 Purpose: [What decision/implementation this enables]
 Scope: [Boundaries]
@@ -42,7 +42,7 @@ Output: DISCOVERY.md with recommendation
 
 <exclude>
 - [Out of scope for this discovery]
-- [Defer to implementation phase]
+- [Defer to implementation release]
 </exclude>
 </discovery_scope>
 
@@ -71,7 +71,7 @@ Before completing discovery, verify:
 
 
 <output_structure>
-Create `.planning/phases/XX-name/DISCOVERY.md`:
+Create `.planning/releases/XX-name/DISCOVERY.md`:
 
 ```markdown
 # [Topic] Discovery
@@ -123,7 +123,7 @@ Create `.planning/phases/XX-name/DISCOVERY.md`:
 - Quality checklist items completed
 - Clear primary recommendation
 - Low-confidence findings marked with validation checkpoints
-- Ready to inform PLAN.md creation
+- Ready to inform CHANGE.md creation
 </success_criteria>
 
 <guidelines>
@@ -142,5 +142,5 @@ Create `.planning/phases/XX-name/DISCOVERY.md`:
 - Niche/complex domains (3D, games, audio, shaders)
 - Need ecosystem knowledge, not just library choice
 - "How do experts build this" questions
-- Use `/cat:research-phase` for these
+- Use `/cat:research-release` for these
 </guidelines>

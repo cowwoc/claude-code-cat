@@ -1,7 +1,7 @@
 ---
-name: cat:execute-plan
-description: Execute a PLAN.md file
-argument-hint: "[path-to-PLAN.md]"
+name: cat:execute-change
+description: Execute a CHANGE.md file
+argument-hint: "[path-to-CHANGE.md]"
 allowed-tools:
   - Read
   - Write
@@ -15,27 +15,27 @@ allowed-tools:
 ---
 
 <objective>
-Execute a PLAN.md file with per-task atomic commits, create SUMMARY.md, update project state.
+Execute a CHANGE.md file with per-task atomic commits, create SUMMARY.md, update project state.
 
 Commit strategy:
 - Each task → 1 commit with implementation + planning metadata updates
 - Final task commit includes SUMMARY.md creation
 
 Uses intelligent segmentation:
-- Plans without checkpoints → spawn subagent for full autonomous execution
-- Plans with verify checkpoints → segment execution, pause at checkpoints
-- Plans with decision checkpoints → execute in main context
+- Changes without checkpoints → spawn subagent for full autonomous execution
+- Changes with verify checkpoints → segment execution, pause at checkpoints
+- Changes with decision checkpoints → execute in main context
   </objective>
 
 <execution_context>
-@${CLAUDE_PLUGIN_ROOT}/.claude/cat/workflows/execute-phase.md
+@${CLAUDE_PLUGIN_ROOT}/.claude/cat/workflows/execute-release.md
 @${CLAUDE_PLUGIN_ROOT}/.claude/cat/templates/summary.md
 @${CLAUDE_PLUGIN_ROOT}/.claude/cat/references/checkpoints.md
 @${CLAUDE_PLUGIN_ROOT}/.claude/cat/references/tdd.md
 </execution_context>
 
 <context>
-Plan path: $ARGUMENTS
+Change path: $ARGUMENTS
 
 **Load project state first:**
 @.planning/STATE.md
@@ -46,11 +46,11 @@ Plan path: $ARGUMENTS
 
 <process>
 1. Check .planning/ directory exists (error if not - user should run /cat:new-project)
-2. Verify plan at $ARGUMENTS exists
-3. Check if SUMMARY.md already exists (plan already executed?)
+2. Verify change at $ARGUMENTS exists
+3. Check if SUMMARY.md already exists (change already executed?)
 4. Load workflow config for mode (interactive/yolo)
-5. Follow execute-phase.md workflow:
-   - Parse plan and determine execution strategy (A/B/C)
+5. Follow execute-release.md workflow:
+   - Parse change and determine execution strategy (A/B/C)
    - Execute tasks (via subagent or main context as appropriate)
    - Handle checkpoints and deviations
    - Create SUMMARY.md
@@ -61,7 +61,7 @@ Plan path: $ARGUMENTS
 <execution_strategies>
 **Strategy A: Fully Autonomous** (no checkpoints)
 
-- Spawn subagent to execute entire plan
+- Spawn subagent to execute entire change
 - Subagent creates SUMMARY.md and commits
 - Main context: orchestration only (~5% usage)
 
@@ -76,7 +76,7 @@ Plan path: $ARGUMENTS
 
 - Execute in main context
 - Decision outcomes affect subsequent tasks
-- Quality maintained through small scope (2-3 tasks per plan)
+- Quality maintained through small scope (2-3 tasks per change)
   </execution_strategies>
 
 <deviation_rules>
@@ -118,6 +118,6 @@ See ${CLAUDE_PLUGIN_ROOT}/.claude/cat/references/git-integration.md for full com
 - [ ] Each task committed with implementation + metadata updates
 - [ ] SUMMARY.md created with substantive content and commit hashes
 - [ ] STATE.md updated (position, decisions, issues, session)
-- [ ] ROADMAP updated (plan count, phase status)
+- [ ] ROADMAP updated (change count, release status)
 - [ ] User informed of next steps
       </success_criteria>

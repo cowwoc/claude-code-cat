@@ -41,7 +41,7 @@ cat .planning/PROJECT.md
 **From STATE.md extract:**
 
 - **Project Reference**: Core value and current focus
-- **Current Position**: Phase X of Y, Plan A of B, Status
+- **Current Position**: Release X of Y, Change A of B, Status
 - **Progress**: Visual progress bar
 - **Recent Decisions**: Key decisions affecting current work
 - **Deferred Issues**: Open items awaiting attention
@@ -61,26 +61,26 @@ cat .planning/PROJECT.md
 Look for incomplete work that needs attention:
 
 ```bash
-# Check for continue-here files (mid-plan resumption)
-ls .planning/phases/*/.continue-here*.md 2>/dev/null
+# Check for continue-here files (mid-change resumption)
+ls .planning/releases/*/.continue-here*.md 2>/dev/null
 
-# Check for plans without summaries (incomplete execution)
-for plan in .planning/phases/*/*-PLAN.md; do
-  summary="${plan/PLAN/SUMMARY}"
-  [ ! -f "$summary" ] && echo "Incomplete: $plan"
+# Check for changes without summaries (incomplete execution)
+for change in .planning/releases/*/*-CHANGE.md; do
+  summary="${change/CHANGE/SUMMARY}"
+  [ ! -f "$summary" ] && echo "Incomplete: $change"
 done 2>/dev/null
 ```
 
 **If .continue-here file exists:**
 
-- This is a mid-plan resumption point
+- This is a mid-change resumption point
 - Read the file for specific resumption context
-- Flag: "Found mid-plan checkpoint"
+- Flag: "Found mid-change checkpoint"
 
-**If PLAN without SUMMARY exists:**
+**If CHANGE without SUMMARY exists:**
 
 - Execution was started but not completed
-- Flag: "Found incomplete plan execution"
+- Flag: "Found incomplete change execution"
   </step>
 
 <step name="present_status">
@@ -92,8 +92,8 @@ Present complete project status to user:
 ╠══════════════════════════════════════════════════════════════╣
 ║  Building: [one-liner from PROJECT.md "What This Is"]         ║
 ║                                                               ║
-║  Phase: [X] of [Y] - [Phase name]                            ║
-║  Plan:  [A] of [B] - [Status]                                ║
+║  Release: [X] of [Y] - [Release name]                            ║
+║  Change:  [A] of [B] - [Status]                                ║
 ║  Progress: [██████░░░░] XX%                                  ║
 ║                                                               ║
 ║  Last activity: [date] - [what happened]                     ║
@@ -101,7 +101,7 @@ Present complete project status to user:
 
 [If incomplete work found:]
 ⚠️  Incomplete work detected:
-    - [.continue-here file or incomplete plan]
+    - [.continue-here file or incomplete change]
 
 [If deferred issues exist:]
 📋 [N] deferred issues awaiting attention
@@ -122,29 +122,29 @@ Based on project state, determine the most logical next action:
 
 **If .continue-here file exists:**
 → Primary: Resume from checkpoint
-→ Option: Start fresh on current plan
+→ Option: Start fresh on current change
 
-**If incomplete plan (PLAN without SUMMARY):**
-→ Primary: Complete the incomplete plan
+**If incomplete change (CHANGE without SUMMARY):**
+→ Primary: Complete the incomplete change
 → Option: Abandon and move on
 
-**If phase in progress, all plans complete:**
-→ Primary: Transition to next phase
+**If release in progress, all changes complete:**
+→ Primary: Transition to next release
 → Option: Review completed work
 
-**If phase ready to plan:**
-→ Check if CONTEXT.md exists for this phase:
+**If release ready to change:**
+→ Check if CONTEXT.md exists for this release:
 
 - If CONTEXT.md missing:
-  → Primary: Discuss phase vision (how user imagines it working)
-  → Secondary: Plan directly (skip context gathering)
+  → Primary: Discuss release vision (how user imagines it working)
+  → Secondary: Change directly (skip context gathering)
 - If CONTEXT.md exists:
-  → Primary: Plan the phase
+  → Primary: Change the release
   → Option: Review roadmap
 
-**If phase ready to execute:**
-→ Primary: Execute next plan
-→ Option: Review the plan first
+**If release ready to execute:**
+→ Primary: Execute next change
+→ Option: Review the change first
 </step>
 
 <step name="offer_options">
@@ -154,28 +154,28 @@ Present contextual options based on project state:
 What would you like to do?
 
 [Primary action based on state - e.g.:]
-1. Resume from checkpoint (/cat:execute-plan .planning/phases/XX-name/.continue-here-02-01.md)
+1. Resume from checkpoint (/cat:execute-change .planning/releases/XX-name/.continue-here-02-01.md)
    OR
-1. Execute next plan (/cat:execute-plan .planning/phases/XX-name/02-02-add-session-PLAN.md)
+1. Execute next change (/cat:execute-change .planning/releases/XX-name/02-02-add-session-CHANGE.md)
    OR
-1. Discuss Phase 3 context (/cat:discuss-phase 3) [if CONTEXT.md missing]
+1. Discuss Release 3 context (/cat:discuss-release 3) [if CONTEXT.md missing]
    OR
-1. Plan Phase 3 (/cat:plan-phase 3) [if CONTEXT.md exists or discuss option declined]
+1. Change Release 3 (/cat:change-release 3) [if CONTEXT.md exists or discuss option declined]
 
 [Secondary options:]
-2. Review current phase status
+2. Review current release status
 3. Check deferred issues ([N] open)
 4. Review brief alignment
 5. Something else
 ```
 
-**Note:** When offering phase planning, check for CONTEXT.md existence first:
+**Note:** When offering release planning, check for CONTEXT.md existence first:
 
 ```bash
-ls .planning/phases/XX-name/CONTEXT.md 2>/dev/null
+ls .planning/releases/XX-name/CONTEXT.md 2>/dev/null
 ```
 
-If missing, suggest discuss-phase before plan. If exists, offer plan directly.
+If missing, suggest discuss-release before change. If exists, offer change directly.
 
 Wait for user selection.
 </step>
@@ -183,37 +183,37 @@ Wait for user selection.
 <step name="route_to_workflow">
 Based on user selection, route to appropriate workflow:
 
-- **Execute plan** → Show command for user to run after clearing:
+- **Execute change** → Show command for user to run after clearing:
   ```
   ---
 
   ## ▶ Next Up
 
-  **{phase}-{plan}-{slug}: [Plan Name]** — [objective from PLAN.md]
+  **{release}-{change}-{slug}: [Change Name]** — [objective from CHANGE.md]
 
-  `/cat:execute-plan [path]`
+  `/cat:execute-change [path]`
 
   <sub>`/clear` first → fresh context window</sub>
 
   ---
   ```
-- **Plan phase** → Show command for user to run after clearing:
+- **Change release** → Show command for user to run after clearing:
   ```
   ---
 
   ## ▶ Next Up
 
-  **Phase [N]: [Name]** — [Goal from ROADMAP.md]
+  **Release [N]: [Name]** — [Goal from ROADMAP.md]
 
-  `/cat:plan-phase [phase-number]`
+  `/cat:change-release [release-number]`
 
   <sub>`/clear` first → fresh context window</sub>
 
   ---
 
   **Also available:**
-  - `/cat:discuss-phase [N]` — gather context first
-  - `/cat:research-phase [N]` — investigate unknowns
+  - `/cat:discuss-release [N]` — gather context first
+  - `/cat:research-release [N]` — investigate unknowns
 
   ---
   ```
@@ -247,7 +247,7 @@ If STATE.md is missing but other artifacts exist:
 "STATE.md missing. Reconstructing from artifacts..."
 
 1. Read PROJECT.md → Extract "What This Is" and Core Value
-2. Read ROADMAP.md → Determine phases, find current position
+2. Read ROADMAP.md → Determine releases, find current position
 3. Scan \*-SUMMARY.md files → Extract decisions, issues, concerns
 4. Read ISSUES.md → Count deferred issues
 5. Check for .continue-here files → Session continuity

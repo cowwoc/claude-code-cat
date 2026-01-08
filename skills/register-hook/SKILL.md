@@ -398,31 +398,31 @@ UserPromptSubmit + parse prompt = prompt hook
 
 The register-hook script performs:
 
-1. **Validation Phase**
+1. **Validation Release**
    - Check hook name not already used
    - Validate trigger event valid
    - Confirm matcher syntax correct
    - Verify settings.json accessible
 
-2. **Script Creation Phase**
+2. **Script Creation Release**
    - Write script with mandatory error handling
    - Add provided hook logic
    - Make executable (chmod +x)
    - Verify script readable
 
-3. **Registration Phase**
+3. **Registration Release**
    - Parse settings.json
    - Add hook to appropriate trigger event
    - Add matcher if specified
    - Write updated settings.json
 
-4. **Verification Phase**
+4. **Verification Release**
    - Validate settings.json still valid JSON
    - Confirm hook entry exists
    - Check script executable
    - Warn about restart requirement
 
-5. **Documentation Phase**
+5. **Documentation Release**
    - Return success status
    - Provide test instructions
    - List next steps

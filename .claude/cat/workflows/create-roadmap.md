@@ -1,5 +1,5 @@
 <purpose>
-Define the phases of implementation. Each phase is a coherent chunk of work
+Define the releases of implementation. Each release is a coherent chunk of work
 that delivers value. The roadmap provides structure, not detailed tasks.
 </purpose>
 
@@ -81,7 +81,7 @@ Select (comma-separate for multiple):
 </step>
 
 <step name="identify_phases">
-Derive phases from the actual work needed.
+Derive releases from the actual work needed.
 
 **Check depth setting:**
 ```bash
@@ -91,22 +91,22 @@ cat .planning/config.json 2>/dev/null | grep depth
 <depth_guidance>
 **Depth controls compression tolerance, not artificial inflation.**
 
-| Depth | Typical Phases | Typical Plans/Phase | Tasks/Plan |
+| Depth | Typical Releases | Typical Changes/Release | Tasks/Change |
 |-------|----------------|---------------------|------------|
 | Quick | 3-5 | 1-3 | 2-3 |
 | Standard | 5-8 | 3-5 | 2-3 |
 | Comprehensive | 8-12 | 5-10 | 2-3 |
 
-**Key principle:** Derive phases from actual work. Depth determines how aggressively you combine things, not a target to hit.
+**Key principle:** Derive releases from actual work. Depth determines how aggressively you combine things, not a target to hit.
 
-- Comprehensive auth system = 8 phases (because auth genuinely has 8 concerns)
-- Comprehensive "add favicon" = 1 phase (because that's all it is)
+- Comprehensive auth system = 8 releases (because auth genuinely has 8 concerns)
+- Comprehensive "add favicon" = 1 release (because that's all it is)
 
 For comprehensive depth:
-- Don't compress multiple features into single phases
-- Each major capability gets its own phase
+- Don't compress multiple features into single releases
+- Each major capability gets its own release
 - Let small things stay small—don't pad to hit a number
-- If you're tempted to combine two things, make them separate phases instead
+- If you're tempted to combine two things, make them separate releases instead
 
 For quick depth:
 - Combine related work aggressively
@@ -114,14 +114,14 @@ For quick depth:
 - Defer nice-to-haves to future milestones
 </depth_guidance>
 
-**Phase Numbering System:**
+**Release Numbering System:**
 
-Use integer phases (1, 2, 3) for planned milestone work.
+Use integer releases (1, 2, 3) for planned milestone work.
 
-Use decimal phases (2.1, 2.2) for urgent insertions:
+Use decimal releases (2.1, 2.2) for urgent insertions:
 
-- Decimal phases inserted between integers (2.1 between 2 and 3)
-- Mark with "(INSERTED)" in phase title
+- Decimal releases inserted between integers (2.1 between 2 and 3)
+- Mark with "(INSERTED)" in release title
 - Created when urgent work discovered after planning
 - Examples: bugfixes, hotfixes, critical patches
 
@@ -132,25 +132,25 @@ Use decimal phases (2.1, 2.2) for urgent insertions:
 - Security patches needing immediate attention
 - NOT for scope creep or "nice to haves" (those go in ISSUES.md)
 
-**Phase execution order:**
+**Release execution order:**
 Numeric sort: 1 → 1.1 → 1.2 → 2 → 2.1 → 3
 
-**Deriving phases:**
+**Deriving releases:**
 
 1. List all distinct systems/features/capabilities required
 2. Group related work into coherent deliverables
-3. Each phase should deliver ONE complete, verifiable thing
-4. If a phase delivers multiple unrelated capabilities: split it
-5. If a phase can't stand alone as a complete deliverable: merge it
+3. Each release should deliver ONE complete, verifiable thing
+4. If a release delivers multiple unrelated capabilities: split it
+5. If a release can't stand alone as a complete deliverable: merge it
 6. Order by dependencies
 
-Good phases are:
+Good releases are:
 
 - **Coherent**: Each delivers one complete, verifiable capability
-- **Sequential**: Later phases build on earlier
+- **Sequential**: Later releases build on earlier
 - **Independent**: Can be verified and committed on its own
 
-Common phase patterns:
+Common release patterns:
 
 - Foundation → Core Feature → Enhancement → Polish
 - Setup → MVP → Iteration → Launch
@@ -158,12 +158,12 @@ Common phase patterns:
   </step>
 
 <step name="detect_research_needs">
-**For each phase, determine if research is likely needed.**
+**For each release, determine if research is likely needed.**
 
-Scan the brief and phase descriptions for research triggers:
+Scan the brief and release descriptions for research triggers:
 
 <research_triggers>
-**Likely (flag the phase):**
+**Likely (flag the release):**
 
 | Trigger Pattern                                       | Why Research Needed                     |
 | ----------------------------------------------------- | --------------------------------------- |
@@ -191,38 +191,38 @@ Scan the brief and phase descriptions for research triggers:
 
 </research_triggers>
 
-**For each phase, assign:**
+**For each release, assign:**
 
 - `Research: Likely ([reason])` + `Research topics: [what to investigate]`
 - `Research: Unlikely ([reason])`
 
-**Important:** These are hints, not mandates. The mandatory_discovery step during phase planning will validate.
+**Important:** These are hints, not mandates. The mandatory_discovery step during release planning will validate.
 
 Present research assessment:
 
 ```
 Research needs detected:
 
-Phase 1: Foundation
+Release 1: Foundation
   Research: Unlikely (project setup, established patterns)
 
-Phase 2: Authentication
+Release 2: Authentication
   Research: Likely (new system, technology choice)
   Topics: JWT library for [stack], session strategy, auth provider options
 
-Phase 3: Stripe Integration
+Release 3: Stripe Integration
   Research: Likely (external API)
   Topics: Current Stripe API, webhook patterns, checkout flow
 
-Phase 4: Dashboard
-  Research: Unlikely (internal UI using patterns from earlier phases)
+Release 4: Dashboard
+  Research: Unlikely (internal UI using patterns from earlier releases)
 
 Does this look right? (yes / adjust)
 ```
 
 </step>
 
-<step name="confirm_phases">
+<step name="confirm_releases">
 <config-check>
 ```bash
 cat .planning/config.json 2>/dev/null
@@ -232,11 +232,11 @@ Note: Config may not exist yet (project initialization). If missing, default to 
 
 <if mode="yolo">
 ```
-⚡ Auto-approved: Phase breakdown ([N] phases)
+⚡ Auto-approved: Release breakdown ([N] releases)
 
-1. [Phase name] - [goal]
-2. [Phase name] - [goal]
-3. [Phase name] - [goal]
+1. [Release name] - [goal]
+2. [Release name] - [goal]
+3. [Release name] - [goal]
 
 Proceeding to research detection...
 ```
@@ -244,14 +244,14 @@ Proceeding to research detection...
 Proceed directly to detect_research_needs step.
 </if>
 
-<if mode="interactive" OR="missing OR custom with gates.confirm_phases true">
-Present the phase breakdown inline:
+<if mode="interactive" OR="missing OR custom with gates.confirm_releases true">
+Present the release breakdown inline:
 
 "Here's how I'd break this down:
 
-1. [Phase name] - [goal]
-2. [Phase name] - [goal]
-3. [Phase name] - [goal]
+1. [Release name] - [goal]
+2. [Release name] - [goal]
+3. [Release name] - [goal]
    ...
 
 Does this feel right? (yes / adjust)"
@@ -262,7 +262,7 @@ If "adjust": Ask what to change, revise, present again.
 <step name="decision_gate">
 <if mode="yolo">
 ```
-⚡ Auto-approved: Create roadmap with [N] phases
+⚡ Auto-approved: Create roadmap with [N] releases
 
 Proceeding to create .planning/ROADMAP.md...
 ```
@@ -285,31 +285,31 @@ Loop until "Create roadmap" selected.
 
 <step name="create_structure">
 ```bash
-mkdir -p .planning/phases
+mkdir -p .planning/releases
 ```
 </step>
 
 <step name="write_roadmap">
 Use template from `~/.claude/cat/templates/roadmap.md`.
 
-Initial roadmaps use integer phases (1, 2, 3...).
-Decimal phases added later via /cat:insert-phase command (if it exists).
+Initial roadmaps use integer releases (1, 2, 3...).
+Decimal releases added later via /cat:insert-release command (if it exists).
 
 Write to `.planning/ROADMAP.md` with:
 
 - Domain Expertise section (paths from detect_domain step, or "None" if skipped)
-- Phase list with names and one-line descriptions
+- Release list with names and one-line descriptions
 - Dependencies (what must complete before what)
 - **Research flags** (from detect_research_needs step):
-  - `Research: Likely ([reason])` with `Research topics:` for flagged phases
-  - `Research: Unlikely ([reason])` for unflagged phases
+  - `Research: Likely ([reason])` with `Research topics:` for flagged releases
+  - `Research: Unlikely ([reason])` for unflagged releases
 - Status tracking (all start as "not started")
 
-Create phase directories:
+Create release directories:
 
 ```bash
-mkdir -p .planning/phases/01-{phase-name}
-mkdir -p .planning/phases/02-{phase-name}
+mkdir -p .planning/releases/01-{release-name}
+mkdir -p .planning/releases/02-{release-name}
 # etc.
 ```
 
@@ -331,13 +331,13 @@ Write to `.planning/STATE.md`:
 See: .planning/PROJECT.md (updated [today's date])
 
 **Core value:** [Copy Core Value from PROJECT.md]
-**Current focus:** Phase 1 — [First phase name]
+**Current focus:** Release 1 — [First release name]
 
 ## Current Position
 
-Phase: 1 of [N] ([First phase name])
-Plan: Not started
-Status: Ready to plan
+Release: 1 of [N] ([First release name])
+Change: Not started
+Status: Ready to change
 Last activity: [today's date] — Project initialized
 
 Progress: ░░░░░░░░░░ 0%
@@ -345,18 +345,18 @@ Progress: ░░░░░░░░░░ 0%
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 0
+- Total changes completed: 0
 - Average duration: —
 - Total execution time: 0 hours
 
-**By Phase:**
+**By Release:**
 
-| Phase | Plans | Total | Avg/Plan |
+| Release | Changes | Total | Avg/Change |
 |-------|-------|-------|----------|
 | — | — | — | — |
 
 **Recent Trend:**
-- Last 5 plans: —
+- Last 5 changes: —
 - Trend: —
 
 ## Accumulated Context
@@ -397,23 +397,23 @@ Commit project initialization (brief + roadmap + state together):
 
 ```bash
 git add .planning/PROJECT.md .planning/ROADMAP.md .planning/STATE.md
-git add .planning/phases/
+git add .planning/releases/
 # config.json if exists
 git add .planning/config.json 2>/dev/null
 git commit -m "$(cat <<'EOF'
-docs: initialize [project-name] ([N] phases)
+docs: initialize [project-name] ([N] releases)
 
 [One-liner from PROJECT.md]
 
-Phases:
-1. [phase-name]: [goal]
-2. [phase-name]: [goal]
-3. [phase-name]: [goal]
+Releases:
+1. [release-name]: [goal]
+2. [release-name]: [goal]
+3. [release-name]: [goal]
 EOF
 )"
 ```
 
-Confirm: "Committed: docs: initialize [project] ([N] phases)"
+Confirm: "Committed: docs: initialize [project] ([N] releases)"
 </step>
 
 <step name="offer_next">
@@ -422,23 +422,23 @@ Project initialized:
 - Brief: .planning/PROJECT.md
 - Roadmap: .planning/ROADMAP.md
 - State: .planning/STATE.md
-- Committed as: docs: initialize [project] ([N] phases)
+- Committed as: docs: initialize [project] ([N] releases)
 
 ---
 
 ## ▶ Next Up
 
-**Phase 1: [Name]** — [Goal from ROADMAP.md]
+**Release 1: [Name]** — [Goal from ROADMAP.md]
 
-`/cat:plan-phase 1`
+`/cat:change-release 1`
 
 <sub>`/clear` first → fresh context window</sub>
 
 ---
 
 **Also available:**
-- `/cat:discuss-phase 1` — gather context first
-- `/cat:research-phase 1` — investigate unknowns
+- `/cat:discuss-release 1` — gather context first
+- `/cat:research-release 1` — investigate unknowns
 - Review roadmap
 
 ---
@@ -462,19 +462,19 @@ Numbers ensure ordering. Names describe content.
 - Don't create Gantt charts
 - Don't add resource allocation
 - Don't include risk matrices
-- Don't impose arbitrary phase counts (let the work determine the count)
+- Don't impose arbitrary release counts (let the work determine the count)
 
-Phases are buckets of work, not project management artifacts.
+Releases are buckets of work, not project management artifacts.
 </anti_patterns>
 
 <success_criteria>
 Roadmap is complete when:
 - [ ] `.planning/ROADMAP.md` exists
 - [ ] `.planning/STATE.md` exists (project memory initialized)
-- [ ] Phases defined with clear names (count derived from work, not imposed)
-- [ ] **Research flags assigned** (Likely/Unlikely for each phase)
-- [ ] **Research topics listed** for Likely phases
-- [ ] Phase directories created
+- [ ] Releases defined with clear names (count derived from work, not imposed)
+- [ ] **Research flags assigned** (Likely/Unlikely for each release)
+- [ ] **Research topics listed** for Likely releases
+- [ ] Release directories created
 - [ ] Dependencies noted if any
 - [ ] Status tracking in place
 </success_criteria>

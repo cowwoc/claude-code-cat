@@ -7,7 +7,7 @@
     {
       "name": "cat",
       "source": "./",
-      "description": "Spec-driven development with quality gates for Claude Code"
+      "description": "Specification-driven development with quality gates for Claude Code"
     }
   ]
 }

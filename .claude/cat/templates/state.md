@@ -14,13 +14,13 @@ Template for `.planning/STATE.md` — the project's living memory.
 See: .planning/PROJECT.md (updated [date])
 
 **Core value:** [One-liner from PROJECT.md Core Value section]
-**Current focus:** [Current phase name]
+**Current focus:** [Current release name]
 
 ## Current Position
 
-Phase: [X] of [Y] ([Phase name])
-Plan: [A] of [B] in current phase
-Status: [Ready to plan / Planning / Ready to execute / In progress / Phase complete]
+Release: [X] of [Y] ([Release name])
+Change: [A] of [B] in current release
+Status: [Ready to change / Planning / Ready to execute / In progress / Release complete]
 Last activity: [YYYY-MM-DD] — [What happened]
 
 Progress: [░░░░░░░░░░] 0%
@@ -28,21 +28,21 @@ Progress: [░░░░░░░░░░] 0%
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: [N]
+- Total changes completed: [N]
 - Average duration: [X] min
 - Total execution time: [X.X] hours
 
-**By Phase:**
+**By Release:**
 
-| Phase | Plans | Total | Avg/Plan |
+| Release | Changes | Total | Avg/Change |
 |-------|-------|-------|----------|
 | - | - | - | - |
 
 **Recent Trend:**
-- Last 5 plans: [durations]
+- Last 5 changes: [durations]
 - Trend: [Improving / Stable / Degrading]
 
-*Updated after each plan completion*
+*Updated after each change completion*
 
 ## Accumulated Context
 
@@ -51,12 +51,12 @@ Progress: [░░░░░░░░░░] 0%
 Decisions are logged in PROJECT.md Key Decisions table.
 Recent decisions affecting current work:
 
-- [Phase X]: [Decision summary]
-- [Phase Y]: [Decision summary]
+- [Release X]: [Decision summary]
+- [Release Y]: [Decision summary]
 
 ### Deferred Issues
 
-[From ISSUES.md — list open items with phase of origin]
+[From ISSUES.md — list open items with release of origin]
 
 None yet.
 
@@ -75,7 +75,7 @@ Resume file: [Path to .continue-here*.md if exists, otherwise "None"]
 
 <purpose>
 
-STATE.md is the project's short-term memory spanning all phases and sessions.
+STATE.md is the project's short-term memory spanning all releases and sessions.
 
 **Problem it solves:** Information is captured in summaries, issues, and decisions but not systematically consumed. Sessions start without context.
 
@@ -92,21 +92,21 @@ STATE.md is the project's short-term memory spanning all phases and sessions.
 **Creation:** After ROADMAP.md is created (during init)
 - Reference PROJECT.md (read it for current context)
 - Initialize empty accumulated context sections
-- Set position to "Phase 1 ready to plan"
+- Set position to "Release 1 ready to change"
 
 **Reading:** First step of every workflow
 - progress: Present status to user
-- plan: Inform planning decisions
+- change: Inform planning decisions
 - execute: Know current position
 - transition: Know what's complete
 
 **Writing:** After every significant action
 - execute: After SUMMARY.md created
-  - Update position (phase, plan, status)
+  - Update position (release, change, status)
   - Note new decisions (detail in PROJECT.md)
   - Update deferred issues list
   - Add blockers/concerns
-- transition: After phase marked complete
+- transition: After release marked complete
   - Update progress bar
   - Clear resolved blockers
   - Refresh Project Reference date
@@ -118,29 +118,29 @@ STATE.md is the project's short-term memory spanning all phases and sessions.
 ### Project Reference
 Points to PROJECT.md for full context. Includes:
 - Core value (the ONE thing that matters)
-- Current focus (which phase)
+- Current focus (which release)
 - Last update date (triggers re-read if stale)
 
 Claude reads PROJECT.md directly for requirements, constraints, and decisions.
 
 ### Current Position
 Where we are right now:
-- Phase X of Y — which phase
-- Plan A of B — which plan within phase
+- Release X of Y — which release
+- Change A of B — which change within release
 - Status — current state
 - Last activity — what happened most recently
 - Progress bar — visual indicator of overall completion
 
-Progress calculation: (completed plans) / (total plans across all phases) × 100%
+Progress calculation: (completed changes) / (total changes across all releases) × 100%
 
 ### Performance Metrics
 Track velocity to understand execution patterns:
-- Total plans completed
-- Average duration per plan
-- Per-phase breakdown
+- Total changes completed
+- Average duration per change
+- Per-release breakdown
 - Recent trend (improving/stable/degrading)
 
-Updated after each plan completion.
+Updated after each change completion.
 
 ### Accumulated Context
 
@@ -148,13 +148,13 @@ Updated after each plan completion.
 
 **Deferred Issues:** Open items from ISSUES.md
 - Brief description with ISS-XXX number
-- Phase where discovered
+- Release where discovered
 - Effort estimate if known
-- Helps phase planning identify what to address
+- Helps release planning identify what to address
 
-**Blockers/Concerns:** From "Next Phase Readiness" sections
+**Blockers/Concerns:** From "Next Release Readiness" sections
 - Issues that affect future work
-- Prefix with originating phase
+- Prefix with originating release
 - Cleared when addressed
 
 ### Session Continuity
@@ -191,8 +191,8 @@ The goal is "read once, know where we are" — if it's too long, that fails.
 - Provides instant context restoration
 
 **When updated:**
-- After each plan execution (update position, note decisions, update issues/blockers)
-- After phase transitions (update progress bar, clear resolved blockers, refresh project reference)
+- After each change execution (update position, note decisions, update issues/blockers)
+- After release transitions (update progress bar, clear resolved blockers, refresh project reference)
 
 **Size management:**
 - Keep under 100 lines total
@@ -202,7 +202,7 @@ The goal is "read once, know where we are" — if it's too long, that fails.
 
 **Sections:**
 - Project Reference: Pointer to PROJECT.md with core value
-- Current Position: Where we are now (phase, plan, status)
+- Current Position: Where we are now (release, change, status)
 - Performance Metrics: Velocity tracking
 - Accumulated Context: Recent decisions, deferred issues, blockers
 - Session Continuity: Resume information

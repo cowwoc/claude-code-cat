@@ -72,7 +72,7 @@ Check for .planning/STATE.md - loads context if project already initialized
    - TESTING.md - Test structure, coverage, practices
    - INTEGRATIONS.md - APIs, databases, external services
    - CONCERNS.md - Technical debt, risks, issues
-6. Offer next steps (typically: /cat:new-project or /cat:plan-phase)
+6. Offer next steps (typically: /cat:new-project or /cat:change-release)
 </process>
 
 <success_criteria>

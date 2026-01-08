@@ -178,7 +178,7 @@ Template for `.planning/codebase/STACK.md` - captures the technology foundation.
 - Include only dependencies that affect understanding (not every utility)
 - Specify versions only when version matters (breaking changes, compatibility)
 
-**Useful for phase planning when:**
+**Useful for release planning when:**
 - Adding new dependencies (check compatibility)
 - Upgrading frameworks (know what's in use)
 - Choosing implementation approach (must work with existing stack)

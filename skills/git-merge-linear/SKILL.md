@@ -12,7 +12,7 @@ allowed-tools: Bash, Read
 -->
 
 **When to Use**:
-- After task branch has passed REVIEW phase
+- After task branch has passed REVIEW release
 - When merging completed task to main branch
 - To maintain clean, linear git history
 

@@ -56,7 +56,7 @@ allowed-tools: Bash, Write
 ### Optimized Workflow (2-3 LLM round-trips, 5-8s)
 
 ```
-[LLM Round 1] Plan and execute
+[LLM Round 1] Change and execute
   → Write content to temp file
   → Write commit message to temp file
   → Bash: write-and-commit.sh file.sh /tmp/content /tmp/msg --executable

@@ -4,15 +4,15 @@
 
   "gates": {
     "confirm_project": true,
-    "confirm_phases": true,
+    "confirm_releases": true,
     "confirm_roadmap": true,
     "confirm_breakdown": true,
-    "confirm_plan": true,
-    "execute_next_plan": true,
+    "confirm_change": true,
+    "execute_next_change": true,
     "issues_review": true,
     "confirm_transition": true,
 
-    "plan_approval": true,
+    "change_approval": true,
     "review_approval": true,
     "merge_approval": true
   },
@@ -61,7 +61,7 @@
   },
 
   "auto_approve": {
-    "low_risk_plans": false,
+    "low_risk_changes": false,
     "low_risk_reviews": false,
     "low_risk_merges": false
   }

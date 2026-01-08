@@ -1,24 +1,24 @@
 ---
-name: cat:discuss-phase
-description: Gather phase context through adaptive questioning before planning
-argument-hint: "[phase]"
+name: cat:discuss-release
+description: Gather release context through adaptive questioning before planning
+argument-hint: "[release]"
 ---
 
 <objective>
-Help the user articulate their vision for a phase through collaborative thinking.
+Help the user articulate their vision for a release through collaborative thinking.
 
-Purpose: Understand HOW the user imagines this phase working — what it looks like, what's essential, what's out of scope. You're a thinking partner helping them crystallize their vision, not an interviewer gathering technical requirements.
+Purpose: Understand HOW the user imagines this release working — what it looks like, what's essential, what's out of scope. You're a thinking partner helping them crystallize their vision, not an interviewer gathering technical requirements.
 
-Output: {phase}-CONTEXT.md capturing the user's vision for the phase
+Output: {release}-CONTEXT.md capturing the user's vision for the release
 </objective>
 
 <execution_context>
-@${CLAUDE_PLUGIN_ROOT}/.claude/cat/workflows/discuss-phase.md
+@${CLAUDE_PLUGIN_ROOT}/.claude/cat/workflows/discuss-release.md
 @${CLAUDE_PLUGIN_ROOT}/.claude/cat/templates/context.md
 </execution_context>
 
 <context>
-Phase number: $ARGUMENTS (required)
+Release number: $ARGUMENTS (required)
 
 **Load project state first:**
 @.planning/STATE.md
@@ -28,18 +28,18 @@ Phase number: $ARGUMENTS (required)
 </context>
 
 <process>
-1. Validate phase number argument (error if missing or invalid)
-2. Check if phase exists in roadmap
+1. Validate release number argument (error if missing or invalid)
+2. Check if release exists in roadmap
 3. Check if CONTEXT.md already exists (offer to update if yes)
-4. Follow discuss-phase.md workflow with **ALL questions using AskUserQuestion**:
-   - Present phase from roadmap
+4. Follow discuss-release.md workflow with **ALL questions using AskUserQuestion**:
+   - Present release from roadmap
    - Use AskUserQuestion: "How do you imagine this working?" with interpretation options
    - Use AskUserQuestion to follow their thread — probe what excites them
-   - Use AskUserQuestion to sharpen the core — what's essential for THIS phase
+   - Use AskUserQuestion to sharpen the core — what's essential for THIS release
    - Use AskUserQuestion to find boundaries — what's explicitly out of scope
    - Use AskUserQuestion for decision gate (ready / ask more / let me add context)
    - Create CONTEXT.md capturing their vision
-5. Offer next steps (research or plan the phase)
+5. Offer next steps (research or change the release)
 
 **CRITICAL: ALL questions use AskUserQuestion. Never ask inline text questions.**
 
@@ -53,8 +53,8 @@ User is the visionary, you are the builder:
 
 <success_criteria>
 
-- Phase validated against roadmap
+- Release validated against roadmap
 - Vision gathered through collaborative thinking (not interrogation)
 - CONTEXT.md captures: how it works, what's essential, what's out of scope
-- User knows next steps (research or plan the phase)
+- User knows next steps (research or change the release)
 </success_criteria>

@@ -85,7 +85,7 @@ Common types: Tech stack, Timeline, Budget, Dependencies, Compatibility, Perform
 
 **Requirements — Validated:**
 - Requirements that shipped and proved valuable
-- Format: `- ✓ [Requirement] — [version/phase]`
+- Format: `- ✓ [Requirement] — [version/release]`
 - These are locked — changing them requires explicit discussion
 
 **Requirements — Active:**
@@ -119,7 +119,7 @@ Common types: Tech stack, Timeline, Budget, Dependencies, Compatibility, Perform
 
 **Last Updated:**
 - Always note when and why the document was updated
-- Format: `after Phase 2` or `after v1.0 milestone`
+- Format: `after Release 2` or `after v1.0 milestone`
 - Triggers review of whether content is still accurate
 
 </guidelines>
@@ -128,9 +128,9 @@ Common types: Tech stack, Timeline, Budget, Dependencies, Compatibility, Perform
 
 PROJECT.md evolves throughout the project lifecycle.
 
-**After each phase transition:**
+**After each release transition:**
 1. Requirements invalidated? → Move to Out of Scope with reason
-2. Requirements validated? → Move to Validated with phase reference
+2. Requirements validated? → Move to Validated with release reference
 3. New requirements emerged? → Add to Active
 4. Decisions to log? → Add to Key Decisions
 5. "What This Is" still accurate? → Update if drifted
@@ -176,7 +176,7 @@ STATE.md references PROJECT.md:
 See: .planning/PROJECT.md (updated [date])
 
 **Core value:** [One-liner from Core Value section]
-**Current focus:** [Current phase name]
+**Current focus:** [Current release name]
 ```
 
 This ensures Claude reads current PROJECT.md context.

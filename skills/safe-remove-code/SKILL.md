@@ -20,7 +20,7 @@ When removing instrumentation, debugging code, or other patterns from multiple f
 - **Task**: Remove timing instrumentation from 47 hooks
 - **Mistake**: Removal script was too aggressive
 - **Impact**: 7 hooks reduced to 3 lines (only `#!/bin/bash` and `set -euo pipefail`)
-- **Hooks destroyed**: auto-learn-from-mistakes.sh, block-data-loss.sh, detect-worktree-violation.sh, enforce-requirements-phase.sh, load-todo.sh, detect-assistant-giving-up.sh, verify-convergence-entry.sh
+- **Hooks destroyed**: auto-learn-from-mistakes.sh, block-data-loss.sh, detect-worktree-violation.sh, enforce-requirements-release.sh, load-todo.sh, detect-assistant-giving-up.sh, verify-convergence-entry.sh
 - **Recovery**: Restored from backups
 - **Root cause**: Didn't validate hooks after removal, declared task complete too early
 
@@ -62,7 +62,7 @@ Before using this skill, verify:
 
 ## Skill Workflow
 
-### Phase 1: Identify Removal Patterns
+### Release 1: Identify Removal Patterns
 
 **❌ WRONG - Vague Pattern**:
 ```bash
@@ -97,7 +97,7 @@ for file in ~/.claude/hooks/*.sh; do
 done
 ```
 
-### Phase 2: Create Backups
+### Release 2: Create Backups
 
 **MANDATORY before any removal**:
 
@@ -131,7 +131,7 @@ fi
 echo "✅ All $ORIGINAL_COUNT files backed up"
 ```
 
-### Phase 3: Remove Code with Validation
+### Release 3: Remove Code with Validation
 
 **Create removal script with per-file validation**:
 
@@ -219,7 +219,7 @@ chmod +x /tmp/safe-pattern-removal.sh
 /tmp/safe-pattern-removal.sh "PATTERN_TO_REMOVE" "~/.claude/hooks" 10
 ```
 
-### Phase 4: Functional Testing
+### Release 4: Functional Testing
 
 **BEFORE removing backups, run functional tests**:
 
@@ -273,7 +273,7 @@ if [[ -f /path/to/project/mvnw ]]; then
 fi
 ```
 
-### Phase 5: Manual Review
+### Release 5: Manual Review
 
 **Sample files before declaring complete**:
 
@@ -313,7 +313,7 @@ fi
 echo "✅ Manual verification passed"
 ```
 
-### Phase 6: Cleanup Backups
+### Release 6: Cleanup Backups
 
 **ONLY after validation passes**:
 
@@ -456,8 +456,8 @@ set -euo pipefail
 echo "=== Safe Code Removal: Timing Instrumentation ==="
 echo ""
 
-# Phase 1: Identify patterns
-echo "Phase 1: Identifying patterns..."
+# Release 1: Identify patterns
+echo "Release 1: Identifying patterns..."
 PATTERNS=(
   "HOOK_START="
   "log_timing"
@@ -479,9 +479,9 @@ if [[ ! $REPLY =~ ^[Yy]$ ]]; then
   exit 0
 fi
 
-# Phase 2: Create backups
+# Release 2: Create backups
 echo ""
-echo "Phase 2: Creating backups..."
+echo "Release 2: Creating backups..."
 BACKUP_SUFFIX=".backup-$(date +%Y%m%d-%H%M%S)"
 for file in ~/.claude/hooks/*.sh; do
   if [[ -f "$file" ]] && [[ ! "$file" =~ \.backup ]]; then
@@ -490,16 +490,16 @@ for file in ~/.claude/hooks/*.sh; do
 done
 echo "✅ Backups created"
 
-# Phase 3: Remove patterns
+# Release 3: Remove patterns
 echo ""
-echo "Phase 3: Removing patterns with validation..."
+echo "Release 3: Removing patterns with validation..."
 for pattern in "${PATTERNS[@]}"; do
   /tmp/safe-pattern-removal.sh "$pattern" "~/.claude/hooks" 10
 done
 
-# Phase 4: Functional testing
+# Release 4: Functional testing
 echo ""
-echo "Phase 4: Running functional tests..."
+echo "Release 4: Running functional tests..."
 for hook in ~/.claude/hooks/*.sh; do
   if [[ -f "$hook" ]] && [[ ! "$hook" =~ \.backup ]]; then
     bash -n "$hook" || {
@@ -510,9 +510,9 @@ for hook in ~/.claude/hooks/*.sh; do
 done
 echo "✅ All hooks pass syntax check"
 
-# Phase 5: Manual review
+# Release 5: Manual review
 echo ""
-echo "Phase 5: Manual review..."
+echo "Release 5: Manual review..."
 echo "Sample files:"
 head -30 ~/.claude/hooks/enforce-checkpoints.sh
 echo ""
@@ -523,9 +523,9 @@ if [[ ! $REPLY =~ ^[Yy]$ ]]; then
   exit 1
 fi
 
-# Phase 6: Cleanup
+# Release 6: Cleanup
 echo ""
-echo "Phase 6: Cleaning up backups..."
+echo "Release 6: Cleaning up backups..."
 rm -f ~/.claude/hooks/*.backup-*
 echo "✅ Backups removed"
 

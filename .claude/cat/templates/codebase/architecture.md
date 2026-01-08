@@ -168,12 +168,12 @@ Template for `.planning/codebase/ARCHITECTURE.md` - captures conceptual code org
 
 **Command:**
 - Purpose: CLI command definition
-- Examples: `src/commands/new-project.ts`, `src/commands/plan-phase.ts`
+- Examples: `src/commands/new-project.ts`, `src/commands/change-release.ts`
 - Pattern: Commander.js command registration
 
 **Template:**
 - Purpose: Reusable document structures
-- Examples: PROJECT.md, PLAN.md templates
+- Examples: PROJECT.md, CHANGE.md templates
 - Pattern: Markdown files with substitution variables
 
 ## Entry Points
@@ -247,7 +247,7 @@ Include file paths as concrete examples of abstractions. Use backtick formatting
 - Note recurring patterns (services, controllers, repositories)
 - Keep descriptions conceptual, not mechanical
 
-**Useful for phase planning when:**
+**Useful for release planning when:**
 - Adding new features (where does it fit in the layers?)
 - Refactoring (understanding current patterns)
 - Identifying where to add code (which layer handles X?)

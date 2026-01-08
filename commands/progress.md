@@ -1,6 +1,6 @@
 ---
 name: cat:progress
-description: Check project progress, show context, and route to next action (execute or plan)
+description: Check project progress, show context, and route to next action (execute or change)
 allowed-tools:
   - Read
   - Bash
@@ -10,7 +10,7 @@ allowed-tools:
 ---
 
 <objective>
-Check project progress, summarize recent work and what's ahead, then intelligently route to the next action - either executing an existing plan or creating the next one.
+Check project progress, summarize recent work and what's ahead, then intelligently route to the next action - either executing an existing change or creating the next one.
 
 Provides situational awareness before continuing work.
 </objective>
@@ -38,7 +38,7 @@ If missing STATE.md or ROADMAP.md: inform what's missing, suggest running `/cat:
 **Load full project context:**
 
 - Read `.planning/STATE.md` for living memory (position, decisions, issues)
-- Read `.planning/ROADMAP.md` for phase structure and objectives
+- Read `.planning/ROADMAP.md` for release structure and objectives
 - Read `.planning/PROJECT.md` for current state (What This Is, Core Value, Requirements)
   </step>
 
@@ -53,10 +53,10 @@ If missing STATE.md or ROADMAP.md: inform what's missing, suggest running `/cat:
 <step name="position">
 **Parse current position:**
 
-- From STATE.md: current phase, plan number, status
-- Calculate: total plans, completed plans, remaining plans
+- From STATE.md: current release, change number, status
+- Calculate: total changes, completed changes, remaining changes
 - Note any blockers, concerns, or deferred issues
-- Check for CONTEXT.md: For phases without PLAN.md files, check if `{phase}-CONTEXT.md` exists in phase directory
+- Check for CONTEXT.md: For releases without CHANGE.md files, check if `{release}-CONTEXT.md` exists in release directory
   </step>
 
 <step name="report">
@@ -65,15 +65,15 @@ If missing STATE.md or ROADMAP.md: inform what's missing, suggest running `/cat:
 ```
 # [Project Name]
 
-**Progress:** [████████░░] 8/10 plans complete
+**Progress:** [████████░░] 8/10 changes complete
 
 ## Recent Work
-- [Phase X, Plan Y]: [what was accomplished - 1 line]
-- [Phase X, Plan Z]: [what was accomplished - 1 line]
+- [Release X, Change Y]: [what was accomplished - 1 line]
+- [Release X, Change Z]: [what was accomplished - 1 line]
 
 ## Current Position
-Phase [N] of [total]: [phase-name]
-Plan [M] of [phase-total]: [status]
+Release [N] of [total]: [release-name]
+Change [M] of [release-total]: [status]
 CONTEXT: [✓ if CONTEXT.md exists | - if not]
 
 ## Key Decisions Made
@@ -84,7 +84,7 @@ CONTEXT: [✓ if CONTEXT.md exists | - if not]
 - [any deferred issues or blockers]
 
 ## What's Next
-[Next phase/plan objective from ROADMAP]
+[Next release/change objective from ROADMAP]
 ```
 
 </step>
@@ -92,30 +92,30 @@ CONTEXT: [✓ if CONTEXT.md exists | - if not]
 <step name="route">
 **Determine next action based on verified counts.**
 
-**Step 1: Count plans and summaries in current phase**
+**Step 1: Count changes and summaries in current release**
 
-List files in the current phase directory:
+List files in the current release directory:
 
 ```bash
-ls -1 .planning/phases/[current-phase-dir]/*-PLAN.md 2>/dev/null | wc -l
-ls -1 .planning/phases/[current-phase-dir]/*-SUMMARY.md 2>/dev/null | wc -l
+ls -1 .planning/releases/[current-release-dir]/*-CHANGE.md 2>/dev/null | wc -l
+ls -1 .planning/releases/[current-release-dir]/*-SUMMARY.md 2>/dev/null | wc -l
 ```
 
-State: "This phase has {X} plans and {Y} summaries."
+State: "This release has {X} changes and {Y} summaries."
 
 **Step 2: Route based on counts**
 
 | Condition | Meaning | Action |
 |-----------|---------|--------|
-| summaries < plans | Unexecuted plans exist | Go to **Route A** |
-| summaries = plans AND plans > 0 | Phase complete | Go to Step 3 |
-| plans = 0 | Phase not yet planned | Go to **Route B** |
+| summaries < changes | Unexecuted changes exist | Go to **Route A** |
+| summaries = changes AND changes > 0 | Release complete | Go to Step 3 |
+| changes = 0 | Release not yet planned | Go to **Route B** |
 
 ---
 
-**Route A: Unexecuted plan exists**
+**Route A: Unexecuted change exists**
 
-Find the first PLAN.md without matching SUMMARY.md.
+Find the first CHANGE.md without matching SUMMARY.md.
 Read its `<objective>` section.
 
 ```
@@ -123,9 +123,9 @@ Read its `<objective>` section.
 
 ## ▶ Next Up
 
-**{phase}-{plan}-{slug}: [Plan Name]** — [objective summary from PLAN.md]
+**{release}-{change}-{slug}: [Change Name]** — [objective summary from CHANGE.md]
 
-`/cat:execute-plan [full-path-to-PLAN.md]`
+`/cat:execute-change [full-path-to-CHANGE.md]`
 
 <sub>`/clear` first → fresh context window</sub>
 
@@ -134,9 +134,9 @@ Read its `<objective>` section.
 
 ---
 
-**Route B: Phase needs planning**
+**Route B: Release needs planning**
 
-Check if `{phase}-CONTEXT.md` exists in phase directory.
+Check if `{release}-CONTEXT.md` exists in release directory.
 
 **If CONTEXT.md exists:**
 
@@ -145,10 +145,10 @@ Check if `{phase}-CONTEXT.md` exists in phase directory.
 
 ## ▶ Next Up
 
-**Phase {N}: {Name}** — {Goal from ROADMAP.md}
-<sub>✓ Context gathered, ready to plan</sub>
+**Release {N}: {Name}** — {Goal from ROADMAP.md}
+<sub>✓ Context gathered, ready to change</sub>
 
-`/cat:plan-phase {phase-number}`
+`/cat:change-release {release-number}`
 
 <sub>`/clear` first → fresh context window</sub>
 
@@ -162,65 +162,65 @@ Check if `{phase}-CONTEXT.md` exists in phase directory.
 
 ## ▶ Next Up
 
-**Phase {N}: {Name}** — {Goal from ROADMAP.md}
+**Release {N}: {Name}** — {Goal from ROADMAP.md}
 
-`/cat:plan-phase {phase}`
+`/cat:change-release {release}`
 
 <sub>`/clear` first → fresh context window</sub>
 
 ---
 
 **Also available:**
-- `/cat:discuss-phase {phase}` — gather context first
-- `/cat:research-phase {phase}` — investigate unknowns
-- `/cat:list-phase-assumptions {phase}` — see Claude's assumptions
+- `/cat:discuss-release {release}` — gather context first
+- `/cat:research-release {release}` — investigate unknowns
+- `/cat:list-release-assumptions {release}` — see Claude's assumptions
 
 ---
 ```
 
 ---
 
-**Step 3: Check milestone status (only when phase complete)**
+**Step 3: Check milestone status (only when release complete)**
 
 Read ROADMAP.md and identify:
-1. Current phase number
-2. All phase numbers in the current milestone section
+1. Current release number
+2. All release numbers in the current milestone section
 
-Count total phases and identify the highest phase number.
+Count total releases and identify the highest release number.
 
-State: "Current phase is {X}. Milestone has {N} phases (highest: {Y})."
+State: "Current release is {X}. Milestone has {N} releases (highest: {Y})."
 
 **Route based on milestone status:**
 
 | Condition | Meaning | Action |
 |-----------|---------|--------|
-| current phase < highest phase | More phases remain | Go to **Route C** |
-| current phase = highest phase | Milestone complete | Go to **Route D** |
+| current release < highest release | More releases remain | Go to **Route C** |
+| current release = highest release | Milestone complete | Go to **Route D** |
 
 ---
 
-**Route C: Phase complete, more phases remain**
+**Route C: Release complete, more releases remain**
 
-Read ROADMAP.md to get the next phase's name and goal.
+Read ROADMAP.md to get the next release's name and goal.
 
 ```
 ---
 
-## ✓ Phase {Z} Complete
+## ✓ Release {Z} Complete
 
 ## ▶ Next Up
 
-**Phase {Z+1}: {Name}** — {Goal from ROADMAP.md}
+**Release {Z+1}: {Name}** — {Goal from ROADMAP.md}
 
-`/cat:plan-phase {Z+1}`
+`/cat:change-release {Z+1}`
 
 <sub>`/clear` first → fresh context window</sub>
 
 ---
 
 **Also available:**
-- `/cat:discuss-phase {Z+1}` — gather context first
-- `/cat:research-phase {Z+1}` — investigate unknowns
+- `/cat:discuss-release {Z+1}` — gather context first
+- `/cat:research-release {Z+1}` — investigate unknowns
 
 ---
 ```
@@ -234,7 +234,7 @@ Read ROADMAP.md to get the next phase's name and goal.
 
 ## 🎉 Milestone Complete
 
-All {N} phases finished!
+All {N} releases finished!
 
 ## ▶ Next Up
 
@@ -252,7 +252,7 @@ All {N} phases finished!
 <step name="edge_cases">
 **Handle edge cases:**
 
-- Phase complete but next phase not planned → offer `/cat:plan-phase [next]`
+- Release complete but next release not planned → offer `/cat:change-release [next]`
 - All work complete → offer milestone completion
 - Blockers present → highlight before offering to continue
 - Handoff file exists → mention it, offer `/cat:resume-work`
@@ -265,7 +265,7 @@ All {N} phases finished!
 - [ ] Rich context provided (recent work, decisions, issues)
 - [ ] Current position clear with visual progress
 - [ ] What's next clearly explained
-- [ ] Smart routing: /cat:execute-plan if plan exists, /cat:plan-phase if not
+- [ ] Smart routing: /cat:execute-change if change exists, /cat:change-release if not
 - [ ] User confirms before any action
 - [ ] Seamless handoff to appropriate cat command
       </success_criteria>

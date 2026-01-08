@@ -148,25 +148,25 @@ cat/
 **commands/cat/**
 - Purpose: Slash command definitions for Claude Code
 - Contains: *.md files (one per command)
-- Key files: new-project.md, plan-phase.md, execute-plan.md
+- Key files: new-project.md, change-release.md, execute-change.md
 - Subdirectories: None (flat structure)
 
 **cat/references/**
 - Purpose: Core philosophy and guidance documents
-- Contains: principles.md, questioning.md, plan-format.md
+- Contains: principles.md, questioning.md, change-format.md
 - Key files: principles.md - system philosophy
 - Subdirectories: None
 
 **cat/templates/**
 - Purpose: Document templates for .planning/ files
 - Contains: Template definitions with frontmatter
-- Key files: project.md, roadmap.md, plan.md, summary.md
+- Key files: project.md, roadmap.md, change.md, summary.md
 - Subdirectories: codebase/ (new - for stack/architecture/structure templates)
 
 **cat/workflows/**
 - Purpose: Reusable multi-step procedures
 - Contains: Workflow definitions called by commands
-- Key files: execute-phase.md, research-phase.md
+- Key files: execute-release.md, research-release.md
 - Subdirectories: None
 
 ## Key File Locations
@@ -277,7 +277,7 @@ root/
 └── file.ts        # Purpose
 ```
 
-**Useful for phase planning when:**
+**Useful for release planning when:**
 - Adding new features (where should files go?)
 - Understanding project organization
 - Finding where specific logic lives

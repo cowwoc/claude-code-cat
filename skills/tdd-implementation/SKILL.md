@@ -44,11 +44,11 @@ Use Test-Driven Development for features that benefit from upfront behavior spec
 └──────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-**Phase transitions are VERIFIED by actually running tests.**
+**Release transitions are VERIFIED by actually running tests.**
 
 ---
 
-## STEP 1: RED PHASE - Write Failing Test
+## STEP 1: RED RELEASE - Write Failing Test
 
 ### Actions:
 1. Create test file following project conventions
@@ -120,7 +120,7 @@ testBehavior() {
 
 ---
 
-## STEP 2: GREEN PHASE - Implement Code
+## STEP 2: GREEN RELEASE - Implement Code
 
 ### Actions:
 1. NOW you can edit production code
@@ -143,7 +143,7 @@ git commit -m "feature: implement [feature]
 
 ---
 
-## STEP 3: REFACTOR PHASE - Clean Up
+## STEP 3: REFACTOR RELEASE - Clean Up
 
 ### Actions:
 1. Clean up implementation if obvious improvements exist
@@ -180,7 +180,7 @@ git commit -m "refactor: clean up [feature]
 
 ### If Original Use-Case Still Fails:
 
-**Your RED test wasn't capturing the ACTUAL bug. Return to RED phase:**
+**Your RED test wasn't capturing the ACTUAL bug. Return to RED release:**
 
 1. **Analyze why the fix didn't work**:
    - The test passed but the bug persists → test was testing the wrong thing

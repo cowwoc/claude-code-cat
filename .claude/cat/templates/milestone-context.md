@@ -29,19 +29,19 @@ Template for `.planning/MILESTONE-CONTEXT.md` - temporary handoff file from disc
 ## Scope
 
 **Suggested name:** v[X.Y] [Theme Name]
-**Estimated phases:** [N]
+**Estimated releases:** [N]
 **Focus:** [One sentence theme/focus]
 
 </scope>
 
 <phase_mapping>
-## Phase Mapping
+## Release Mapping
 
-[How features map to phases - rough breakdown]
+[How features map to releases - rough breakdown]
 
-- Phase [N]: [Feature/goal]
-- Phase [N+1]: [Feature/goal]
-- Phase [N+2]: [Feature/goal]
+- Release [N]: [Feature/goal]
+- Release [N+1]: [Feature/goal]
+- Release [N+2]: [Feature/goal]
 
 </phase_mapping>
 
@@ -82,12 +82,12 @@ The file exists only to pass context from `discuss-milestone` to `create-milesto
 **Content should include:**
 - Features identified (the core of what to build)
 - Suggested milestone name/theme
-- Rough phase mapping
+- Rough release mapping
 - Any constraints or scope boundaries
 - Notes from discussion
 
 **Content should NOT include:**
-- Technical analysis (that comes during phase research)
-- Detailed phase specifications (create-milestone handles that)
+- Technical analysis (that comes during release research)
+- Detailed release specifications (create-milestone handles that)
 - Implementation details
 </guidelines>

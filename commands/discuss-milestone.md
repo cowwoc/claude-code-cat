@@ -6,7 +6,7 @@ description: Gather context for next milestone through adaptive questioning
 <objective>
 Help you figure out what to build in the next milestone through collaborative thinking.
 
-Purpose: After completing a milestone, explore what features you want to add, improve, or fix. Features first — scope and phases derive from what you want to build.
+Purpose: After completing a milestone, explore what features you want to add, improve, or fix. Features first — scope and releases derive from what you want to build.
 Output: Context gathered, then routes to /cat:new-milestone
 </objective>
 
@@ -27,7 +27,7 @@ Output: Context gathered, then routes to /cat:new-milestone
 
 <process>
 1. Verify previous milestone complete (or acknowledge active milestone)
-2. Present context from previous milestone (accomplishments, phase count)
+2. Present context from previous milestone (accomplishments, release count)
 3. Follow discuss-milestone.md workflow with **ALL questions using AskUserQuestion**:
    - Use AskUserQuestion: "What do you want to add, improve, or fix?" with feature categories
    - Use AskUserQuestion to dig into features they mention

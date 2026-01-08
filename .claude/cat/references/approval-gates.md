@@ -4,17 +4,17 @@ User approval checkpoints at critical transitions.
 
 ## Gate Types
 
-### Plan Approval Gate
-**When:** After plan creation, before execution
+### Change Approval Gate
+**When:** After change creation, before execution
 **Required for:** HIGH (mandatory), MEDIUM (mandatory), LOW (optional based on config)
 
 **Prompt:**
 ```
 ════════════════════════════════════════
-APPROVAL REQUIRED: Plan Execution
+APPROVAL REQUIRED: Change Execution
 ════════════════════════════════════════
 
-Plan: {phase}-{plan}-PLAN.md
+Change: {release}-{change}-CHANGE.md
 Risk Level: {risk_level}
 Reason: {risk_reason}
 
@@ -22,12 +22,12 @@ Tasks: {task_count}
 Files affected: {file_list}
 Estimated scope: {scope_estimate}
 
-Review the plan and approve to proceed.
+Review the change and approve to proceed.
 
 Options:
-- approve: Execute the plan as written
+- approve: Execute the change as written
 - adjust: Request modifications before execution
-- cancel: Abort this plan
+- cancel: Abort this change
 
 ════════════════════════════════════════
 ```
@@ -42,7 +42,7 @@ Options:
 APPROVAL REQUIRED: Review Complete
 ════════════════════════════════════════
 
-Plan: {phase}-{plan}
+Change: {release}-{change}
 Review Status: {all_pass ? "ALL PASS" : "ISSUES FOUND"}
 
 Agent Results:
@@ -71,7 +71,7 @@ Options:
 APPROVAL REQUIRED: Merge to Main
 ════════════════════════════════════════
 
-Plan: {phase}-{plan}
+Change: {release}-{change}
 Branch: {feature_branch} → main
 
 Changes:
@@ -93,7 +93,7 @@ Options:
 
 | Gate | HIGH | MEDIUM | LOW (interactive) | LOW (yolo) |
 |------|------|--------|-------------------|------------|
-| Plan Approval | Required | Required | Required | Auto-approve |
+| Change Approval | Required | Required | Required | Auto-approve |
 | Review Approval | Required | Required | Required | Skip |
 | Merge Approval | Required | Required | Required | Auto-approve |
 
@@ -104,12 +104,12 @@ In `.planning/config.json`:
 ```json
 {
   "gates": {
-    "plan_approval": true,
+    "change_approval": true,
     "review_approval": true,
     "merge_approval": true
   },
   "auto_approve": {
-    "low_risk_plans": false,
+    "low_risk_changes": false,
     "low_risk_reviews": false,
     "low_risk_merges": false
   }

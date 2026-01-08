@@ -1,5 +1,5 @@
 <purpose>
-Gather phase context through collaborative thinking before planning. Help the user articulate their vision for how this phase should work, look, and feel.
+Gather release context through collaborative thinking before planning. Help the user articulate their vision for how this release should work, look, and feel.
 
 You are a thinking partner, not an interviewer. The user is the visionary — you are the builder. Your job is to understand their vision, not interrogate them about technical details you can figure out yourself.
 </purpose>
@@ -25,51 +25,51 @@ Ask about vision. Figure out implementation yourself.
 <process>
 
 <step name="validate_phase" priority="first">
-Phase number: $ARGUMENTS (required)
+Release number: $ARGUMENTS (required)
 
-Validate phase exists in roadmap:
+Validate release exists in roadmap:
 
 ```bash
 if [ -f .planning/ROADMAP.md ]; then
-  cat .planning/ROADMAP.md | grep "Phase ${PHASE}:"
+  cat .planning/ROADMAP.md | grep "Release ${RELEASE}:"
 else
-  cat .planning/ROADMAP.md | grep "Phase ${PHASE}:"
+  cat .planning/ROADMAP.md | grep "Release ${RELEASE}:"
 fi
 ```
 
-**If phase not found:**
+**If release not found:**
 
 ```
-Error: Phase ${PHASE} not found in roadmap.
+Error: Release ${RELEASE} not found in roadmap.
 
-Use /cat:progress to see available phases.
+Use /cat:progress to see available releases.
 ```
 
 Exit workflow.
 
-**If phase found:**
-Parse phase details from roadmap:
+**If release found:**
+Parse release details from roadmap:
 
-- Phase number
-- Phase name
-- Phase description
+- Release number
+- Release name
+- Release description
 - Status (should be "Not started" or "In progress")
 
 Continue to check_existing.
 </step>
 
 <step name="check_existing">
-Check if CONTEXT.md already exists for this phase:
+Check if CONTEXT.md already exists for this release:
 
 ```bash
-ls .planning/phases/${PHASE}-*/CONTEXT.md 2>/dev/null
-ls .planning/phases/${PHASE}-*/${PHASE}-CONTEXT.md 2>/dev/null
+ls .planning/releases/${RELEASE}-*/CONTEXT.md 2>/dev/null
+ls .planning/releases/${RELEASE}-*/${RELEASE}-CONTEXT.md 2>/dev/null
 ```
 
 **If exists:**
 
 ```
-Phase ${PHASE} already has context: [path to CONTEXT.md]
+Release ${RELEASE} already has context: [path to CONTEXT.md]
 
 What's next?
 1. Update context - Review and revise existing context
@@ -93,9 +93,9 @@ Continue to questioning.
 Present initial context from roadmap, then immediately use AskUserQuestion:
 
 ```
-Phase ${PHASE}: ${PHASE_NAME}
+Release ${RELEASE}: ${RELEASE_NAME}
 
-From the roadmap: ${PHASE_DESCRIPTION}
+From the roadmap: ${RELEASE_DESCRIPTION}
 ```
 
 **1. Open:**
@@ -103,7 +103,7 @@ From the roadmap: ${PHASE_DESCRIPTION}
 Use AskUserQuestion:
 - header: "Vision"
 - question: "How do you imagine this working?"
-- options: 2-3 interpretations based on the phase description + "Let me describe it"
+- options: 2-3 interpretations based on the release description + "Let me describe it"
 
 **2. Follow the thread:**
 
@@ -116,14 +116,14 @@ Based on their response, use AskUserQuestion:
 
 Use AskUserQuestion:
 - header: "Essential"
-- question: "What's the most important part of this phase?"
+- question: "What's the most important part of this release?"
 - options: Key aspects they've mentioned + "All equally important" + "Something else"
 
 **4. Find boundaries:**
 
 Use AskUserQuestion:
 - header: "Scope"
-- question: "What's explicitly out of scope for this phase?"
+- question: "What's explicitly out of scope for this release?"
 - options: Things that might be tempting + "Nothing specific" + "Let me list them"
 
 **5. Capture specifics (optional):**
@@ -159,17 +159,17 @@ Create CONTEXT.md capturing the user's vision.
 
 Use template from ~/.claude/cat/templates/context.md
 
-**File location:** `.planning/phases/${PHASE}-${SLUG}/${PHASE}-CONTEXT.md`
+**File location:** `.planning/releases/${RELEASE}-${SLUG}/${RELEASE}-CONTEXT.md`
 
-**If phase directory doesn't exist yet:**
-Create it: `.planning/phases/${PHASE}-${SLUG}/`
+**If release directory doesn't exist yet:**
+Create it: `.planning/releases/${RELEASE}-${SLUG}/`
 
-Use roadmap phase name for slug (lowercase, hyphens).
+Use roadmap release name for slug (lowercase, hyphens).
 
 Populate template sections with VISION context (not technical analysis):
 
 - `<vision>`: How the user imagines this working
-- `<essential>`: What must be nailed in this phase
+- `<essential>`: What must be nailed in this release
 - `<boundaries>`: What's explicitly out of scope
 - `<specifics>`: Any particular look/feel/behavior mentioned
 - `<notes>`: Any other context gathered
@@ -183,7 +183,7 @@ Write file.
 Present CONTEXT.md summary:
 
 ```
-Created: .planning/phases/${PHASE}-${SLUG}/${PHASE}-CONTEXT.md
+Created: .planning/releases/${RELEASE}-${SLUG}/${RELEASE}-CONTEXT.md
 
 ## Vision
 [How they imagine it working]
@@ -198,16 +198,16 @@ Created: .planning/phases/${PHASE}-${SLUG}/${PHASE}-CONTEXT.md
 
 ## ▶ Next Up
 
-**Phase ${PHASE}: [Name]** — [Goal from ROADMAP.md]
+**Release ${RELEASE}: [Name]** — [Goal from ROADMAP.md]
 
-`/cat:plan-phase ${PHASE}`
+`/cat:change-release ${RELEASE}`
 
 <sub>`/clear` first → fresh context window</sub>
 
 ---
 
 **Also available:**
-- `/cat:research-phase ${PHASE}` — investigate unknowns
+- `/cat:research-release ${RELEASE}` — investigate unknowns
 - Review/edit CONTEXT.md before continuing
 
 ---
@@ -216,14 +216,14 @@ Created: .planning/phases/${PHASE}-${SLUG}/${PHASE}-CONTEXT.md
 </step>
 
 <step name="git_commit">
-Commit phase context:
+Commit release context:
 
 ```bash
-git add .planning/phases/${PHASE}-${SLUG}/${PHASE}-CONTEXT.md
+git add .planning/releases/${RELEASE}-${SLUG}/${RELEASE}-CONTEXT.md
 git commit -m "$(cat <<'EOF'
-docs(${PHASE}): capture phase context
+docs(${RELEASE}): capture release context
 
-Phase ${PHASE}: ${PHASE_NAME}
+Release ${RELEASE}: ${RELEASE_NAME}
 - Vision and goals documented
 - Essential requirements identified
 - Scope boundaries defined
@@ -231,17 +231,17 @@ EOF
 )"
 ```
 
-Confirm: "Committed: docs(${PHASE}): capture phase context"
+Confirm: "Committed: docs(${RELEASE}): capture release context"
 </step>
 
 </process>
 
 <success_criteria>
 
-- Phase validated against roadmap
+- Release validated against roadmap
 - Vision gathered through collaborative thinking (not interrogation)
 - User's imagination captured: how it works, what's essential, what's out of scope
-- CONTEXT.md created in phase directory
+- CONTEXT.md created in release directory
 - CONTEXT.md committed to git
-- User knows next steps (typically: research or plan the phase)
+- User knows next steps (typically: research or change the release)
 </success_criteria>

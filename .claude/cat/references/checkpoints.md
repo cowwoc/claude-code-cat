@@ -1,5 +1,5 @@
 <overview>
-Plans execute autonomously. Checkpoints formalize interaction points where human verification or decisions are needed.
+Changes execute autonomously. Checkpoints formalize interaction points where human verification or decisions are needed.
 
 **Core principle:** Claude automates everything with CLI/API. Checkpoints are for verification and decisions, not manual work.
 </overview>

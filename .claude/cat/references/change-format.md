@@ -1,21 +1,21 @@
 <overview>
-Claude-executable plans have a specific format that enables Claude to implement without interpretation. This reference defines what makes a plan executable vs. vague.
+Claude-executable changes have a specific format that enables Claude to implement without interpretation. This reference defines what makes a change executable vs. vague.
 
-**Key insight:** PLAN.md IS the executable prompt. It contains everything Claude needs to execute the phase, including objective, context references, tasks, verification, success criteria, and output specification.
+**Key insight:** CHANGE.md IS the executable prompt. It contains everything Claude needs to execute the release, including objective, context references, tasks, verification, success criteria, and output specification.
 </overview>
 
 <core_principle>
-A plan is Claude-executable when Claude can read the PLAN.md and immediately start implementing without asking clarifying questions.
+A change is Claude-executable when Claude can read the CHANGE.md and immediately start implementing without asking clarifying questions.
 
 If Claude has to guess, interpret, or make assumptions - the task is too vague.
 </core_principle>
 
 <prompt_structure>
-Every PLAN.md follows this XML structure:
+Every CHANGE.md follows this XML structure:
 
 ```markdown
 ---
-phase: XX-name
+release: XX-name
 type: execute
 domain: [optional]
 ---
@@ -59,7 +59,7 @@ Output: [...]
 </tasks>
 
 <verification>
-[Overall phase checks]
+[Overall release checks]
 </verification>
 
 <success_criteria>
@@ -244,28 +244,28 @@ See `./checkpoints.md` for comprehensive checkpoint guidance.
 </task_types>
 
 <tdd_plans>
-**TDD work uses dedicated plans.**
+**TDD work uses dedicated changes.**
 
-TDD features require 2-3 execution cycles (RED → GREEN → REFACTOR), each with file reads, test runs, and potential debugging. This is fundamentally heavier than standard tasks and would consume 50-60% of context if embedded in a multi-task plan.
+TDD features require 2-3 execution cycles (RED → GREEN → REFACTOR), each with file reads, test runs, and potential debugging. This is fundamentally heavier than standard tasks and would consume 50-60% of context if embedded in a multi-task change.
 
-**When to create a TDD plan:**
+**When to create a TDD change:**
 - Business logic with defined inputs/outputs
 - API endpoints with request/response contracts
 - Data transformations and parsing
 - Validation rules
 - Algorithms with testable behavior
 
-**When to use standard plans (skip TDD):**
+**When to use standard changes (skip TDD):**
 - UI layout and styling
 - Configuration changes
 - Glue code connecting existing components
 - One-off scripts
 
 **Heuristic:** Can you write `expect(fn(input)).toBe(output)` before writing `fn`?
-→ Yes: Create a TDD plan (one feature per plan)
-→ No: Use standard plan, add tests after if needed
+→ Yes: Create a TDD change (one feature per change)
+→ No: Use standard change, add tests after if needed
 
-See `./tdd.md` for TDD plan structure and execution guidance.
+See `./tdd.md` for TDD change structure and execution guidance.
 </tdd_plans>
 
 <context_references>
@@ -274,8 +274,8 @@ Use @file references to load context for the prompt:
 ```markdown
 <context>
 @.planning/PROJECT.md           # Project vision
-@.planning/ROADMAP.md         # Phase structure
-@.planning/phases/02-auth/DISCOVERY.md  # Discovery results
+@.planning/ROADMAP.md         # Release structure
+@.planning/releases/02-auth/DISCOVERY.md  # Discovery results
 @src/lib/db.ts                # Existing database setup
 @src/types/user.ts            # Existing type definitions
 </context>
@@ -285,11 +285,11 @@ Reference files that Claude needs to understand before implementing.
 </context_references>
 
 <verification_section>
-Overall phase verification (beyond individual task verification):
+Overall release verification (beyond individual task verification):
 
 ```markdown
 <verification>
-Before declaring phase complete:
+Before declaring release complete:
 - [ ] `npm run build` succeeds without errors
 - [ ] `npm test` passes all tests
 - [ ] No TypeScript errors
@@ -300,7 +300,7 @@ Before declaring phase complete:
 </verification_section>
 
 <success_criteria_section>
-Measurable criteria for phase completion:
+Measurable criteria for release completion:
 
 ```markdown
 <success_criteria>
@@ -320,9 +320,9 @@ Specify the SUMMARY.md structure:
 
 ```markdown
 <output>
-After completion, create `.planning/phases/XX-name/SUMMARY.md`:
+After completion, create `.planning/releases/XX-name/SUMMARY.md`:
 
-# Phase X: Name Summary
+# Release X: Name Summary
 
 **[Substantive one-liner]**
 
@@ -334,7 +334,7 @@ After completion, create `.planning/phases/XX-name/SUMMARY.md`:
 
 ## Issues Encountered
 
-## Next Phase Readiness
+## Next Release Readiness
 
 </output>
 ```
@@ -373,13 +373,13 @@ Claude can implement this immediately.
 </just_right>
 
 <note_on_tdd>
-**TDD candidates get dedicated plans.**
+**TDD candidates get dedicated changes.**
 
-If email validation warrants TDD, create a TDD plan for it. See `./tdd.md` for TDD plan structure.
+If email validation warrants TDD, create a TDD change for it. See `./tdd.md` for TDD change structure.
 </note_on_tdd>
 
 <too_detailed>
-Writing the actual code in the plan. Trust Claude to implement from clear instructions.
+Writing the actual code in the change. Trust Claude to implement from clear instructions.
 </too_detailed>
 </specificity_levels>
 
@@ -419,10 +419,10 @@ Good task size: 15-60 minutes of Claude work.
 
 **Too small**: "Add import statement for bcrypt" (combine with related task)
 **Just right**: "Create login endpoint with JWT validation" (focused, specific)
-**Too big**: "Implement full authentication system" (split into multiple plans)
+**Too big**: "Implement full authentication system" (split into multiple changes)
 
 If a task takes multiple sessions, break it down.
 If a task is trivial, combine with related tasks.
 
-**Note on scope:** If a phase has >3 tasks or spans multiple subsystems, split into multiple plans using the naming convention `{phase}-{plan}-PLAN.md`. See `./scope-estimation.md` for guidance.
+**Note on scope:** If a release has >3 tasks or spans multiple subsystems, split into multiple changes using the naming convention `{release}-{change}-CHANGE.md`. See `./scope-estimation.md` for guidance.
 </sizing_tasks>

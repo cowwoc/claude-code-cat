@@ -1,8 +1,8 @@
-# Phase Prompt Template
+# Release Prompt Template
 
-Template for `.planning/phases/XX-name/{phase}-{plan}-{slug}-PLAN.md` - executable phase plans.
+Template for `.planning/releases/XX-name/{release}-{change}-{slug}-CHANGE.md` - executable release changes.
 
-**Naming:** Use `{phase}-{plan}-{slug}-PLAN.md` format (e.g., `01-02-setup-auth-PLAN.md` for Phase 1, Plan 2)
+**Naming:** Use `{release}-{change}-{slug}-CHANGE.md` format (e.g., `01-02-setup-auth-CHANGE.md` for Release 1, Change 2)
 
 ---
 
@@ -10,8 +10,8 @@ Template for `.planning/phases/XX-name/{phase}-{plan}-{slug}-PLAN.md` - executab
 
 ```markdown
 ---
-phase: XX-name
-plan: 01
+release: XX-name
+change: 01
 type: execute
 domain: [optional - if domain skill loaded]
 
@@ -21,17 +21,17 @@ status: READY  # READY | BLOCKED | IN_PROGRESS | COMPLETE
 
 # Dependencies (from todo.md-style tracking)
 dependencies:
-  - phase: 01
-    plan: 02
+  - release: 01
+    change: 02
     description: "Database schema must exist"
   # Or task-level:
   - task-id: setup-database
     description: "Database connection required"
 
-# What this plan enables
+# What this change enables
 blocks:
-  - phase: 02
-    plan: 01
+  - release: 02
+    change: 01
     description: "Auth endpoints need user model"
 
 # Optional metadata
@@ -40,16 +40,16 @@ parallelizable-with: ["02-02", "02-03"]
 ---
 
 <objective>
-[What this phase accomplishes - from roadmap phase goal]
+[What this release accomplishes - from roadmap release goal]
 
 Purpose: [Why this matters for the project]
 Output: [What artifacts will be created]
 </objective>
 
 <execution_context>
-~/.claude/cat/workflows/execute-phase.md
+~/.claude/cat/workflows/execute-release.md
 ./summary.md
-[If plan contains checkpoint tasks (type="checkpoint:*"), add:]
+[If change contains checkpoint tasks (type="checkpoint:*"), add:]
 ~/.claude/cat/references/checkpoints.md
 </execution_context>
 
@@ -57,7 +57,7 @@ Output: [What artifacts will be created]
 @.planning/PROJECT.md
 @.planning/ROADMAP.md
 [If discovery exists:]
-@.planning/phases/XX-name/DISCOVERY.md
+@.planning/releases/XX-name/DISCOVERY.md
 [Relevant source files:]
 @src/path/to/relevant.ts
 </context>
@@ -122,7 +122,7 @@ Output: [What artifacts will be created]
 </tasks>
 
 <verification>
-Before declaring phase complete:
+Before declaring release complete:
 - [ ] [Specific test command]
 - [ ] [Build/type check passes]
 - [ ] [Behavior verification]
@@ -133,15 +133,15 @@ Before declaring phase complete:
 - All tasks completed
 - All verification checks pass
 - No errors or warnings introduced
-- [Phase-specific criteria]
+- [Release-specific criteria]
   </success_criteria>
 
 <output>
-After completion, create `.planning/phases/XX-name/{phase}-{plan}-SUMMARY.md`:
+After completion, create `.planning/releases/XX-name/{release}-{change}-SUMMARY.md`:
 
-# Phase [X] Plan [Y]: [Name] Summary
+# Release [X] Change [Y]: [Name] Summary
 
-**[Substantive one-liner - what shipped, not "phase complete"]**
+**[Substantive one-liner - what shipped, not "release complete"]**
 
 ## Accomplishments
 
@@ -163,8 +163,8 @@ After completion, create `.planning/phases/XX-name/{phase}-{plan}-SUMMARY.md`:
 
 ## Next Step
 
-[If more plans in this phase: "Ready for {phase}-{next-plan}-{slug}-PLAN.md"]
-[If phase complete: "Phase complete, ready for next phase"]
+[If more changes in this release: "Ready for {release}-{next-change}-{slug}-CHANGE.md"]
+[If release complete: "Release complete, ready for next release"]
 </output>
 ```
 
@@ -181,39 +181,39 @@ From create-meta-prompts patterns:
   </key_elements>
 
 <scope_guidance>
-**Plan sizing:**
+**Change sizing:**
 
-- Aim for 2-3 tasks per plan
-- If planning >3 tasks, split into multiple plans (01-01, 01-02, etc.)
+- Aim for 2-3 tasks per change
+- If planning >3 tasks, split into multiple changes (01-01, 01-02, etc.)
 - Target ~50% context usage maximum
-- Complex phases: Create 01-01, 01-02, 01-03 plans instead of one large plan
+- Complex releases: Create 01-01, 01-02, 01-03 changes instead of one large change
 
 **When to split:**
 
 - Different subsystems (auth vs API vs UI)
 - Clear dependency boundaries (setup → implement → test)
 - Risk of context overflow (>50% estimated usage)
-- **TDD candidates** - Features that warrant TDD become their own TDD plans
+- **TDD candidates** - Features that warrant TDD become their own TDD changes
 </scope_guidance>
 
 <tdd_plan_note>
-**TDD features get dedicated plans.**
+**TDD features get dedicated changes.**
 
-TDD requires 2-3 execution cycles (RED → GREEN → REFACTOR) that consume 40-50% context for a single feature. Features warranting TDD (business logic, validation, algorithms, API contracts) each get their own TDD plan.
+TDD requires 2-3 execution cycles (RED → GREEN → REFACTOR) that consume 40-50% context for a single feature. Features warranting TDD (business logic, validation, algorithms, API contracts) each get their own TDD change.
 
 **Heuristic:** Can you write `expect(fn(input)).toBe(output)` before writing `fn`?
-→ Yes: Create a TDD plan (one feature per plan)
-→ No: Standard task in standard plan
+→ Yes: Create a TDD change (one feature per change)
+→ No: Standard task in standard change
 
-See `~/.claude/cat/references/tdd.md` for TDD plan structure.
+See `~/.claude/cat/references/tdd.md` for TDD change structure.
 </tdd_plan_note>
 
 <good_examples>
 
 ```markdown
 ---
-phase: 01-foundation
-plan: 01
+release: 01-foundation
+change: 01
 type: execute
 domain: next-js
 
@@ -222,15 +222,15 @@ risk: MEDIUM  # Auth code requires review
 status: READY
 
 # Dependencies
-dependencies: []  # First plan, no dependencies
+dependencies: []  # First change, no dependencies
 
-# What this plan enables
+# What this change enables
 blocks:
-  - phase: 01
-    plan: 02
+  - release: 01
+    change: 02
     description: "Login endpoint needed for protected routes"
-  - phase: 02
-    plan: 01
+  - release: 02
+    change: 01
     description: "Auth foundation needed for API endpoints"
 
 # Optional metadata
@@ -246,7 +246,7 @@ Output: Working Next.js app with JWT auth, protected routes, and user model.
 </objective>
 
 <execution_context>
-~/.claude/cat/workflows/execute-phase.md
+~/.claude/cat/workflows/execute-release.md
 ./summary.md
 </execution_context>
 
@@ -277,7 +277,7 @@ Output: Working Next.js app with JWT auth, protected routes, and user model.
 </tasks>
 
 <verification>
-Before declaring phase complete:
+Before declaring release complete:
 - [ ] `npm run build` succeeds without errors
 - [ ] `npx prisma validate` passes
 - [ ] Login endpoint responds correctly to valid/invalid credentials
@@ -293,7 +293,7 @@ Before declaring phase complete:
   </success_criteria>
 
 <output>
-After completion, create `.planning/phases/01-foundation/01-01-SUMMARY.md`
+After completion, create `.planning/releases/01-foundation/01-01-SUMMARY.md`
 </output>
 ```
 
@@ -302,7 +302,7 @@ After completion, create `.planning/phases/01-foundation/01-01-SUMMARY.md`
 <bad_examples>
 
 ```markdown
-# Phase 1: Foundation
+# Release 1: Foundation
 
 ## Tasks
 
@@ -317,8 +317,8 @@ This is useless. No XML structure, no @context, no verification, no specificity.
 
 <guidelines>
 **When to use:**
-- Creating execution plans for each phase
-- One plan per 2-3 tasks, multiple plans per phase if needed
+- Creating execution changes for each release
+- One change per 2-3 tasks, multiple changes per release if needed
 - Always use XML structure for Claude parsing
 
 **Task types:**

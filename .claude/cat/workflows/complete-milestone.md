@@ -36,8 +36,8 @@ When a milestone completes, this workflow:
 **Archive Format:**
 Uses `templates/milestone-archive.md` template with:
 
-- Milestone header (status, phases, date)
-- Full phase details from roadmap
+- Milestone header (status, releases, date)
+- Full release details from roadmap
 - Milestone summary (decisions, issues, technical debt)
 
 </archival_behavior>
@@ -50,13 +50,13 @@ Check if milestone is truly complete:
 
 ```bash
 cat .planning/ROADMAP.md
-ls .planning/phases/*/SUMMARY.md 2>/dev/null | wc -l
+ls .planning/releases/*/SUMMARY.md 2>/dev/null | wc -l
 ```
 
 **Questions to ask:**
 
-- Which phases belong to this milestone?
-- Are all those phases complete (all plans have summaries)?
+- Which releases belong to this milestone?
+- Are all those releases complete (all changes have summaries)?
 - Has the work been tested/validated?
 - Is this ready to ship/tag?
 
@@ -66,12 +66,12 @@ Present:
 Milestone: [Name from user, e.g., "v1.0 MVP"]
 
 Appears to include:
-- Phase 1: Foundation (2/2 plans complete)
-- Phase 2: Authentication (2/2 plans complete)
-- Phase 3: Core Features (3/3 plans complete)
-- Phase 4: Polish (1/1 plan complete)
+- Release 1: Foundation (2/2 changes complete)
+- Release 2: Authentication (2/2 changes complete)
+- Release 3: Core Features (3/3 changes complete)
+- Release 4: Polish (1/1 change complete)
 
-Total: 4 phases, 8 plans, all complete
+Total: 4 releases, 8 changes, all complete
 ```
 
 <config-check>
@@ -105,7 +105,7 @@ Ready to mark this milestone as shipped?
 
 Wait for confirmation.
 
-If "adjust scope": Ask which phases should be included.
+If "adjust scope": Ask which releases should be included.
 If "wait": Stop, user will return when ready.
 
 </if>
@@ -117,13 +117,13 @@ If "wait": Stop, user will return when ready.
 Calculate milestone statistics:
 
 ```bash
-# Count phases and plans in milestone
+# Count releases and changes in milestone
 # (user specified or detected from roadmap)
 
 # Find git range from SUMMARY.md files
-# First commit: grep first hash from earliest phase SUMMARY
-# Last commit: grep last hash from latest phase SUMMARY
-ls -1 .planning/phases/*/[0-9]*-SUMMARY.md
+# First commit: grep first hash from earliest release SUMMARY
+# Last commit: grep last hash from latest release SUMMARY
+ls -1 .planning/releases/*/[0-9]*-SUMMARY.md
 
 # Count files modified in range
 git diff --stat FIRST_COMMIT..LAST_COMMIT | tail -1
@@ -140,9 +140,9 @@ Present summary:
 
 ```
 Milestone Stats:
-- Phases: [X-Y]
-- Plans: [Z] total
-- Tasks: [N] total (estimated from phase summaries)
+- Releases: [X-Y]
+- Changes: [Z] total
+- Tasks: [N] total (estimated from release summaries)
 - Files modified: [M]
 - Lines of code: [LOC] [language]
 - Timeline: [Days] days ([Start] → [End])
@@ -153,12 +153,12 @@ Milestone Stats:
 
 <step name="extract_accomplishments">
 
-Read all phase SUMMARY.md files in milestone range:
+Read all release SUMMARY.md files in milestone range:
 
 ```bash
-cat .planning/phases/01-*/01-*-SUMMARY.md
-cat .planning/phases/02-*/02-*-SUMMARY.md
-# ... for each phase in milestone
+cat .planning/releases/01-*/01-*-SUMMARY.md
+cat .planning/releases/02-*/02-*-SUMMARY.md
+# ... for each release in milestone
 ```
 
 From summaries, extract 4-6 key accomplishments.
@@ -167,11 +167,11 @@ Present:
 
 ```
 Key accomplishments for this milestone:
-1. [Achievement from phase 1]
-2. [Achievement from phase 2]
-3. [Achievement from phase 3]
-4. [Achievement from phase 4]
-5. [Achievement from phase 5]
+1. [Achievement from release 1]
+2. [Achievement from release 2]
+3. [Achievement from release 3]
+4. [Achievement from release 4]
+5. [Achievement from release 5]
 ```
 
 </step>
@@ -197,7 +197,7 @@ Use template from `templates/milestone.md`:
 
 **Delivered:** [One sentence from user]
 
-**Phases completed:** [X-Y] ([Z] plans total)
+**Releases completed:** [X-Y] ([Z] changes total)
 
 **Key accomplishments:**
 
@@ -207,7 +207,7 @@ Use template from `templates/milestone.md`:
 
 - [Files] files created/modified
 - [LOC] lines of [language]
-- [Phases] phases, [Plans] plans, [Tasks] tasks
+- [Releases] releases, [Changes] changes, [Tasks] tasks
 - [Days] days from [start milestone or start project] to ship
 
 **Git range:** `FIRST_HASH` → `LAST_HASH`
@@ -223,10 +223,10 @@ Use template from `templates/milestone.md`:
 
 Perform full PROJECT.md evolution review at milestone completion.
 
-**Read all phase summaries in this milestone:**
+**Read all release summaries in this milestone:**
 
 ```bash
-cat .planning/phases/*-*/*-SUMMARY.md
+cat .planning/releases/*-*/*-SUMMARY.md
 ```
 
 **Full review checklist:**
@@ -263,7 +263,7 @@ cat .planning/phases/*-*/*-SUMMARY.md
    - Known issues or technical debt to address
 
 5. **Key Decisions audit:**
-   - Extract all decisions from milestone phase summaries
+   - Extract all decisions from milestone release summaries
    - Add to Key Decisions table with outcomes where known
    - Mark ✓ Good, ⚠️ Revisit, or — Pending for each
 
@@ -365,7 +365,7 @@ Initial user testing showed demand for shape tools.
 
 <step name="reorganize_roadmap">
 
-Update `.planning/ROADMAP.md` to group completed milestone phases.
+Update `.planning/ROADMAP.md` to group completed milestone releases.
 
 Add milestone headers and collapse completed work:
 
@@ -374,30 +374,30 @@ Add milestone headers and collapse completed work:
 
 ## Milestones
 
-- ✅ **v1.0 MVP** — Phases 1-4 (shipped YYYY-MM-DD)
-- 🚧 **v1.1 Security** — Phases 5-6 (in progress)
-- 📋 **v2.0 Redesign** — Phases 7-10 (planned)
+- ✅ **v1.0 MVP** — Releases 1-4 (shipped YYYY-MM-DD)
+- 🚧 **v1.1 Security** — Releases 5-6 (in progress)
+- 📋 **v2.0 Redesign** — Releases 7-10 (planned)
 
-## Phases
+## Releases
 
 <details>
-<summary>✅ v1.0 MVP (Phases 1-4) — SHIPPED YYYY-MM-DD</summary>
+<summary>✅ v1.0 MVP (Releases 1-4) — SHIPPED YYYY-MM-DD</summary>
 
-- [x] Phase 1: Foundation (2/2 plans) — completed YYYY-MM-DD
-- [x] Phase 2: Authentication (2/2 plans) — completed YYYY-MM-DD
-- [x] Phase 3: Core Features (3/3 plans) — completed YYYY-MM-DD
-- [x] Phase 4: Polish (1/1 plan) — completed YYYY-MM-DD
+- [x] Release 1: Foundation (2/2 changes) — completed YYYY-MM-DD
+- [x] Release 2: Authentication (2/2 changes) — completed YYYY-MM-DD
+- [x] Release 3: Core Features (3/3 changes) — completed YYYY-MM-DD
+- [x] Release 4: Polish (1/1 change) — completed YYYY-MM-DD
 
 </details>
 
 ### 🚧 v[Next] [Name] (In Progress / Planned)
 
-- [ ] Phase 5: [Name] ([N] plans)
-- [ ] Phase 6: [Name] ([N] plans)
+- [ ] Release 5: [Name] ([N] changes)
+- [ ] Release 6: [Name] ([N] changes)
 
 ## Progress
 
-| Phase             | Milestone | Plans Complete | Status      | Completed  |
+| Release             | Milestone | Changes Complete | Status      | Completed  |
 | ----------------- | --------- | -------------- | ----------- | ---------- |
 | 1. Foundation     | v1.0      | 2/2            | Complete    | YYYY-MM-DD |
 | 2. Authentication | v1.0      | 2/2            | Complete    | YYYY-MM-DD |
@@ -420,9 +420,9 @@ Extract completed milestone details and create archive file.
 2. Read `~/.claude/cat/templates/milestone-archive.md` template
 
 3. Extract data from current ROADMAP.md:
-   - All phases belonging to this milestone (by phase number range)
-   - Full phase details (goals, plans, dependencies, status)
-   - Phase plan lists with completion checkmarks
+   - All releases belonging to this milestone (by release number range)
+   - Full release details (goals, changes, dependencies, status)
+   - Release change lists with completion checkmarks
 
 4. Extract data from PROJECT.md:
    - Key decisions made during this milestone
@@ -432,11 +432,11 @@ Extract completed milestone details and create archive file.
    - {{VERSION}} — Milestone version (e.g., "1.0")
    - {{MILESTONE_NAME}} — From ROADMAP.md milestone header
    - {{DATE}} — Today's date
-   - {{PHASE_START}} — First phase number in milestone
-   - {{PHASE_END}} — Last phase number in milestone
-   - {{TOTAL_PLANS}} — Count of all plans in milestone
+   - {{RELEASE_START}} — First release number in milestone
+   - {{RELEASE_END}} — Last release number in milestone
+   - {{TOTAL_CHANGES}} — Count of all changes in milestone
    - {{MILESTONE_DESCRIPTION}} — From ROADMAP.md overview
-   - {{PHASES_SECTION}} — Full phase details extracted
+   - {{PHASES_SECTION}} — Full release details extracted
    - {{DECISIONS_FROM_PROJECT}} — Key decisions from PROJECT.md
    - {{ISSUES_RESOLVED_DURING_MILESTONE}} — From summaries
    - {{ISSUES_DEFERRED_TO_LATER}} — From ISSUES.md
@@ -445,7 +445,7 @@ Extract completed milestone details and create archive file.
 
 7. Update ROADMAP.md:
    - Create/update "## Completed Milestones" section if not exists
-   - Add one-line entry: `- ✅ [v[X.Y] [Name]](milestones/v[X.Y]-ROADMAP.md) (Phases [N]-[M]) — SHIPPED [DATE]`
+   - Add one-line entry: `- ✅ [v[X.Y] [Name]](milestones/v[X.Y]-ROADMAP.md) (Releases [N]-[M]) — SHIPPED [DATE]`
    - Remove full milestone details from "Current Milestone" section
    - Move next planned milestone to "Current Milestone" position
 
@@ -479,9 +479,9 @@ See: .planning/PROJECT.md (updated [today])
 **Current Position:**
 
 ```markdown
-Phase: [Next phase] of [Total] ([Phase name])
-Plan: Not started
-Status: Ready to plan
+Release: [Next release] of [Total] ([Release name])
+Change: Not started
+Status: Ready to change
 Last activity: [today] — v[X.Y] milestone complete
 
 Progress: [updated progress bar]
@@ -563,7 +563,7 @@ Confirm: "Committed: chore: complete v[X.Y] milestone"
 ✅ Milestone v[X.Y] [Name] complete
 
 Shipped:
-- [N] phases ([M] plans, [P] tasks)
+- [N] releases ([M] changes, [P] tasks)
 - [One sentence of what shipped]
 
 Summary: .planning/MILESTONES.md
@@ -573,7 +573,7 @@ Tag: v[X.Y]
 
 ## ▶ Next Up
 
-**Plan Next Milestone** — define v[X.Y+1] features and scope
+**Change Next Milestone** — define v[X.Y+1] features and scope
 
 `/cat:discuss-milestone`
 
@@ -618,7 +618,7 @@ Keep names short (1-2 words describing the focus).
 - Before archiving planning
 
 **Don't create milestones for:**
-- Every phase completion (too granular)
+- Every release completion (too granular)
 - Work in progress (wait until shipped)
 - Internal dev iterations (unless truly shipped internally)
 

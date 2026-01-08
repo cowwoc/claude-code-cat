@@ -12,14 +12,14 @@ You are planning for ONE person (the user) and ONE implementer (Claude).
 
 <plans_are_prompts>
 
-PLAN.md is not a document that gets transformed into a prompt.
-PLAN.md IS the prompt. It contains:
+CHANGE.md is not a document that gets transformed into a prompt.
+CHANGE.md IS the prompt. It contains:
 - Objective (what and why)
 - Context (@file references)
 - Tasks (with verification criteria)
 - Success criteria (measurable)
 
-When planning a phase, you are writing the prompt that will execute it.
+When planning a release, you are writing the prompt that will execute it.
 </plans_are_prompts>
 
 <initialization_leverage>
@@ -33,7 +33,7 @@ The most leveraged moment is project initialization.
 
 <scope_control>
 
-Plans must complete within reasonable context usage.
+Changes must complete within reasonable context usage.
 
 **Quality degradation curve:**
 - 0-30% context: Peak quality
@@ -41,10 +41,10 @@ Plans must complete within reasonable context usage.
 - 50-70% context: Degrading quality
 - 70%+ context: Poor quality
 
-**Solution:** Aggressive atomicity - split into small, focused plans.
-- 2-3 tasks per plan maximum
-- Each plan independently executable
-- Better to have many small plans than few large ones
+**Solution:** Aggressive atomicity - split into small, focused changes.
+- 2-3 tasks per change maximum
+- Each change independently executable
+- Better to have many small changes than few large ones
 </scope_control>
 
 <claude_automates>
@@ -64,7 +64,7 @@ Not for:
 
 <deviation_rules>
 
-Plans are guides, not straitjackets. During execution:
+Changes are guides, not straitjackets. During execution:
 
 1. **Auto-fix bugs** - Fix immediately, document
 2. **Auto-add critical** - Security/correctness gaps, add immediately
@@ -77,7 +77,7 @@ Plans are guides, not straitjackets. During execution:
 
 Use TDD when the work WOULD benefit from it. Not dogma—pragmatism.
 
-**TDD candidates (create dedicated TDD plan):**
+**TDD candidates (create dedicated TDD change):**
 - Business logic with defined inputs/outputs
 - API endpoints and handlers
 - Data transformations and parsing
@@ -85,7 +85,7 @@ Use TDD when the work WOULD benefit from it. Not dogma—pragmatism.
 - State machines and workflows
 - Anything where you can describe expected behavior before implementing
 
-**Skip TDD (use standard plan):**
+**Skip TDD (use standard change):**
 - UI layout and styling
 - Exploratory prototyping
 - One-off scripts and migrations
@@ -94,27 +94,27 @@ Use TDD when the work WOULD benefit from it. Not dogma—pragmatism.
 
 **Decision heuristic:**
 Can you write `expect(fn(input)).toBe(output)` before writing `fn`?
-→ Yes: Create a TDD plan (one feature per plan)
-→ No: Standard plan, add tests after if needed
+→ Yes: Create a TDD change (one feature per change)
+→ No: Standard change, add tests after if needed
 
-**Why TDD gets its own plan:**
-TDD requires 2-3 execution cycles (RED → GREEN → REFACTOR), each with file reads, test runs, and potential debugging. This consumes 40-50% of context for a single feature. Dedicated TDD plans ensure full quality throughout the cycle.
+**Why TDD gets its own change:**
+TDD requires 2-3 execution cycles (RED → GREEN → REFACTOR), each with file reads, test runs, and potential debugging. This consumes 40-50% of context for a single feature. Dedicated TDD changes ensure full quality throughout the cycle.
 
-**TDD plan structure:**
+**TDD change structure:**
 1. Write failing test (RED) → commit
 2. Implement to pass (GREEN) → commit
 3. Refactor if needed → commit
 
 This is about design quality, not test coverage metrics.
 
-See `~/.claude/cat/references/tdd.md` for TDD plan structure.
+See `~/.claude/cat/references/tdd.md` for TDD change structure.
 </test_driven_when_beneficial>
 
 <ship_fast>
 
 No enterprise process. No approval gates.
 
-Plan → Execute → Ship → Learn → Repeat
+Change → Execute → Ship → Learn → Repeat
 
 Milestones mark shipped versions (v1.0 → v1.1 → v2.0).
 </ship_fast>
@@ -131,12 +131,12 @@ Each task gets its own commit immediately after completion:
 
 **Why per-task commits:**
 - Git history becomes primary context source for future Claude sessions
-- `git bisect` finds exact failing task, not just failing plan
+- `git bisect` finds exact failing task, not just failing change
 - Each task independently revertable
 - Better failure recovery (task 1 committed ✅, retry task 2)
 - Observability optimized for AI workflow, not human browsing
 
-**Plans produce 2-3 commits total:**
+**Changes produce 2-3 commits total:**
 - Each task commit contains implementation + planning metadata
 
 See `~/.claude/cat/references/git-integration.md` for complete strategy.

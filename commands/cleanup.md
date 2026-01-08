@@ -37,7 +37,7 @@ ls -la .cat-execution-context 2>/dev/null || echo "No context file found"
 # List CAT-related branches
 echo ""
 echo "=== CAT Branches ==="
-git branch -a | grep -E "(phase/|worktree)" || echo "No CAT branches found"
+git branch -a | grep -E "(release/|worktree)" || echo "No CAT branches found"
 ```
 
 Present findings to user.
@@ -49,11 +49,11 @@ Present findings to user.
 A worktree is likely abandoned if:
 - Its lock file references a session that's no longer active
 - The worktree directory exists but has no recent activity
-- The main project has a stale `.cat-plan-*.lock` file
+- The main project has a stale `.cat-change-*.lock` file
 
 Check each lock file:
 ```bash
-for lock in .cat-plan-*.lock; do
+for lock in .cat-change-*.lock; do
   if [[ -f "$lock" ]]; then
     echo "Lock: $lock"
     echo "  Session: $(cat "$lock")"
@@ -100,8 +100,8 @@ WORKTREE_PATH="<path>"
 git worktree remove "$WORKTREE_PATH" --force
 
 # Remove associated lock file
-PLAN_ID="<extracted-from-path>"  # e.g., "02-01" from ".worktrees/m1-02-01"
-rm -f ".cat-plan-${PLAN_ID}.lock"
+CHANGE_ID="<extracted-from-path>"  # e.g., "02-01" from ".worktrees/m1-02-01"
+rm -f ".cat-change-${CHANGE_ID}.lock"
 
 # Remove orphaned branch (AFTER worktree removal)
 BRANCH_NAME="<branch-from-worktree>"
@@ -133,7 +133,7 @@ ls -la .cat-*.lock 2>/dev/null || echo "None"
 # Confirm branches cleaned
 echo ""
 echo "Remaining CAT branches:"
-git branch -a | grep -E "(phase/|worktree)" || echo "None"
+git branch -a | grep -E "(release/|worktree)" || echo "None"
 
 echo ""
 echo "Cleanup complete"
@@ -166,7 +166,7 @@ Action: Survey all, confirm cleanup of each
 
 **Scenario 3: Lock file blocking new execution**
 ```
-Symptoms: "Plan already being executed" error but no active session
+Symptoms: "Change already being executed" error but no active session
 Action: Remove specific lock file after confirming no active work
 ```
 

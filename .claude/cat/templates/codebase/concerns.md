@@ -95,7 +95,7 @@ Template for `.planning/codebase/CONCERNS.md` - captures known issues and areas 
 **[Package/Service]:**
 - Risk: [e.g., "deprecated", "unmaintained", "breaking changes coming"]
 - Impact: [What breaks if it fails]
-- Migration plan: [Alternative or upgrade path]
+- Migration change: [Alternative or upgrade path]
 
 ## Missing Critical Features
 
@@ -130,7 +130,7 @@ Template for `.planning/codebase/CONCERNS.md` - captures known issues and areas 
 **Database queries in React components:**
 - Issue: Direct Supabase queries in 15+ page components instead of server actions
 - Files: `app/dashboard/page.tsx`, `app/profile/page.tsx`, `app/courses/[id]/page.tsx`, `app/settings/page.tsx` (and 11 more in `app/`)
-- Why: Rapid prototyping during MVP phase
+- Why: Rapid prototyping during MVP release
 - Impact: Can't implement RLS properly, exposes DB structure to client
 - Fix approach: Move all queries to server actions in `app/actions/`, add proper RLS policies
 
@@ -215,7 +215,7 @@ Template for `.planning/codebase/CONCERNS.md` - captures known issues and areas 
 
 **Server-side render blocking:**
 - Current capacity: ~50 concurrent users before slowdown
-- Limit: Vercel Hobby plan (10s function timeout, 100GB-hrs/mo)
+- Limit: Vercel Hobby change (10s function timeout, 100GB-hrs/mo)
 - Symptoms at limit: 504 gateway timeouts on course pages
 - Scaling path: Upgrade to Vercel Pro ($20/mo), add edge caching
 
@@ -224,7 +224,7 @@ Template for `.planning/codebase/CONCERNS.md` - captures known issues and areas 
 **react-hot-toast:**
 - Risk: Unmaintained (last update 18 months ago), React 19 compatibility unknown
 - Impact: Toast notifications break, no graceful degradation
-- Migration plan: Switch to sonner (actively maintained, similar API)
+- Migration change: Switch to sonner (actively maintained, similar API)
 
 ## Missing Critical Features
 
@@ -297,7 +297,7 @@ Template for `.planning/codebase/CONCERNS.md` - captures known issues and areas 
 - Risk-focused ("Could expose user data" not "security is bad")
 - Factual ("3.5s load time" not "really slow")
 
-**Useful for phase planning when:**
+**Useful for release planning when:**
 - Deciding what to work on next
 - Estimating risk of changes
 - Understanding where to be careful

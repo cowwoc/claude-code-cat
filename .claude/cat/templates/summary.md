@@ -1,6 +1,6 @@
 # Summary Template
 
-Template for `.planning/phases/XX-name/{phase}-{plan}-{slug}-SUMMARY.md` - phase completion documentation.
+Template for `.planning/releases/XX-name/{release}-{change}-{slug}-SUMMARY.md` - release completion documentation.
 
 ---
 
@@ -8,22 +8,22 @@ Template for `.planning/phases/XX-name/{phase}-{plan}-{slug}-SUMMARY.md` - phase
 
 ```markdown
 ---
-phase: XX-name
-plan: YY
+release: XX-name
+change: YY
 subsystem: [primary category: auth, payments, ui, api, database, infra, testing, etc.]
 tags: [searchable tech: jwt, stripe, react, postgres, prisma]
 
 # Dependency graph
 requires:
-  - phase: [prior phase this depends on]
-    provides: [what that phase built that this uses]
+  - release: [prior release this depends on]
+    provides: [what that release built that this uses]
 provides:
-  - [bullet list of what this phase built/delivered]
-affects: [list of phase names or keywords that will need this context]
+  - [bullet list of what this release built/delivered]
+affects: [list of release names or keywords that will need this context]
 
 # Tech tracking
 tech-stack:
-  added: [libraries/tools added in this phase]
+  added: [libraries/tools added in this release]
   patterns: [architectural/code patterns established]
 
 key-files:
@@ -45,9 +45,9 @@ duration: Xmin
 completed: YYYY-MM-DD
 ---
 
-# Phase [X]: [Name] Summary
+# Release [X]: [Name] Summary
 
-**[Substantive one-liner describing outcome - NOT "phase complete" or "implementation finished"]**
+**[Substantive one-liner describing outcome - NOT "release complete" or "implementation finished"]**
 
 ## Performance
 
@@ -70,7 +70,7 @@ Each task was committed atomically:
 2. **Task 2: [task name]** - `def456g` (feat/fix/test/refactor)
 3. **Task 3: [task name]** - `hij789k` (feat/fix/test/refactor)
 
-**Plan metadata:** `lmn012o` (docs: complete plan)
+**Change metadata:** `lmn012o` (docs: complete change)
 
 _Note: TDD tasks may have multiple commits (test → feat → refactor)_
 
@@ -79,11 +79,11 @@ _Note: TDD tasks may have multiple commits (test → feat → refactor)_
 - `path/to/another.ts` - What it does
 
 ## Decisions Made
-[Key decisions with brief rationale, or "None - followed plan as specified"]
+[Key decisions with brief rationale, or "None - followed change as specified"]
 
-## Deviations from Plan
+## Deviations from Change
 
-[If no deviations: "None - plan executed exactly as written"]
+[If no deviations: "None - change executed exactly as written"]
 
 [If deviations occurred:]
 
@@ -108,38 +108,38 @@ Logged to .planning/ISSUES.md for future consideration:
 ---
 
 **Total deviations:** [N] auto-fixed ([breakdown by rule]), [N] deferred
-**Impact on plan:** [Brief assessment - e.g., "All auto-fixes necessary for correctness/security. No scope creep."]
+**Impact on change:** [Brief assessment - e.g., "All auto-fixes necessary for correctness/security. No scope creep."]
 
 ## Issues Encountered
 [Problems and how they were resolved, or "None"]
 
-[Note: "Deviations from Plan" documents unplanned work that was handled automatically via deviation rules. "Issues Encountered" documents problems during planned work that required problem-solving.]
+[Note: "Deviations from Change" documents unplanned work that was handled automatically via deviation rules. "Issues Encountered" documents problems during planned work that required problem-solving.]
 
-## Next Phase Readiness
-[What's ready for next phase]
+## Next Release Readiness
+[What's ready for next release]
 [Any blockers or concerns]
 
 ---
-*Phase: XX-name*
+*Release: XX-name*
 *Completed: [date]*
 ```
 
 <frontmatter_guidance>
-**Purpose:** Enable automatic context assembly via dependency graph. Frontmatter makes summary metadata machine-readable so plan-phase can scan all summaries quickly and select relevant ones based on dependencies.
+**Purpose:** Enable automatic context assembly via dependency graph. Frontmatter makes summary metadata machine-readable so change-release can scan all summaries quickly and select relevant ones based on dependencies.
 
 **Fast scanning:** Frontmatter is first ~25 lines, cheap to scan across all summaries without reading full content.
 
-**Dependency graph:** `requires`/`provides`/`affects` create explicit links between phases, enabling transitive closure for context selection.
+**Dependency graph:** `requires`/`provides`/`affects` create explicit links between releases, enabling transitive closure for context selection.
 
-**Subsystem:** Primary categorization (auth, payments, ui, api, database, infra, testing) for detecting related phases.
+**Subsystem:** Primary categorization (auth, payments, ui, api, database, infra, testing) for detecting related releases.
 
 **Tags:** Searchable technical keywords (libraries, frameworks, tools) for tech stack awareness.
 
-**Key-files:** Important files for @context references in PLAN.md.
+**Key-files:** Important files for @context references in CHANGE.md.
 
-**Patterns:** Established conventions future phases should maintain.
+**Patterns:** Established conventions future releases should maintain.
 
-**Population:** Frontmatter is populated during summary creation in execute-phase.md. See `<step name="create_summary">` for field-by-field guidance.
+**Population:** Frontmatter is populated during summary creation in execute-release.md. See `<step name="create_summary">` for field-by-field guidance.
 </frontmatter_guidance>
 
 <one_liner_rules>
@@ -151,7 +151,7 @@ The one-liner MUST be substantive:
 - "Dashboard with real-time metrics via Server-Sent Events"
 
 **Bad:**
-- "Phase complete"
+- "Release complete"
 - "Authentication implemented"
 - "Foundation finished"
 - "All tasks done"
@@ -161,7 +161,7 @@ The one-liner should tell someone what actually shipped.
 
 <example>
 ```markdown
-# Phase 1: Foundation Summary
+# Release 1: Foundation Summary
 
 **JWT auth with refresh rotation using jose library, Prisma User model, and protected API middleware**
 
@@ -191,13 +191,13 @@ The one-liner should tell someone what actually shipped.
 - 15-min access tokens with 7-day refresh tokens
 - Storing refresh tokens in database for revocation capability
 
-## Deviations from Plan
+## Deviations from Change
 
 ### Auto-fixed Issues
 
 **1. [Rule 2 - Missing Critical] Added password hashing with bcrypt**
 - **Found during:** Task 2 (Login endpoint implementation)
-- **Issue:** Plan didn't specify password hashing - storing plaintext would be critical security flaw
+- **Issue:** Change didn't specify password hashing - storing plaintext would be critical security flaw
 - **Fix:** Added bcrypt hashing on registration, comparison on login with salt rounds 10
 - **Files modified:** src/app/api/auth/login/route.ts, src/lib/auth.ts
 - **Verification:** Password hash test passes, plaintext never stored
@@ -220,25 +220,25 @@ Logged to .planning/ISSUES.md for future consideration:
 ---
 
 **Total deviations:** 2 auto-fixed (1 missing critical, 1 blocking), 2 deferred
-**Impact on plan:** Both auto-fixes essential for security and functionality. No scope creep.
+**Impact on change:** Both auto-fixes essential for security and functionality. No scope creep.
 
 ## Issues Encountered
 - jsonwebtoken CommonJS import failed in Edge runtime - switched to jose (planned library change, worked as expected)
 
-## Next Phase Readiness
+## Next Release Readiness
 - Auth foundation complete, ready for feature development
 - User registration endpoint needed before public launch
 
 ---
-*Phase: 01-foundation*
+*Release: 01-foundation*
 *Completed: 2025-01-15*
 ```
 </example>
 
 <guidelines>
 **When to create:**
-- After completing each phase plan
-- Required output from execute-phase workflow
+- After completing each release change
+- Required output from execute-release workflow
 - Documents what actually happened vs what was planned
 
 **Frontmatter completion:**
@@ -247,7 +247,7 @@ Logged to .planning/ISSUES.md for future consideration:
 - Frontmatter enables automatic context assembly for future planning
 
 **One-liner requirements:**
-- Must be substantive (describe what shipped, not "phase complete")
+- Must be substantive (describe what shipped, not "release complete")
 - Should tell someone what was accomplished
 - Examples: "JWT auth with refresh rotation using jose library" not "Authentication implemented"
 
@@ -265,9 +265,9 @@ Logged to .planning/ISSUES.md for future consideration:
 - Key decisions made during execution
 - Include rationale (why this choice)
 - Extracted to STATE.md accumulated context
-- Use "None - followed plan as specified" if no deviations
+- Use "None - followed change as specified" if no deviations
 
 **After creation:**
 - STATE.md updated with position, decisions, issues
-- Next plan can reference decisions made
+- Next change can reference decisions made
 </guidelines>

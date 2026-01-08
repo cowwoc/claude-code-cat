@@ -1,6 +1,6 @@
 ---
 name: cat:pause-work
-description: Create context handoff when pausing work mid-phase
+description: Create context handoff when pausing work mid-release
 allowed-tools:
   - Read
   - Write
@@ -20,15 +20,15 @@ Enables seamless resumption in fresh session with full context restoration.
 <process>
 
 <step name="detect">
-Find current phase directory from most recently modified files.
+Find current release directory from most recently modified files.
 </step>
 
 <step name="gather">
 **Collect complete state for handoff:**
 
-1. **Current position**: Which phase, which plan, which task
+1. **Current position**: Which release, which change, which task
 2. **Work completed**: What got done this session
-3. **Work remaining**: What's left in current plan/phase
+3. **Work remaining**: What's left in current change/release
 4. **Decisions made**: Key decisions and rationale
 5. **Blockers/issues**: Anything stuck
 6. **Mental context**: The approach, next steps, "vibe"
@@ -38,11 +38,11 @@ Ask user for clarifications if needed.
 </step>
 
 <step name="write">
-**Write handoff to `.planning/phases/XX-name/.continue-here.md`:**
+**Write handoff to `.planning/releases/XX-name/.continue-here.md`:**
 
 ```markdown
 ---
-phase: XX-name
+release: XX-name
 task: 3
 total_tasks: 7
 status: in_progress
@@ -78,7 +78,7 @@ last_updated: [timestamp]
 </blockers>
 
 <context>
-[Mental state, what were you thinking, the plan]
+[Mental state, what were you thinking, the change]
 </context>
 
 <next_action>
@@ -91,18 +91,18 @@ Be specific enough for a fresh Claude to understand immediately.
 
 <step name="commit">
 ```bash
-git add .planning/phases/*/.continue-here.md
-git commit -m "wip: [phase-name] paused at task [X]/[Y]"
+git add .planning/releases/*/.continue-here.md
+git commit -m "wip: [release-name] paused at task [X]/[Y]"
 ```
 </step>
 
 <step name="confirm">
 ```
-✓ Handoff created: .planning/phases/[XX-name]/.continue-here.md
+✓ Handoff created: .planning/releases/[XX-name]/.continue-here.md
 
 Current state:
 
-- Phase: [XX-name]
+- Release: [XX-name]
 - Task: [X] of [Y]
 - Status: [in_progress/blocked]
 - Committed as WIP
@@ -115,7 +115,7 @@ To resume: /cat:resume-work
 </process>
 
 <success_criteria>
-- [ ] .continue-here.md created in correct phase directory
+- [ ] .continue-here.md created in correct release directory
 - [ ] All sections filled with specific content
 - [ ] Committed as WIP
 - [ ] User knows location and how to resume

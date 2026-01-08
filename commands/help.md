@@ -17,14 +17,14 @@ Output ONLY the reference content below. Do NOT add:
 <reference>
 # CAT Command Reference
 
-**CAT** creates hierarchical project plans optimized for solo agentic development with Claude Code.
+**CAT** creates hierarchical project changes optimized for solo agentic development with Claude Code.
 
 ## Quick Start
 
 1. `/cat:new-project` - Initialize project with brief
-2. `/cat:create-roadmap` - Create roadmap and phases
-3. `/cat:plan-phase <number>` - Create detailed plan for first phase
-4. `/cat:execute-plan <path>` - Execute the plan
+2. `/cat:create-roadmap` - Create roadmap and releases
+3. `/cat:change-release <number>` - Create detailed change for first release
+4. `/cat:execute-change <path>` - Execute the change
 
 ## Core Workflow
 
@@ -47,9 +47,9 @@ Usage: `/cat:new-project`
 **`/cat:create-roadmap`**
 Create roadmap and state tracking for initialized project.
 
-- Creates `.planning/ROADMAP.md` (phase breakdown)
+- Creates `.planning/ROADMAP.md` (release breakdown)
 - Creates `.planning/STATE.md` (project memory)
-- Creates `.planning/phases/` directories
+- Creates `.planning/releases/` directories
 
 Usage: `/cat:create-roadmap`
 
@@ -63,18 +63,18 @@ Map an existing codebase for brownfield projects.
 
 Usage: `/cat:map-codebase`
 
-### Phase Planning
+### Release Planning
 
-**`/cat:discuss-phase <number>`**
-Help articulate your vision for a phase before planning.
+**`/cat:discuss-release <number>`**
+Help articulate your vision for a release before planning.
 
-- Captures how you imagine this phase working
+- Captures how you imagine this release working
 - Creates CONTEXT.md with your vision, essentials, and boundaries
 - Use when you have ideas about how something should look/feel
 
-Usage: `/cat:discuss-phase 2`
+Usage: `/cat:discuss-release 2`
 
-**`/cat:research-phase <number>`**
+**`/cat:research-release <number>`**
 Comprehensive ecosystem research for niche/complex domains.
 
 - Discovers standard stack, architecture patterns, pitfalls
@@ -82,60 +82,60 @@ Comprehensive ecosystem research for niche/complex domains.
 - Use for 3D, games, audio, shaders, ML, and other specialized domains
 - Goes beyond "which library" to ecosystem knowledge
 
-Usage: `/cat:research-phase 3`
+Usage: `/cat:research-release 3`
 
-**`/cat:list-phase-assumptions <number>`**
+**`/cat:list-release-assumptions <number>`**
 See what Claude is planning to do before it starts.
 
-- Shows Claude's intended approach for a phase
+- Shows Claude's intended approach for a release
 - Lets you course-correct if Claude misunderstood your vision
 - No files created - conversational output only
 
-Usage: `/cat:list-phase-assumptions 3`
+Usage: `/cat:list-release-assumptions 3`
 
-**`/cat:plan-phase <number>`**
-Create detailed execution plan for a specific phase.
+**`/cat:change-release <number>`**
+Create detailed execution change for a specific release.
 
-- Generates `.planning/phases/XX-phase-name/XX-YY-PLAN.md`
-- Breaks phase into concrete, actionable tasks
+- Generates `.planning/releases/XX-release-name/XX-YY-CHANGE.md`
+- Breaks release into concrete, actionable tasks
 - Includes verification criteria and success measures
-- Multiple plans per phase supported (XX-01, XX-02, etc.)
+- Multiple changes per release supported (XX-01, XX-02, etc.)
 
-Usage: `/cat:plan-phase 1`
-Result: Creates `.planning/phases/01-foundation/01-01-setup-project-PLAN.md`
+Usage: `/cat:change-release 1`
+Result: Creates `.planning/releases/01-foundation/01-01-setup-project-CHANGE.md`
 
 ### Execution
 
-**`/cat:execute-plan <path>`**
-Execute a PLAN.md file directly.
+**`/cat:execute-change <path>`**
+Execute a CHANGE.md file directly.
 
-- Runs plan tasks sequentially
+- Runs change tasks sequentially
 - Creates SUMMARY.md after completion
 - Updates STATE.md with accumulated context
 - Fast execution without loading full skill context
 
-Usage: `/cat:execute-plan .planning/phases/01-foundation/01-01-setup-project-PLAN.md`
+Usage: `/cat:execute-change .planning/releases/01-foundation/01-01-setup-project-CHANGE.md`
 
 ### Roadmap Management
 
-**`/cat:add-phase <description>`**
-Add new phase to end of current milestone.
+**`/cat:add-release <description>`**
+Add new release to end of current milestone.
 
 - Appends to ROADMAP.md
 - Uses next sequential number
-- Updates phase directory structure
+- Updates release directory structure
 
-Usage: `/cat:add-phase "Add admin dashboard"`
+Usage: `/cat:add-release "Add admin dashboard"`
 
-**`/cat:insert-phase <after> <description>`**
-Insert urgent work as decimal phase between existing phases.
+**`/cat:insert-release <after> <description>`**
+Insert urgent work as decimal release between existing releases.
 
-- Creates intermediate phase (e.g., 7.1 between 7 and 8)
+- Creates intermediate release (e.g., 7.1 between 7 and 8)
 - Useful for discovered work that must happen mid-milestone
-- Maintains phase ordering
+- Maintains release ordering
 
-Usage: `/cat:insert-phase 7 "Fix critical auth bug"`
-Result: Creates Phase 7.1
+Usage: `/cat:insert-release 7 "Fix critical auth bug"`
+Result: Creates Release 7.1
 
 ### Milestone Management
 
@@ -149,10 +149,10 @@ Figure out what you want to build in the next milestone.
 Usage: `/cat:discuss-milestone`
 
 **`/cat:new-milestone <name>`**
-Create a new milestone with phases for an existing project.
+Create a new milestone with releases for an existing project.
 
 - Adds milestone section to ROADMAP.md
-- Creates phase directories
+- Creates release directories
 - Updates STATE.md for new milestone
 
 Usage: `/cat:new-milestone "v2.0 Features"`
@@ -176,7 +176,7 @@ Check project status and intelligently route to next action.
 - Summarizes recent work from SUMMARY files
 - Displays current position and what's next
 - Lists key decisions and open issues
-- Offers to execute next plan or create it if missing
+- Offers to execute next change or create it if missing
 - Detects 100% milestone completion
 
 Usage: `/cat:progress`
@@ -193,7 +193,7 @@ Resume work from previous session with full context restoration.
 Usage: `/cat:resume-work`
 
 **`/cat:pause-work`**
-Create context handoff when pausing work mid-phase.
+Create context handoff when pausing work mid-release.
 
 - Creates .continue-here file with current state
 - Updates STATE.md session continuity section
@@ -209,8 +209,8 @@ Review deferred issues with codebase context.
 - Analyzes all open issues against current codebase state
 - Identifies resolved issues (can close)
 - Identifies urgent issues (should address now)
-- Identifies natural fits for upcoming phases
-- Offers batch actions (close, insert phase, note for planning)
+- Identifies natural fits for upcoming releases
+- Offers batch actions (close, insert release, note for planning)
 
 Usage: `/cat:consider-issues`
 
@@ -224,7 +224,7 @@ Show this command reference.
 ```
 .planning/
 ├── PROJECT.md            # Project vision
-├── ROADMAP.md            # Current phase breakdown
+├── ROADMAP.md            # Current release breakdown
 ├── STATE.md              # Project memory & context
 ├── ISSUES.md             # Deferred enhancements (created when needed)
 ├── config.json           # Workflow mode & gates
@@ -236,12 +236,12 @@ Show this command reference.
 │   ├── TESTING.md        # Test setup, patterns
 │   ├── INTEGRATIONS.md   # External services, APIs
 │   └── CONCERNS.md       # Tech debt, known issues
-└── phases/
+└── releases/
     ├── 01-foundation/
-    │   ├── 01-01-setup-project-PLAN.md
+    │   ├── 01-01-setup-project-CHANGE.md
     │   └── 01-01-setup-project-SUMMARY.md
     └── 02-core-features/
-        ├── 02-01-add-api-routes-PLAN.md
+        ├── 02-01-add-api-routes-CHANGE.md
         └── 02-01-add-api-routes-SUMMARY.md
 ```
 
@@ -258,7 +258,7 @@ Set during `/cat:new-project`:
 **YOLO Mode**
 
 - Auto-approves most decisions
-- Executes plans without confirmation
+- Executes changes without confirmation
 - Only stops for critical checkpoints
 
 Change anytime by editing `.planning/config.json`
@@ -270,8 +270,8 @@ Change anytime by editing `.planning/config.json`
 ```
 /cat:new-project
 /cat:create-roadmap
-/cat:plan-phase 1
-/cat:execute-plan .planning/phases/01-foundation/01-01-setup-project-PLAN.md
+/cat:change-release 1
+/cat:execute-change .planning/releases/01-foundation/01-01-setup-project-CHANGE.md
 ```
 
 **Resuming work after a break:**
@@ -283,9 +283,9 @@ Change anytime by editing `.planning/config.json`
 **Adding urgent mid-milestone work:**
 
 ```
-/cat:insert-phase 5 "Critical security fix"
-/cat:plan-phase 5.1
-/cat:execute-plan .planning/phases/05.1-critical-security-fix/05.1-01-fix-auth-vuln-PLAN.md
+/cat:insert-release 5 "Critical security fix"
+/cat:change-release 5.1
+/cat:execute-change .planning/releases/05.1-critical-security-fix/05.1-01-fix-auth-vuln-CHANGE.md
 ```
 
 **Completing a milestone:**
@@ -299,6 +299,6 @@ Change anytime by editing `.planning/config.json`
 
 - Read `.planning/PROJECT.md` for project vision
 - Read `.planning/STATE.md` for current context
-- Check `.planning/ROADMAP.md` for phase status
+- Check `.planning/ROADMAP.md` for release status
 - Run `/cat:progress` to check where you're up to
   </reference>

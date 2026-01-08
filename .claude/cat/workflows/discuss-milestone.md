@@ -1,7 +1,7 @@
 <purpose>
 Help the user figure out what they want to build in the next milestone through collaborative thinking.
 
-You're a thinking partner helping them crystallize their vision for what's next. Features first — everything else (scope, phases) derives from what they want to build.
+You're a thinking partner helping them crystallize their vision for what's next. Features first — everything else (scope, releases) derives from what they want to build.
 </purpose>
 
 <process>
@@ -21,11 +21,11 @@ Continue to milestone_context.
 
 ```
 Current milestone in progress: v[X.Y] [Name]
-Phases [N]-[M], [P]% complete
+Releases [N]-[M], [P]% complete
 
 Did you want to:
 1. Complete current milestone first (/cat:complete-milestone)
-2. Add phases to current milestone (/cat:add-phase)
+2. Add releases to current milestone (/cat:add-release)
 3. Continue anyway - discuss next milestone scope
 
 ```
@@ -41,8 +41,8 @@ Last completed: v[X.Y] [Name] (shipped [DATE])
 Key accomplishments:
 - [From MILESTONES.md or STATE.md]
 
-Total phases delivered: [N]
-Next phase number: [N+1]
+Total releases delivered: [N]
+Next release number: [N+1]
 ```
 
 Continue to intake_gate.
@@ -103,7 +103,7 @@ Based on what you described:
 - [Feature 2]: [brief description]
 - [Feature 3]: [brief description]
 
-**Estimated scope:** [N] phases
+**Estimated scope:** [N] releases
 **Theme suggestion:** v[X.Y] [Name]
 ```
 
@@ -132,8 +132,8 @@ Use template from ~/.claude/cat/templates/milestone-context.md
 Populate with:
 - Features identified during discussion
 - Suggested milestone name and theme
-- Estimated phase count
-- How features map to phases
+- Estimated release count
+- How features map to releases
 - Any constraints or scope boundaries mentioned
 
 ```bash
@@ -157,17 +157,17 @@ cat > .planning/MILESTONE-CONTEXT.md << 'EOF'
 ## Scope
 
 **Suggested name:** v[X.Y] [Theme Name]
-**Estimated phases:** [N]
+**Estimated releases:** [N]
 **Focus:** [One sentence theme/focus]
 
 </scope>
 
 <phase_mapping>
-## Phase Mapping
+## Release Mapping
 
-- Phase [N]: [Feature/goal]
-- Phase [N+1]: [Feature/goal]
-- Phase [N+2]: [Feature/goal]
+- Release [N]: [Feature/goal]
+- Release [N+1]: [Feature/goal]
+- Release [N+2]: [Feature/goal]
 
 </phase_mapping>
 
@@ -204,7 +204,7 @@ Milestone scope defined:
 - [Feature 3]: [description]
 
 **Suggested milestone:** v[X.Y] [Theme Name]
-**Estimated phases:** [N]
+**Estimated releases:** [N]
 
 Context saved to `.planning/MILESTONE-CONTEXT.md`
 
@@ -231,6 +231,6 @@ Context saved to `.planning/MILESTONE-CONTEXT.md`
 - **Features identified** - What to build/add/fix (the substance)
 - Features explored with clarifying questions
 - Scope synthesized from features (not asked abstractly)
-- **MILESTONE-CONTEXT.md created** with features, scope, and phase mapping
+- **MILESTONE-CONTEXT.md created** with features, scope, and release mapping
 - Context handed off to /cat:new-milestone
 </success_criteria>

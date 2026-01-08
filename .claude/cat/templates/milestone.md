@@ -7,7 +7,7 @@ Add this entry to `.planning/MILESTONES.md` when completing a milestone:
 
 **Delivered:** [One sentence describing what shipped]
 
-**Phases completed:** [X-Y] ([Z] plans total)
+**Releases completed:** [X-Y] ([Z] changes total)
 
 **Key accomplishments:**
 - [Major achievement 1]
@@ -18,7 +18,7 @@ Add this entry to `.planning/MILESTONES.md` when completing a milestone:
 **Stats:**
 - [X] files created/modified
 - [Y] lines of code (primary language)
-- [Z] phases, [N] plans, [M] tasks
+- [Z] releases, [N] changes, [M] tasks
 - [D] days from start to ship (or milestone to milestone)
 
 **Git range:** `abc1234` → `def5678` (first → last commit hashes from SUMMARY.md files)
@@ -46,20 +46,20 @@ If MILESTONES.md doesn't exist, create it with header:
 - Before archiving planning (capture what was shipped)
 
 **Don't create milestones for:**
-- Individual phase completions (normal workflow)
+- Individual release completions (normal workflow)
 - Work in progress (wait until shipped)
 - Minor bug fixes that don't constitute a release
 
 **Stats to include:**
 - Count modified files: `git diff --stat FIRST_HASH..LAST_HASH | tail -1`
 - Count LOC: `find . -name "*.swift" -o -name "*.ts" | xargs wc -l` (or relevant extension)
-- Phase/plan/task counts from ROADMAP
-- Timeline from first phase commit to last phase commit
+- Release/change/task counts from ROADMAP
+- Timeline from first release commit to last release commit
 
 **Git range format:**
 - First commit of milestone → last commit of milestone
-- Get commit hashes from SUMMARY.md files in each phase
-- Example: `a1b2c3d` → `e4f5g6h` for phases 1-4
+- Get commit hashes from SUMMARY.md files in each release
+- Example: `a1b2c3d` → `e4f5g6h` for releases 1-4
 </guidelines>
 
 <example>
@@ -70,7 +70,7 @@ If MILESTONES.md doesn't exist, create it with header:
 
 **Delivered:** Security hardening with Keychain integration and comprehensive error handling
 
-**Phases completed:** 5-6 (3 plans total)
+**Releases completed:** 5-6 (3 changes total)
 
 **Key accomplishments:**
 - Migrated API key storage from plaintext to macOS Keychain
@@ -81,7 +81,7 @@ If MILESTONES.md doesn't exist, create it with header:
 **Stats:**
 - 23 files modified
 - 650 lines of Swift added
-- 2 phases, 3 plans, 12 tasks
+- 2 releases, 3 changes, 12 tasks
 - 8 days from v1.0 to v1.1
 
 **Git range:** `c4d5e6f` → `g7h8i9j`
@@ -94,7 +94,7 @@ If MILESTONES.md doesn't exist, create it with header:
 
 **Delivered:** Menu bar weather app with current conditions and 3-day forecast
 
-**Phases completed:** 1-4 (7 plans total)
+**Releases completed:** 1-4 (7 changes total)
 
 **Key accomplishments:**
 - Menu bar app with popover UI (AppKit)
@@ -106,7 +106,7 @@ If MILESTONES.md doesn't exist, create it with header:
 **Stats:**
 - 47 files created
 - 2,450 lines of Swift
-- 4 phases, 7 plans, 28 tasks
+- 4 releases, 7 changes, 28 tasks
 - 12 days from start to ship
 
 **Git range:** `a1b2c3d` → `e4f5g6h`

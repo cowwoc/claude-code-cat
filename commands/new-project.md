@@ -12,7 +12,7 @@ allowed-tools:
 
 Initialize a new project through comprehensive context gathering.
 
-This is the most leveraged moment in any project. Deep questioning here means better plans, better execution, better outcomes.
+This is the most leveraged moment in any project. Deep questioning here means better changes, better execution, better outcomes.
 
 Creates `.planning/` with PROJECT.md and config.json.
 
@@ -242,11 +242,11 @@ Use AskUserQuestion:
 - header: "Depth"
 - question: "How thorough should planning be?"
 - options:
-  - "Quick" — Ship fast, minimal phases/plans (3-5 phases, 1-3 plans each)
-  - "Standard" — Balanced scope and speed (5-8 phases, 3-5 plans each)
-  - "Comprehensive" — Thorough coverage, more phases/plans (8-12 phases, 5-10 plans each)
+  - "Quick" — Ship fast, minimal releases/changes (3-5 releases, 1-3 changes each)
+  - "Standard" — Balanced scope and speed (5-8 releases, 3-5 changes each)
+  - "Comprehensive" — Thorough coverage, more releases/changes (8-12 releases, 5-10 changes each)
 
-**Depth controls compression tolerance, not artificial inflation.** All depths use 2-3 tasks per plan. Comprehensive means "don't compress complex work"—it doesn't mean "pad simple work to hit a number."
+**Depth controls compression tolerance, not artificial inflation.** All depths use 2-3 tasks per change. Comprehensive means "don't compress complex work"—it doesn't mean "pad simple work to hit a number."
 
 Create `.planning/config.json` with chosen mode and depth using `templates/config.json` structure.
 

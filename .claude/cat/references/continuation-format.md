@@ -27,7 +27,7 @@ Standard format for presenting next steps after completing a command or workflow
 ## Format Rules
 
 1. **Always show what it is** — name + description, never just a command path
-2. **Pull context from source** — ROADMAP.md for phases, PLAN.md `<objective>` for plans
+2. **Pull context from source** — ROADMAP.md for releases, CHANGE.md `<objective>` for changes
 3. **Command in inline code** — backticks, easy to copy-paste, renders as clickable link
 4. **`/clear` explanation** — always include, keeps it concise but explains why
 5. **"Also available" not "Other options"** — sounds more app-like
@@ -35,7 +35,7 @@ Standard format for presenting next steps after completing a command or workflow
 
 ## Variants
 
-### Execute Next Plan
+### Execute Next Change
 
 ```
 ---
@@ -44,22 +44,22 @@ Standard format for presenting next steps after completing a command or workflow
 
 **02-03: Refresh Token Rotation** — Add /api/auth/refresh with sliding expiry
 
-`/cat:execute-plan .planning/phases/02-auth/02-03-refresh-token-PLAN.md`
+`/cat:execute-change .planning/releases/02-auth/02-03-refresh-token-CHANGE.md`
 
 <sub>`/clear` first → fresh context window</sub>
 
 ---
 
 **Also available:**
-- Review plan before executing
-- `/cat:list-phase-assumptions 2` — check assumptions
+- Review change before executing
+- `/cat:list-release-assumptions 2` — check assumptions
 
 ---
 ```
 
-### Execute Final Plan in Phase
+### Execute Final Change in Release
 
-Add note that this is the last plan and what comes after:
+Add note that this is the last change and what comes after:
 
 ```
 ---
@@ -67,69 +67,69 @@ Add note that this is the last plan and what comes after:
 ## ▶ Next Up
 
 **02-03: Refresh Token Rotation** — Add /api/auth/refresh with sliding expiry
-<sub>Final plan in Phase 2</sub>
+<sub>Final change in Release 2</sub>
 
-`/cat:execute-plan .planning/phases/02-auth/02-03-refresh-token-PLAN.md`
+`/cat:execute-change .planning/releases/02-auth/02-03-refresh-token-CHANGE.md`
 
 <sub>`/clear` first → fresh context window</sub>
 
 ---
 
 **After this completes:**
-- Phase 2 → Phase 3 transition
-- Next: **Phase 3: Core Features** — User dashboard and settings
+- Release 2 → Release 3 transition
+- Next: **Release 3: Core Features** — User dashboard and settings
 
 ---
 ```
 
-### Plan a Phase
+### Change a Release
 
 ```
 ---
 
 ## ▶ Next Up
 
-**Phase 2: Authentication** — JWT login flow with refresh tokens
+**Release 2: Authentication** — JWT login flow with refresh tokens
 
-`/cat:plan-phase 2`
+`/cat:change-release 2`
 
 <sub>`/clear` first → fresh context window</sub>
 
 ---
 
 **Also available:**
-- `/cat:discuss-phase 2` — gather context first
-- `/cat:research-phase 2` — investigate unknowns
+- `/cat:discuss-release 2` — gather context first
+- `/cat:research-release 2` — investigate unknowns
 - Review roadmap
 
 ---
 ```
 
-### Phase Complete, Ready for Next
+### Release Complete, Ready for Next
 
 Show completion status before next action:
 
 ```
 ---
 
-## ✓ Phase 2 Complete
+## ✓ Release 2 Complete
 
-3/3 plans executed
+3/3 changes executed
 
 ## ▶ Next Up
 
-**Phase 3: Core Features** — User dashboard, settings, and data export
+**Release 3: Core Features** — User dashboard, settings, and data export
 
-`/cat:plan-phase 3`
+`/cat:change-release 3`
 
 <sub>`/clear` first → fresh context window</sub>
 
 ---
 
 **Also available:**
-- `/cat:discuss-phase 3` — gather context first
-- `/cat:research-phase 3` — investigate unknowns
-- Review what Phase 2 built
+- `/cat:discuss-release 3` — gather context first
+- `/cat:research-release 3` — investigate unknowns
+- Review what Release 2 built
 
 ---
 ```
@@ -143,13 +143,13 @@ When there's no clear primary action:
 
 ## ▶ Next Up
 
-**Phase 3: Core Features** — User dashboard, settings, and data export
+**Release 3: Core Features** — User dashboard, settings, and data export
 
-**To plan directly:** `/cat:plan-phase 3`
+**To change directly:** `/cat:change-release 3`
 
-**To discuss context first:** `/cat:discuss-phase 3`
+**To discuss context first:** `/cat:discuss-release 3`
 
-**To research unknowns:** `/cat:research-phase 3`
+**To research unknowns:** `/cat:research-release 3`
 
 <sub>`/clear` first → fresh context window</sub>
 
@@ -163,11 +163,11 @@ When there's no clear primary action:
 
 ## 🎉 Milestone v1.0 Complete
 
-All 4 phases shipped
+All 4 releases shipped
 
 ## ▶ Next Up
 
-**Plan v1.1** — Enhanced features and optimizations
+**Change v1.1** — Enhanced features and optimizations
 
 `/cat:discuss-milestone`
 
@@ -184,23 +184,23 @@ All 4 phases shipped
 
 ## Pulling Context
 
-### For phases (from ROADMAP.md):
+### For releases (from ROADMAP.md):
 
 ```markdown
-### Phase 2: Authentication
+### Release 2: Authentication
 **Goal**: JWT login flow with refresh tokens
 ```
 
-Extract: `**Phase 2: Authentication** — JWT login flow with refresh tokens`
+Extract: `**Release 2: Authentication** — JWT login flow with refresh tokens`
 
-### For plans (from ROADMAP.md):
+### For changes (from ROADMAP.md):
 
 ```markdown
-Plans:
+Changes:
 - [ ] 02-03: Add refresh token rotation
 ```
 
-Or from PLAN.md `<objective>`:
+Or from CHANGE.md `<objective>`:
 
 ```xml
 <objective>
@@ -220,7 +220,7 @@ Extract: `**02-03: Refresh Token Rotation** — Add /api/auth/refresh with slidi
 ## To Continue
 
 Run `/clear`, then paste:
-/cat:execute-plan .planning/phases/02-auth/02-03-refresh-token-PLAN.md
+/cat:execute-change .planning/releases/02-auth/02-03-refresh-token-CHANGE.md
 ```
 
 User has no idea what 02-03 is about.
@@ -228,7 +228,7 @@ User has no idea what 02-03 is about.
 ### Don't: Missing /clear explanation
 
 ```
-`/cat:plan-phase 3`
+`/cat:change-release 3`
 
 Run /clear first.
 ```
@@ -248,7 +248,7 @@ Sounds like an afterthought. Use "Also available:" instead.
 
 ```
 ```
-/cat:plan-phase 3
+/cat:change-release 3
 ```
 ```
 

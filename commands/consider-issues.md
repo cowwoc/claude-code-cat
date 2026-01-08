@@ -53,7 +53,7 @@ Exit.
 Extract from "## Open Enhancements" section:
 - ISS number (ISS-001, ISS-002, etc.)
 - Brief description
-- Discovered phase/date
+- Discovered release/date
 - Type (Performance/Refactoring/UX/Testing/Documentation/Accessibility)
 - Description details
 - Effort estimate
@@ -73,18 +73,18 @@ Build list of issues to analyze.
    - Check if the enhancement was implemented as part of other work
 
 3. **Assess current urgency:**
-   - Is this blocking upcoming phases?
+   - Is this blocking upcoming releases?
    - Has this become a pain point mentioned in recent summaries?
    - Is this now affecting code we're actively working on?
 
 4. **Check natural fit:**
-   - Does this align with an upcoming phase in the roadmap?
+   - Does this align with an upcoming release in the roadmap?
    - Would addressing it now touch the same files as current work?
 
 **Categorize each issue:**
 - **Resolved** - Can be closed (code changed, no longer applicable)
 - **Urgent** - Should address before continuing (blocking or causing problems)
-- **Natural fit** - Good candidate for upcoming phase X
+- **Natural fit** - Good candidate for upcoming release X
 - **Can wait** - Keep deferred, no change in status
 </step>
 
@@ -110,8 +110,8 @@ Build list of issues to analyze.
 ## Urgent (should address now)
 
 ### ISS-XXX: [description]
-**Why urgent:** [What changed - blocking next phase, causing active problems, etc.]
-**Recommendation:** Insert plan before Phase [X] / Add to current phase
+**Why urgent:** [What changed - blocking next release, causing active problems, etc.]
+**Recommendation:** Insert change before Release [X] / Add to current release
 **Effort:** [Quick/Medium/Substantial]
 
 [Repeat for each urgent issue, or "None - all issues can wait" if none urgent]
@@ -121,7 +121,7 @@ Build list of issues to analyze.
 ## Natural Fit for Upcoming Work
 
 ### ISS-XXX: [description]
-**Fits with:** Phase [X] - [phase name]
+**Fits with:** Release [X] - [release name]
 **Reason:** [Same files, same subsystem, natural inclusion]
 
 [Repeat for each, or "None" if no natural fits]
@@ -155,13 +155,13 @@ Use AskUserQuestion with appropriate options based on findings:
 - "Review each first" - Show details before closing
 
 **If urgent issues exist:**
-- "Insert urgent phase" - Create phase to address urgent issues (/cat:insert-phase)
-- "Add to current plan" - Include in next plan being created
+- "Insert urgent release" - Create release to address urgent issues (/cat:insert-release)
+- "Add to current change" - Include in next change being created
 - "Defer anyway" - Keep as-is despite urgency
 
 **If natural fits exist:**
-- "Note for phase planning" - Will be picked up during /cat:plan-phase
-- "Add explicit reminder" - Update issue with "Include in Phase X"
+- "Note for release planning" - Will be picked up during /cat:change-release
+- "Add explicit reminder" - Update issue with "Include in Release X"
 
 **Always include:**
 - "Done for now" - Exit without changes
@@ -182,12 +182,12 @@ Use AskUserQuestion with appropriate options based on findings:
 3. Write updated ISSUES.md
 4. Update STATE.md deferred issues count
 
-**If inserting urgent phase:**
-- Display the command for user to run after clearing: `/cat:insert-phase [after-phase] Address urgent issues ISS-XXX, ISS-YYY`
+**If inserting urgent release:**
+- Display the command for user to run after clearing: `/cat:insert-release [after-release] Address urgent issues ISS-XXX, ISS-YYY`
 
-**If noting for phase planning:**
-- Update issue's "Suggested phase" field with specific phase number
-- These will be picked up by /cat:plan-phase workflow
+**If noting for release planning:**
+- Update issue's "Suggested release" field with specific release number
+- These will be picked up by /cat:change-release workflow
 </step>
 
 </process>

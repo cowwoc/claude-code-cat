@@ -1,15 +1,15 @@
-# Phase Context Template
+# Release Context Template
 
-Template for `.planning/phases/XX-name/{phase}-CONTEXT.md` - captures the user's vision for a phase.
+Template for `.planning/releases/XX-name/{release}-CONTEXT.md` - captures the user's vision for a release.
 
-**Purpose:** Document how the user imagines the phase working. This is vision context, not technical analysis. Technical details come from research.
+**Purpose:** Document how the user imagines the release working. This is vision context, not technical analysis. Technical details come from research.
 
 ---
 
 ## File Template
 
 ```markdown
-# Phase [X]: [Name] - Context
+# Release [X]: [Name] - Context
 
 **Gathered:** [date]
 **Status:** [Ready for research / Ready for planning]
@@ -17,14 +17,14 @@ Template for `.planning/phases/XX-name/{phase}-CONTEXT.md` - captures the user's
 <vision>
 ## How This Should Work
 
-[User's description of how they imagine this phase working. What happens when someone uses it? What does it look/feel like? This is the "pitch" version, not the technical spec.]
+[User's description of how they imagine this release working. What happens when someone uses it? What does it look/feel like? This is the "pitch" version, not the technical spec.]
 
 </vision>
 
 <essential>
 ## What Must Be Nailed
 
-[The core of this phase. If we only get one thing right, what is it? What's the non-negotiable that makes this phase successful?]
+[The core of this release. If we only get one thing right, what is it? What's the non-negotiable that makes this release successful?]
 
 - [Essential thing 1]
 - [Essential thing 2]
@@ -35,9 +35,9 @@ Template for `.planning/phases/XX-name/{phase}-CONTEXT.md` - captures the user's
 <boundaries>
 ## What's Out of Scope
 
-[Explicit exclusions for this phase. What are we NOT building? Where does this phase end and the next begin?]
+[Explicit exclusions for this release. What are we NOT building? Where does this release end and the next begin?]
 
-- [Not doing X - that's Phase Y]
+- [Not doing X - that's Release Y]
 - [Not including Z - deferred]
 - [Explicitly excluding W]
 
@@ -63,13 +63,13 @@ Template for `.planning/phases/XX-name/{phase}-CONTEXT.md` - captures the user's
 
 ---
 
-*Phase: XX-name*
+*Release: XX-name*
 *Context gathered: [date]*
 ```
 
 <good_examples>
 ```markdown
-# Phase 3: User Dashboard - Context
+# Release 3: User Dashboard - Context
 
 **Gathered:** 2025-01-20
 **Status:** Ready for research
@@ -107,7 +107,7 @@ The main thing is seeing their active projects and what needs attention. Think o
 - I like how Linear's home screen highlights what's assigned to you without noise
 - Should show projects in a card format, not a list
 - Maybe a "Today" section at the top with urgent stuff
-- Dark mode is essential (already have this from Phase 2)
+- Dark mode is essential (already have this from Release 2)
 
 </specifics>
 
@@ -122,7 +122,7 @@ Priority is clarity over features. Better to show less and make it obvious than 
 
 ---
 
-*Phase: 03-user-dashboard*
+*Release: 03-user-dashboard*
 *Context gathered: 2025-01-20*
 ```
 </good_examples>
@@ -155,7 +155,7 @@ The user does NOT know (and shouldn't be asked):
 - Codebase analysis
 
 **After creation:**
-- File lives in phase directory: `.planning/phases/XX-name/{phase}-CONTEXT.md`
-- Research phase adds technical context (patterns, risks, constraints)
-- Planning phase creates executable tasks informed by both vision AND research
+- File lives in release directory: `.planning/releases/XX-name/{release}-CONTEXT.md`
+- Research release adds technical context (patterns, risks, constraints)
+- Planning release creates executable tasks informed by both vision AND research
 </guidelines>

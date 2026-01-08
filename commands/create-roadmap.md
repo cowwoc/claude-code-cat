@@ -1,6 +1,6 @@
 ---
 name: cat:create-roadmap
-description: Create roadmap with phases for the project
+description: Create roadmap with releases for the project
 allowed-tools:
   - Read
   - Write
@@ -10,7 +10,7 @@ allowed-tools:
 ---
 
 <objective>
-Create project roadmap with phase breakdown.
+Create project roadmap with release breakdown.
 
 Roadmaps define what work happens in what order. Run after /cat:new-project.
 </objective>
@@ -61,12 +61,12 @@ Follow the create-roadmap.md workflow starting from detect_domain step.
 
 The workflow handles:
 - Domain expertise detection
-- Phase identification
-- Research flags for each phase
+- Release identification
+- Research flags for each release
 - Confirmation gates (respecting config mode)
 - ROADMAP.md creation
 - STATE.md initialization
-- Phase directory creation
+- Release directory creation
 - Git commit
 </step>
 
@@ -75,23 +75,23 @@ The workflow handles:
 Roadmap created:
 - Roadmap: .planning/ROADMAP.md
 - State: .planning/STATE.md
-- [N] phases defined
+- [N] releases defined
 
 ---
 
 ## ▶ Next Up
 
-**Phase 1: [Name]** — [Goal from ROADMAP.md]
+**Release 1: [Name]** — [Goal from ROADMAP.md]
 
-`/cat:plan-phase 1`
+`/cat:change-release 1`
 
 <sub>`/clear` first → fresh context window</sub>
 
 ---
 
 **Also available:**
-- `/cat:discuss-phase 1` — gather context first
-- `/cat:research-phase 1` — investigate unknowns
+- `/cat:discuss-release 1` — gather context first
+- `/cat:research-release 1` — investigate unknowns
 - Review roadmap
 
 ---
@@ -103,13 +103,13 @@ Roadmap created:
 <output>
 - `.planning/ROADMAP.md`
 - `.planning/STATE.md`
-- `.planning/phases/XX-name/` directories
+- `.planning/releases/XX-name/` directories
 </output>
 
 <success_criteria>
 - [ ] PROJECT.md validated
-- [ ] ROADMAP.md created with phases
+- [ ] ROADMAP.md created with releases
 - [ ] STATE.md initialized
-- [ ] Phase directories created
+- [ ] Release directories created
 - [ ] Changes committed
 </success_criteria>

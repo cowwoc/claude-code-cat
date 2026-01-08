@@ -1,7 +1,7 @@
 <purpose>
-Comprehensive research on HOW to implement a phase before planning.
+Comprehensive research on HOW to implement a release before planning.
 
-Triggered by /cat:research-phase command when the domain is niche, complex, or Claude's training is likely stale.
+Triggered by /cat:research-release command when the domain is niche, complex, or Claude's training is likely stale.
 
 Produces RESEARCH.md with ecosystem knowledge that informs quality planning - not just "which library" but "how do experts build this."
 </purpose>
@@ -24,7 +24,7 @@ Produces RESEARCH.md with ecosystem knowledge that informs quality planning - no
 </when_to_use>
 
 <key_insight>
-The current "mandatory discovery" in plan-phase asks: "Which library should I use?"
+The current "mandatory discovery" in change-release asks: "Which library should I use?"
 
 This workflow asks: "What do I not know that I don't know?"
 
@@ -39,45 +39,45 @@ For niche domains, the question isn't library selection - it's:
 <process>
 
 <step name="validate_phase" priority="first">
-Phase number: $ARGUMENTS (required)
+Release number: $ARGUMENTS (required)
 
-Validate phase exists in roadmap:
+Validate release exists in roadmap:
 
 ```bash
 if [ -f .planning/ROADMAP.md ]; then
-  grep -A5 "Phase ${PHASE}:" .planning/ROADMAP.md
+  grep -A5 "Release ${RELEASE}:" .planning/ROADMAP.md
 fi
 ```
 
-**If phase not found:**
+**If release not found:**
 ```
-Error: Phase ${PHASE} not found in roadmap.
+Error: Release ${RELEASE} not found in roadmap.
 
-Use /cat:progress to see available phases.
+Use /cat:progress to see available releases.
 ```
 Exit workflow.
 
-**If phase found:**
+**If release found:**
 Extract:
-- Phase number
-- Phase name
-- Phase description
+- Release number
+- Release name
+- Release description
 - Any "Research: Likely" flags
 
 Continue to check_existing.
 </step>
 
 <step name="check_existing">
-Check if RESEARCH.md already exists for this phase:
+Check if RESEARCH.md already exists for this release:
 
 ```bash
-ls .planning/phases/${PHASE}-*/RESEARCH.md 2>/dev/null
-ls .planning/phases/${PHASE}-*/${PHASE}-RESEARCH.md 2>/dev/null
+ls .planning/releases/${RELEASE}-*/RESEARCH.md 2>/dev/null
+ls .planning/releases/${RELEASE}-*/${RELEASE}-RESEARCH.md 2>/dev/null
 ```
 
 **If exists:**
 ```
-Phase ${PHASE} already has research: [path to RESEARCH.md]
+Release ${RELEASE} already has research: [path to RESEARCH.md]
 
 What's next?
 1. Update research - Refresh with new findings
@@ -103,17 +103,17 @@ Load available context to inform research direction:
 cat .planning/PROJECT.md 2>/dev/null | head -50
 ```
 
-**2. Phase context (if exists from /cat:discuss-phase):**
+**2. Release context (if exists from /cat:discuss-release):**
 ```bash
-cat .planning/phases/${PHASE}-*/${PHASE}-CONTEXT.md 2>/dev/null
+cat .planning/releases/${RELEASE}-*/${RELEASE}-CONTEXT.md 2>/dev/null
 ```
 
 If CONTEXT.md exists, use it to understand:
-- User's specific goals for this phase
+- User's specific goals for this release
 - Constraints mentioned
 - Any preferences stated
 
-**3. Prior phase decisions:**
+**3. Prior release decisions:**
 ```bash
 cat .planning/STATE.md 2>/dev/null | grep -A20 "## Accumulated Decisions"
 ```
@@ -122,12 +122,12 @@ These may constrain technology choices.
 
 Present what was found:
 ```
-Research context for Phase ${PHASE}: ${PHASE_NAME}
+Research context for Release ${RELEASE}: ${RELEASE_NAME}
 
-Roadmap description: ${PHASE_DESCRIPTION}
+Roadmap description: ${RELEASE_DESCRIPTION}
 
 [If CONTEXT.md exists:]
-Phase context available - will incorporate user preferences.
+Release context available - will incorporate user preferences.
 
 [If prior decisions exist:]
 Prior decisions to respect: [list relevant ones]
@@ -137,7 +137,7 @@ Proceeding with ecosystem research...
 </step>
 
 <step name="identify_domains">
-Analyze the phase description to identify what needs researching.
+Analyze the release description to identify what needs researching.
 
 **Ask: "What knowledge do I need to actually implement this well?"**
 
@@ -302,10 +302,10 @@ Before creating RESEARCH.md, run through research-pitfalls.md checklist:
 <step name="write_research">
 Create RESEARCH.md using accumulated findings.
 
-**File location:** `.planning/phases/${PHASE}-${SLUG}/${PHASE}-RESEARCH.md`
+**File location:** `.planning/releases/${RELEASE}-${SLUG}/${RELEASE}-RESEARCH.md`
 
-**If phase directory doesn't exist:**
-Create it: `.planning/phases/${PHASE}-${SLUG}/`
+**If release directory doesn't exist:**
+Create it: `.planning/releases/${RELEASE}-${SLUG}/`
 
 Use template from ~/.claude/cat/templates/research.md
 
@@ -345,7 +345,7 @@ Write file.
 Present RESEARCH.md summary to user:
 
 ```
-Created: .planning/phases/${PHASE}-${SLUG}/${PHASE}-RESEARCH.md
+Created: .planning/releases/${RELEASE}-${SLUG}/${RELEASE}-RESEARCH.md
 
 ## Research Summary
 
@@ -371,7 +371,7 @@ Created: .planning/phases/${PHASE}-${SLUG}/${PHASE}-RESEARCH.md
 **Confidence:** [HIGH/MEDIUM/LOW] - [brief reason]
 
 What's next?
-1. Plan this phase (/cat:plan-phase ${PHASE}) - RESEARCH.md will be loaded automatically
+1. Change this release (/cat:change-release ${RELEASE}) - RESEARCH.md will be loaded automatically
 2. Dig deeper - Research specific areas more thoroughly
 3. Review full RESEARCH.md
 4. Done for now
@@ -379,14 +379,14 @@ What's next?
 </step>
 
 <step name="git_commit">
-Commit phase research:
+Commit release research:
 
 ```bash
-git add .planning/phases/${PHASE}-${SLUG}/${PHASE}-RESEARCH.md
+git add .planning/releases/${RELEASE}-${SLUG}/${RELEASE}-RESEARCH.md
 git commit -m "$(cat <<'EOF'
-docs(${PHASE}): complete phase research
+docs(${RELEASE}): complete release research
 
-Phase ${PHASE}: ${PHASE_NAME}
+Release ${RELEASE}: ${RELEASE_NAME}
 - Standard stack identified
 - Architecture patterns documented
 - Common pitfalls catalogued
@@ -394,14 +394,14 @@ EOF
 )"
 ```
 
-Confirm: "Committed: docs(${PHASE}): complete phase research"
+Confirm: "Committed: docs(${RELEASE}): complete release research"
 </step>
 
 </process>
 
 <success_criteria>
-- [ ] Phase validated against roadmap
-- [ ] Research domains identified from phase description
+- [ ] Release validated against roadmap
+- [ ] Research domains identified from release description
 - [ ] Context7 consulted for all relevant libraries
 - [ ] Official docs consulted where Context7 lacks coverage
 - [ ] WebSearch used for ecosystem discovery
@@ -414,13 +414,13 @@ Confirm: "Committed: docs(${PHASE}): complete phase research"
 - [ ] Common pitfalls catalogued
 - [ ] Confidence levels assigned honestly
 - [ ] RESEARCH.md committed to git
-- [ ] User knows next steps (plan phase)
+- [ ] User knows next steps (change release)
 </success_criteria>
 
 <integration_with_planning>
-When /cat:plan-phase runs after research:
+When /cat:change-release runs after research:
 
-1. plan-phase detects RESEARCH.md exists in phase directory
+1. change-release detects RESEARCH.md exists in release directory
 2. RESEARCH.md loaded as @context reference
 3. "Standard stack" informs library choices in tasks
 4. "Don't hand-roll" prevents custom solutions where libraries exist
@@ -428,7 +428,7 @@ When /cat:plan-phase runs after research:
 6. "Architecture patterns" inform task structure
 7. "Code examples" can be referenced in task actions
 
-This produces higher quality plans because Claude knows:
+This produces higher quality changes because Claude knows:
 - What tools experts use
 - What patterns to follow
 - What mistakes to avoid

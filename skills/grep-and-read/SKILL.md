@@ -61,7 +61,7 @@ Message 1: Skill grep-and-read pattern="FormattingRule" max_files=5
 
 ## Skill Workflow
 
-### Phase 1: Search for Pattern
+### Release 1: Search for Pattern
 
 Use Grep tool to find all files containing the pattern:
 
@@ -89,7 +89,7 @@ src/main/java/io/github/cowwoc/styler/formatter/FormattingRuleImpl.java
 src/test/java/io/github/cowwoc/styler/formatter/FormattingRuleTest.java
 ```
 
-### Phase 2: Read All Matching Files (Parallel)
+### Release 2: Read All Matching Files (Parallel)
 
 Read all found files in a single message using multiple Read tool calls:
 
@@ -103,7 +103,7 @@ Read: /path/to/project/src/test/java/.../FormattingRuleTest.java
 **If max_files exceeded**: Show first N files, report total found
 **If context_lines limited**: Read first N lines of each file
 
-### Phase 3: Consolidate and Report
+### Release 3: Consolidate and Report
 
 Provide summary and consolidated output:
 

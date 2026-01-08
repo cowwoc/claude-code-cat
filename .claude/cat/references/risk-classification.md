@@ -1,6 +1,6 @@
 # Risk Classification System
 
-Automatic risk assessment for plans based on file patterns, keywords, and scope.
+Automatic risk assessment for changes based on file patterns, keywords, and scope.
 
 ## Risk Levels
 
@@ -67,7 +67,7 @@ Requires: Basic review (style only), optional user approval, basic verification.
 
 ## Manual Override
 
-Plans can override auto-detected risk in frontmatter:
+Changes can override auto-detected risk in frontmatter:
 
 ```yaml
 ---

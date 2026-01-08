@@ -1,15 +1,15 @@
 # Research Template
 
-Template for `.planning/phases/XX-name/{phase}-RESEARCH.md` - comprehensive ecosystem research before planning.
+Template for `.planning/releases/XX-name/{release}-RESEARCH.md` - comprehensive ecosystem research before planning.
 
-**Purpose:** Document what Claude needs to know to implement a phase well - not just "which library" but "how do experts build this."
+**Purpose:** Document what Claude needs to know to implement a release well - not just "which library" but "how do experts build this."
 
 ---
 
 ## File Template
 
 ```markdown
-# Phase [X]: [Name] - Research
+# Release [X]: [Name] - Research
 
 **Researched:** [date]
 **Domain:** [primary technology/problem domain]
@@ -216,7 +216,7 @@ Things that couldn't be fully resolved:
 
 ---
 
-*Phase: XX-name*
+*Release: XX-name*
 *Research completed: [date]*
 *Ready for planning: [yes/no]*
 ```
@@ -226,7 +226,7 @@ Things that couldn't be fully resolved:
 ## Good Example
 
 ```markdown
-# Phase 3: 3D City Driving - Research
+# Release 3: 3D City Driving - Research
 
 **Researched:** 2025-01-20
 **Domain:** Three.js 3D web game with driving mechanics
@@ -490,7 +490,7 @@ function useVehicleControls(rigidBodyRef) {
 
 ---
 
-*Phase: 03-city-driving*
+*Release: 03-city-driving*
 *Research completed: 2025-01-20*
 *Ready for planning: yes*
 ```
@@ -500,7 +500,7 @@ function useVehicleControls(rigidBodyRef) {
 ## Guidelines
 
 **When to create:**
-- Before planning phases in niche/complex domains
+- Before planning releases in niche/complex domains
 - When Claude's training data is likely stale or sparse
 - When "how do experts do this" matters more than "which library"
 
@@ -517,13 +517,13 @@ function useVehicleControls(rigidBodyRef) {
 - Sources: Mark confidence levels honestly
 
 **Integration with planning:**
-- RESEARCH.md loaded as @context reference in PLAN.md
+- RESEARCH.md loaded as @context reference in CHANGE.md
 - Standard stack informs library choices
 - Don't hand-roll prevents custom solutions
 - Pitfalls inform verification criteria
 - Code examples can be referenced in task actions
 
 **After creation:**
-- File lives in phase directory: `.planning/phases/XX-name/{phase}-RESEARCH.md`
+- File lives in release directory: `.planning/releases/XX-name/{release}-RESEARCH.md`
 - Referenced during planning workflow
-- plan-phase loads it automatically when present
+- change-release loads it automatically when present

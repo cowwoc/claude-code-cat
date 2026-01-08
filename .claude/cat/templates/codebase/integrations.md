@@ -194,7 +194,7 @@ Template for `.planning/codebase/INTEGRATIONS.md` - captures external service de
 
 **Logs:**
 - Vercel logs - stdout/stderr only
-  - Retention: 7 days on Pro plan
+  - Retention: 7 days on Pro change
 
 ## CI/CD & Deployment
 
@@ -267,7 +267,7 @@ Template for `.planning/codebase/INTEGRATIONS.md` - captures external service de
 - Document environment-specific differences (dev/staging/prod)
 - Include auth patterns for each service
 
-**Useful for phase planning when:**
+**Useful for release planning when:**
 - Adding new external service integrations
 - Debugging authentication issues
 - Understanding data flow outside the application

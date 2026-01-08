@@ -5,7 +5,7 @@ State machine tracking with audit trail.
 ## State Machine
 
 ```
-PLAN_CREATED → PLAN_APPROVED → EXECUTING → EXECUTED →
+CHANGE_CREATED → CHANGE_APPROVED → EXECUTING → EXECUTED →
 BUILD_VERIFIED → REVIEWED → APPROVAL_PENDING → MERGED → COMPLETE
 ```
 
@@ -13,8 +13,8 @@ BUILD_VERIFIED → REVIEWED → APPROVAL_PENDING → MERGED → COMPLETE
 
 | State | Description | Required Artifact |
 |-------|-------------|-------------------|
-| PLAN_CREATED | Plan file exists | PLAN.md |
-| PLAN_APPROVED | User approved execution | Approval in audit trail |
+| CHANGE_CREATED | Change file exists | CHANGE.md |
+| CHANGE_APPROVED | User approved execution | Approval in audit trail |
 | EXECUTING | Tasks being executed | - |
 | EXECUTED | All tasks complete | Task commits |
 | BUILD_VERIFIED | Build/test passed | Verification report |
@@ -26,8 +26,8 @@ BUILD_VERIFIED → REVIEWED → APPROVAL_PENDING → MERGED → COMPLETE
 ### Valid Transitions
 
 ```
-PLAN_CREATED → PLAN_APPROVED (user approval)
-PLAN_APPROVED → EXECUTING (automatic)
+CHANGE_CREATED → CHANGE_APPROVED (user approval)
+CHANGE_APPROVED → EXECUTING (automatic)
 EXECUTING → EXECUTED (all tasks done)
 EXECUTED → BUILD_VERIFIED (verification pass)
 BUILD_VERIFIED → REVIEWED (all agents pass)
@@ -36,7 +36,7 @@ APPROVAL_PENDING → MERGED (user approval)
 MERGED → COMPLETE (summary created)
 
 # Failure transitions
-EXECUTING → PLAN_APPROVED (task failure, retry)
+EXECUTING → CHANGE_APPROVED (task failure, retry)
 BUILD_VERIFIED → EXECUTING (test failure, fix needed)
 REVIEWED → EXECUTING (review failure, fix needed)
 ```
@@ -46,8 +46,8 @@ REVIEWED → EXECUTING (review failure, fix needed)
 ### Required Sequence
 ```yaml
 sequence_rules:
-  - PLAN_CREATED must precede EXECUTING
-  - PLAN_APPROVED must precede EXECUTING (for HIGH/MEDIUM risk)
+  - CHANGE_CREATED must precede EXECUTING
+  - CHANGE_APPROVED must precede EXECUTING (for HIGH/MEDIUM risk)
   - BUILD_VERIFIED must precede REVIEWED
   - REVIEWED must precede MERGED (for HIGH/MEDIUM risk)
   - APPROVAL_PENDING must precede MERGED
@@ -56,8 +56,8 @@ sequence_rules:
 ### Required Artifacts
 ```yaml
 artifact_rules:
-  PLAN_CREATED:
-    - PLAN.md exists in phase directory
+  CHANGE_CREATED:
+    - CHANGE.md exists in release directory
   EXECUTED:
     - All tasks have associated commits
     - No uncommitted changes
@@ -77,7 +77,7 @@ violations:
   SKIPPED_STATE:
     severity: ERROR
     description: Required state was bypassed
-    example: PLAN_CREATED → EXECUTING (skipped approval)
+    example: CHANGE_CREATED → EXECUTING (skipped approval)
 
   MISSING_ARTIFACT:
     severity: ERROR
@@ -104,8 +104,8 @@ Track all state transitions in STATE.md:
 
 | Timestamp | State | Actor | Details |
 |-----------|-------|-------|---------|
-| 2025-01-15T10:00:00Z | PLAN_CREATED | agent | 02-01-setup-auth-PLAN.md created |
-| 2025-01-15T10:05:00Z | PLAN_APPROVED | user | Approved via gate |
+| 2025-01-15T10:00:00Z | CHANGE_CREATED | agent | 02-01-setup-auth-CHANGE.md created |
+| 2025-01-15T10:05:00Z | CHANGE_APPROVED | user | Approved via gate |
 | 2025-01-15T10:06:00Z | EXECUTING | agent | Started task execution |
 | 2025-01-15T10:45:00Z | EXECUTED | agent | 3/3 tasks complete |
 | 2025-01-15T10:46:00Z | BUILD_VERIFIED | agent | Build/test passed |
@@ -117,18 +117,18 @@ Track all state transitions in STATE.md:
 
 ## Compliance Report
 
-Generated at plan completion:
+Generated at change completion:
 
 ```markdown
 ## Protocol Compliance Report
 
-**Plan:** 02-01-setup-auth-PLAN.md
+**Change:** 02-01-setup-auth-CHANGE.md
 **Risk Level:** HIGH
 **Compliance Status:** COMPLIANT
 
 ### State Sequence
-✓ PLAN_CREATED (10:00:00)
-✓ PLAN_APPROVED (10:05:00) - Required for HIGH risk
+✓ CHANGE_CREATED (10:00:00)
+✓ CHANGE_APPROVED (10:05:00) - Required for HIGH risk
 ✓ EXECUTING (10:06:00)
 ✓ EXECUTED (10:45:00)
 ✓ BUILD_VERIFIED (10:46:00)
@@ -138,7 +138,7 @@ Generated at plan completion:
 ✓ COMPLETE (11:01:00)
 
 ### Artifact Verification
-✓ PLAN.md exists
+✓ CHANGE.md exists
 ✓ 3 task commits found
 ✓ Verification report present
 ✓ Review report present (5/5 agents)

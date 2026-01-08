@@ -462,7 +462,7 @@ it('mocks file system', () => {
 - Check for coverage configuration
 - Document actual patterns used, not ideal patterns
 
-**Useful for phase planning when:**
+**Useful for release planning when:**
 - Adding new features (write matching tests)
 - Refactoring (maintain test patterns)
 - Fixing bugs (add regression tests)

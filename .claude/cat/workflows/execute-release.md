@@ -1,5 +1,5 @@
 <purpose>
-Execute a phase prompt (PLAN.md) and create the outcome summary (SUMMARY.md).
+Execute a release prompt (CHANGE.md) and create the outcome summary (SUMMARY.md).
 </purpose>
 
 <required_reading>
@@ -17,7 +17,7 @@ cat .planning/STATE.md 2>/dev/null
 
 **If file exists:** Parse and internalize:
 
-- Current position (phase, plan, status)
+- Current position (release, change, status)
 - Accumulated decisions (constraints on this execution)
 - Deferred issues (context for deviations)
 - Blockers/concerns (things to watch for)
@@ -38,7 +38,7 @@ This ensures every execution has full project context.
 </step>
 
 <step name="acquire_execution_lock">
-Acquire execution lock to prevent concurrent plan execution:
+Acquire execution lock to prevent concurrent change execution:
 
 ```bash
 LOCK_DIR="${LOCK_DIR:-.claude/locks}"
@@ -73,44 +73,44 @@ EOF
 echo "Execution lock acquired: $LOCK_FILE"
 ```
 
-**Note:** Lock is released on plan completion or SessionEnd (fallback cleanup).
+**Note:** Lock is released on change completion or SessionEnd (fallback cleanup).
 </step>
 
 <step name="identify_plan">
-Find the next plan to execute:
-- Check roadmap for "In progress" phase
-- Find plans in that phase directory
-- Identify first plan without corresponding SUMMARY
+Find the next change to execute:
+- Check roadmap for "In progress" release
+- Find changes in that release directory
+- Identify first change without corresponding SUMMARY
 
 ```bash
 cat .planning/ROADMAP.md
-# Look for phase with "In progress" status
-# Then find plans in that phase
-ls .planning/phases/XX-name/*-PLAN.md 2>/dev/null | sort
-ls .planning/phases/XX-name/*-SUMMARY.md 2>/dev/null | sort
+# Look for release with "In progress" status
+# Then find changes in that release
+ls .planning/releases/XX-name/*-CHANGE.md 2>/dev/null | sort
+ls .planning/releases/XX-name/*-SUMMARY.md 2>/dev/null | sort
 ```
 
 **Logic:**
 
-- If `01-01-setup-auth-PLAN.md` exists but `01-01-setup-auth-SUMMARY.md` doesn't → execute 01-01
+- If `01-01-setup-auth-CHANGE.md` exists but `01-01-setup-auth-SUMMARY.md` doesn't → execute 01-01
 - If `01-01-setup-auth-SUMMARY.md` exists but `01-02-*-SUMMARY.md` doesn't → execute 01-02
-- Pattern: Find first PLAN file without matching SUMMARY file (match by plan ID prefix)
+- Pattern: Find first CHANGE file without matching SUMMARY file (match by change ID prefix)
 
-**Decimal phase handling:**
+**Decimal release handling:**
 
-Phase directories can be integer or decimal format:
+Release directories can be integer or decimal format:
 
-- Integer: `.planning/phases/01-foundation/01-01-setup-auth-PLAN.md`
-- Decimal: `.planning/phases/01.1-hotfix/01.1-01-fix-bug-PLAN.md`
+- Integer: `.planning/releases/01-foundation/01-01-setup-auth-CHANGE.md`
+- Decimal: `.planning/releases/01.1-hotfix/01.1-01-fix-bug-CHANGE.md`
 
-Parse phase number from path (handles both formats):
+Parse release number from path (handles both formats):
 
 ```bash
-# Extract phase number (handles XX or XX.Y format)
-PHASE=$(echo "$PLAN_PATH" | grep -oE '[0-9]+(\.[0-9]+)?-[0-9]+')
+# Extract release number (handles XX or XX.Y format)
+RELEASE=$(echo "$CHANGE_PATH" | grep -oE '[0-9]+(\.[0-9]+)?-[0-9]+')
 ```
 
-SUMMARY naming follows same pattern (uses same slug as PLAN):
+SUMMARY naming follows same pattern (uses same slug as CHANGE):
 
 - Integer: `01-01-setup-auth-SUMMARY.md`
 - Decimal: `01.1-01-fix-bug-SUMMARY.md`
@@ -125,8 +125,8 @@ cat .planning/config.json 2>/dev/null
 
 <if mode="yolo">
 ```
-⚡ Auto-approved: Execute {phase}-{plan}-{slug}-PLAN.md
-[Plan X of Y for Phase Z]
+⚡ Auto-approved: Execute {release}-{change}-{slug}-CHANGE.md
+[Change X of Y for Release Z]
 
 Starting execution...
 ```
@@ -134,12 +134,12 @@ Starting execution...
 Proceed directly to parse_segments step.
 </if>
 
-<if mode="interactive" OR="custom with gates.execute_next_plan true">
+<if mode="interactive" OR="custom with gates.execute_next_change true">
 Present:
 
 ```
-Found plan to execute: {phase}-{plan}-{slug}-PLAN.md
-[Plan X of Y for Phase Z]
+Found change to execute: {release}-{change}-{slug}-CHANGE.md
+[Change X of Y for Release Z]
 
 Proceed with execution?
 ```
@@ -152,30 +152,30 @@ Wait for confirmation before proceeding.
 Record execution start time for performance tracking:
 
 ```bash
-PLAN_START_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-PLAN_START_EPOCH=$(date +%s)
+CHANGE_START_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+CHANGE_START_EPOCH=$(date +%s)
 ```
 
 Store in shell variables for duration calculation at completion.
 </step>
 
 <step name="parse_segments">
-**Intelligent segmentation: Parse plan into execution segments.**
+**Intelligent segmentation: Parse change into execution segments.**
 
-Plans are divided into segments by checkpoints. Each segment is routed to optimal execution context (subagent or main).
+Changes are divided into segments by checkpoints. Each segment is routed to optimal execution context (subagent or main).
 
 **1. Check for checkpoints:**
 
 ```bash
 # Find all checkpoints and their types
-grep -n "type=\"checkpoint" .planning/phases/XX-name/{phase}-{plan}-{slug}-PLAN.md
+grep -n "type=\"checkpoint" .planning/releases/XX-name/{release}-{change}-{slug}-CHANGE.md
 ```
 
 **2. Analyze execution strategy:**
 
 **If NO checkpoints found:**
 
-- **Fully autonomous plan** - spawn single subagent for entire plan
+- **Fully autonomous change** - spawn single subagent for entire change
 - Subagent gets fresh 200k context, executes all tasks, creates SUMMARY, commits
 - Main context: Just orchestration (~5% usage)
 
@@ -230,7 +230,7 @@ No segmentation benefit - execute entirely in main
 
 - Fresh context for each autonomous segment (0% start every time)
 - Main context only for checkpoints (~10-20% total)
-- Can handle 10+ task plans if properly segmented
+- Can handle 10+ task changes if properly segmented
 - Quality impossible to degrade in autonomous segments
 
 **When segmentation provides no benefit:**
@@ -240,27 +240,27 @@ No segmentation benefit - execute entirely in main
 
 **5. Implementation:**
 
-**For fully autonomous plans:**
+**For fully autonomous changes:**
 
 ```
 Use Task tool with subagent_type="general-purpose":
 
-Prompt: "Execute plan at .planning/phases/{phase}-{plan}-{slug}-PLAN.md
+Prompt: "Execute change at .planning/releases/{release}-{change}-{slug}-CHANGE.md
 
-This is an autonomous plan (no checkpoints). Execute all tasks, create SUMMARY.md in phase directory, commit with message following plan's commit guidance.
+This is an autonomous change (no checkpoints). Execute all tasks, create SUMMARY.md in release directory, commit with message following change's commit guidance.
 
-Follow all deviation rules and authentication gate protocols from the plan.
+Follow all deviation rules and authentication gate protocols from the change.
 
-When complete, report: plan name, tasks completed, SUMMARY path, commit hash."
+When complete, report: change name, tasks completed, SUMMARY path, commit hash."
 ```
 
-**For segmented plans (has verify-only checkpoints):**
+**For segmented changes (has verify-only checkpoints):**
 
 ```
 Execute segment-by-segment:
 
 For each autonomous segment:
-  Spawn subagent with prompt: "Execute tasks [X-Y] from plan at .planning/phases/{phase}-{plan}-{slug}-PLAN.md. Read the plan for full context and deviation rules. Do NOT create SUMMARY or commit - just execute these tasks and report results."
+  Spawn subagent with prompt: "Execute tasks [X-Y] from change at .planning/releases/{release}-{change}-{slug}-CHANGE.md. Read the change for full context and deviation rules. Do NOT create SUMMARY or commit - just execute these tasks and report results."
 
   Wait for subagent completion
 
@@ -275,31 +275,31 @@ After all segments complete:
   Commit with all changes
 ```
 
-**For decision-dependent plans:**
+**For decision-dependent changes:**
 
 ```
 Execute in main context (standard flow below)
 No subagent routing
-Quality maintained through small scope (2-3 tasks per plan)
+Quality maintained through small scope (2-3 tasks per change)
 ```
 
 See step name="segment_execution" for detailed segment execution loop.
 </step>
 
 <step name="segment_execution">
-**Detailed segment execution loop for segmented plans.**
+**Detailed segment execution loop for segmented changes.**
 
-**This step applies ONLY to segmented plans (Pattern B: has checkpoints, but they're verify-only).**
+**This step applies ONLY to segmented changes (Pattern B: has checkpoints, but they're verify-only).**
 
 For Pattern A (fully autonomous) and Pattern C (decision-dependent), skip this step.
 
 **Execution flow:**
 
 ````
-1. Parse plan to identify segments:
-   - Read plan file
-   - Find checkpoint locations: grep -n "type=\"checkpoint" PLAN.md
-   - Identify checkpoint types: grep "type=\"checkpoint" PLAN.md | grep -o 'checkpoint:[^"]*'
+1. Parse change to identify segments:
+   - Read change file
+   - Find checkpoint locations: grep -n "type=\"checkpoint" CHANGE.md
+   - Identify checkpoint types: grep "type=\"checkpoint" CHANGE.md | grep -o 'checkpoint:[^"]*'
    - Build segment map:
      * Segment 1: Start → first checkpoint (tasks 1-X)
      * Checkpoint 1: Type and location
@@ -318,11 +318,11 @@ For Pattern A (fully autonomous) and Pattern C (decision-dependent), skip this s
       ```
       Spawn Task tool with subagent_type="general-purpose":
 
-      Prompt: "Execute tasks [task numbers/names] from plan at [plan path].
+      Prompt: "Execute tasks [task numbers/names] from change at [change path].
 
       **Context:**
-      - Read the full plan for objective, context files, and deviation rules
-      - You are executing a SEGMENT of this plan (not the full plan)
+      - Read the full change for objective, context files, and deviation rules
+      - You are executing a SEGMENT of this change (not the full change)
       - Other segments will be executed separately
 
       **Your responsibilities:**
@@ -366,7 +366,7 @@ For Pattern A (fully autonomous) and Pattern C (decision-dependent), skip this s
    C. Commit:
       - Stage all files from all segments
       - Stage SUMMARY.md
-      - Commit with message following plan guidance
+      - Commit with message following change guidance
       - Include note about segmented execution if relevant
 
    D. Report completion
@@ -375,7 +375,7 @@ For Pattern A (fully autonomous) and Pattern C (decision-dependent), skip this s
 
 ````
 
-Plan: 01-02-add-user-model-PLAN.md (8 tasks, 2 verify checkpoints)
+Change: 01-02-add-user-model-CHANGE.md (8 tasks, 2 verify checkpoints)
 
 Parsing segments...
 
@@ -429,42 +429,42 @@ Committing...
 - Subagent 2: Fresh 0-30% (tasks 5-6)
 - Subagent 3: Fresh 0-20% (task 8)
 - All autonomous work: Peak quality
-- Can handle large plans with many tasks if properly segmented
+- Can handle large changes with many tasks if properly segmented
 
 **When NOT to use segmentation:**
-- Plan has decision/human-action checkpoints that affect following tasks
+- Change has decision/human-action checkpoints that affect following tasks
 - Following tasks depend on checkpoint outcome
 - Better to execute in main sequentially in those cases
 </step>
 
 <step name="load_prompt">
-Read the plan prompt:
+Read the change prompt:
 ```bash
-cat .planning/phases/XX-name/{phase}-{plan}-{slug}-PLAN.md
+cat .planning/releases/XX-name/{release}-{change}-{slug}-CHANGE.md
 ````
 
 This IS the execution instructions. Follow it exactly.
 
-**If plan references CONTEXT.md:**
-The CONTEXT.md file provides the user's vision for this phase — how they imagine it working, what's essential, and what's out of scope. Honor this context throughout execution.
+**If change references CONTEXT.md:**
+The CONTEXT.md file provides the user's vision for this release — how they imagine it working, what's essential, and what's out of scope. Honor this context throughout execution.
 </step>
 
 <step name="previous_phase_check">
-Before executing, check if previous phase had issues:
+Before executing, check if previous release had issues:
 
 ```bash
-# Find previous phase summary
-ls .planning/phases/*/SUMMARY.md 2>/dev/null | sort -r | head -2 | tail -1
+# Find previous release summary
+ls .planning/releases/*/SUMMARY.md 2>/dev/null | sort -r | head -2 | tail -1
 ```
 
-If previous phase SUMMARY.md has "Issues Encountered" != "None" or "Next Phase Readiness" mentions blockers:
+If previous release SUMMARY.md has "Issues Encountered" != "None" or "Next Release Readiness" mentions blockers:
 
 Use AskUserQuestion:
 
 - header: "Previous Issues"
-- question: "Previous phase had unresolved items: [summary]. How to proceed?"
+- question: "Previous release had unresolved items: [summary]. How to proceed?"
 - options:
-  - "Proceed anyway" - Issues won't block this phase
+  - "Proceed anyway" - Issues won't block this release
   - "Address first" - Let's resolve before continuing
   - "Review previous" - Show me the full summary
     </step>
@@ -484,7 +484,7 @@ Execute each task in the prompt. **Deviations are normal** - handle them automat
 
    - Work toward task completion
    - **If CLI/API returns authentication error:** Handle as authentication gate (see below)
-   - **When you discover additional work not in plan:** Apply deviation rules (see below) automatically
+   - **When you discover additional work not in change:** Apply deviation rules (see below) automatically
    - Continue implementing, applying rules as needed
    - Run the verification
    - Confirm done criteria met
@@ -601,32 +601,32 @@ These are normal gates, not errors.
 
 <user_initiated_plan_changes>
 
-## Handling User Feedback That Changes the Plan
+## Handling User Feedback That Changes the Change
 
-**When user feedback during execution changes the plan design:**
+**When user feedback during execution changes the change design:**
 
-User questions like "Why are we doing X?" or "Isn't Y redundant?" often signal plan improvements.
+User questions like "Why are we doing X?" or "Isn't Y redundant?" often signal change improvements.
 
 **Protocol:**
 
 1. **Acknowledge the feedback**: "You're right, that's a valid point."
 
-2. **Explicitly announce the plan change**:
+2. **Explicitly announce the change change**:
    ```
-   Based on your feedback, I'm modifying the plan:
+   Based on your feedback, I'm modifying the change:
 
    **Before**: [original approach]
    **After**: [new approach]
    **Reason**: [user's insight]
    ```
 
-3. **Update the PLAN.md file immediately** to reflect the change
+3. **Update the CHANGE.md file immediately** to reflect the change
 
-4. **Continue execution** with the modified plan
+4. **Continue execution** with the modified change
 
 **Why this matters:**
 - User should always know what's being implemented vs. what was planned
-- Plan document should be source of truth (not conversation history)
+- Change document should be source of truth (not conversation history)
 - Prevents confusion about actual deliverables
 
 </user_initiated_plan_changes>
@@ -635,9 +635,9 @@ User questions like "Why are we doing X?" or "Isn't Y redundant?" often signal p
 
 ## Handling Discoveries During Implementation
 
-**When implementation reveals the plan was based on incorrect assumptions:**
+**When implementation reveals the change was based on incorrect assumptions:**
 
-Before implementing a task, if you discover existing code/APIs that differ from plan assumptions:
+Before implementing a task, if you discover existing code/APIs that differ from change assumptions:
 
 **Protocol:**
 
@@ -647,22 +647,22 @@ Before implementing a task, if you discover existing code/APIs that differ from 
    ```
    ## Implementation Discovery
 
-   **Plan assumed**: [what the plan said]
+   **Change assumed**: [what the change said]
    **Code actually**: [what the existing code does]
    **Impact**: [how this affects the implementation]
    ```
 
-3. **Update the PLAN.md** to reflect the actual implementation approach
+3. **Update the CHANGE.md** to reflect the actual implementation approach
 
 4. **Ask user if unclear**: If the discovery significantly changes scope or approach, confirm before proceeding
 
 **Examples:**
-- Plan says "default: available processors" but existing API uses memory-based calculation
-- Plan says "add new method" but similar method already exists
-- Plan says "modify X" but X was refactored/renamed since planning
+- Change says "default: available processors" but existing API uses memory-based calculation
+- Change says "add new method" but similar method already exists
+- Change says "modify X" but X was refactored/renamed since planning
 
 **Why this matters:**
-- Plans are written before deep codebase investigation
+- Changes are written before deep codebase investigation
 - Implementation often reveals assumptions were wrong
 - User should know what's actually being implemented
 
@@ -672,7 +672,7 @@ Before implementing a task, if you discover existing code/APIs that differ from 
 
 ## Automatic Deviation Handling
 
-**While executing tasks, you WILL discover work not in the plan.** This is normal.
+**While executing tasks, you WILL discover work not in the change.** This is normal.
 
 Apply these rules automatically. Track all deviations for Summary documentation.
 
@@ -870,15 +870,15 @@ After all tasks complete, Summary MUST include deviations section.
 **If no deviations:**
 
 ```markdown
-## Deviations from Plan
+## Deviations from Change
 
-None - plan executed exactly as written.
+None - change executed exactly as written.
 ```
 
 **If deviations occurred:**
 
 ```markdown
-## Deviations from Plan
+## Deviations from Change
 
 ### Auto-fixed Issues
 
@@ -910,7 +910,7 @@ Logged to .planning/ISSUES.md for future consideration:
 ---
 
 **Total deviations:** 4 auto-fixed (1 bug, 1 missing critical, 1 blocking, 1 architectural with approval), 3 deferred
-**Impact on plan:** All auto-fixes necessary for correctness/security/performance. No scope creep.
+**Impact on change:** All auto-fixes necessary for correctness/security/performance. No scope creep.
 ```
 
 **This provides complete transparency:**
@@ -919,22 +919,22 @@ Logged to .planning/ISSUES.md for future consideration:
 - Why it was needed
 - What rule applied
 - What was done
-- User can see exactly what happened beyond the plan
+- User can see exactly what happened beyond the change
 
 </deviation_documentation>
 
 <tdd_plan_execution>
-## TDD Plan Execution
+## TDD Change Execution
 
-When executing a plan with `type: tdd` in frontmatter, follow the RED-GREEN-REFACTOR cycle for the single feature defined in the plan.
+When executing a change with `type: tdd` in frontmatter, follow the RED-GREEN-REFACTOR cycle for the single feature defined in the change.
 
-**1. Check test infrastructure (if first TDD plan):**
+**1. Check test infrastructure (if first TDD change):**
 If no test framework configured:
 - Detect project type from package.json/requirements.txt/etc.
 - Install minimal test framework (Jest, pytest, Go testing, etc.)
 - Create test config file
 - Verify: run empty test suite
-- This is part of the RED phase, not a separate task
+- This is part of the RED release, not a separate task
 
 **2. RED - Write failing test:**
 - Read `<behavior>` element for test specification
@@ -954,30 +954,30 @@ If no test framework configured:
 - Run tests - MUST still pass
 - Commit only if changes made: `refactor: clean up [feature]`
 
-**Commit pattern for TDD plans:**
-Each TDD plan produces 2-3 atomic commits:
+**Commit pattern for TDD changes:**
+Each TDD change produces 2-3 atomic commits:
 1. `test: add failing test for X`
 2. `feature: implement X`
 3. `refactor: clean up X` (optional)
 
 **Error handling:**
-- If test doesn't fail in RED phase: Test is wrong or feature already exists. Investigate before proceeding.
-- If test doesn't pass in GREEN phase: Debug implementation, keep iterating until green.
-- If tests fail in REFACTOR phase: Undo refactor, commit was premature.
+- If test doesn't fail in RED release: Test is wrong or feature already exists. Investigate before proceeding.
+- If test doesn't pass in GREEN release: Debug implementation, keep iterating until green.
+- If tests fail in REFACTOR release: Undo refactor, commit was premature.
 
 **Verification:**
-After TDD plan completion, ensure:
+After TDD change completion, ensure:
 - All tests pass
 - Test coverage for the new behavior exists
 - No unrelated tests broken
 
-**Why TDD uses dedicated plans:** TDD requires 2-3 execution cycles (RED → GREEN → REFACTOR), each with file reads, test runs, and potential debugging. This consumes 40-50% of context for a single feature. Dedicated plans ensure full quality throughout the cycle.
+**Why TDD uses dedicated changes:** TDD requires 2-3 execution cycles (RED → GREEN → REFACTOR), each with file reads, test runs, and potential debugging. This consumes 40-50% of context for a single feature. Dedicated changes ensure full quality throughout the cycle.
 
 **Comparison:**
-- Standard plans: Multiple tasks, 1 commit per task, 2-4 commits total
-- TDD plans: Single feature, 2-3 commits for RED/GREEN/REFACTOR cycle
+- Standard changes: Multiple tasks, 1 commit per task, 2-4 commits total
+- TDD changes: Single feature, 2-3 commits for RED/GREEN/REFACTOR cycle
 
-See `~/.claude/cat/references/tdd.md` for TDD plan structure.
+See `~/.claude/cat/references/tdd.md` for TDD change structure.
 </tdd_plan_execution>
 
 <pre_commit_review>
@@ -1038,7 +1038,7 @@ After each task completes (verification passed, done criteria met), commit immed
 
 **1. Identify modified files:**
 
-Track files changed during this specific task (not the entire plan):
+Track files changed during this specific task (not the entire change):
 
 ```bash
 git status --short
@@ -1057,7 +1057,7 @@ git add src/types/user.ts
 git add .planning/STATE.md
 
 # For final task only: also include SUMMARY.md and ROADMAP.md
-git add .planning/phases/XX-name/{phase}-{plan}-SUMMARY.md
+git add .planning/releases/XX-name/{release}-{change}-SUMMARY.md
 git add .planning/ROADMAP.md
 ```
 
@@ -1067,13 +1067,13 @@ git add .planning/ROADMAP.md
 |------|-------------|---------|
 | `feature` | New feature, endpoint, component, functionality | feature: create user registration endpoint |
 | `bugfix` | Bug fix, error correction | bugfix: correct email validation regex |
-| `test` | Test-only changes (TDD RED phase) | test: add failing test for password hashing |
-| `refactor` | Code cleanup, no behavior change (TDD REFACTOR phase) | refactor: extract validation to helper |
+| `test` | Test-only changes (TDD RED release) | test: add failing test for password hashing |
+| `refactor` | Code cleanup, no behavior change (TDD REFACTOR release) | refactor: extract validation to helper |
 | `performance` | Performance improvement | performance: add database index for user lookups |
 | `docs` | Documentation changes | docs: add API endpoint documentation |
 | `style` | Formatting, linting fixes | style: format auth module |
 | `config` | Config, tooling, dependencies | config: add bcrypt dependency |
-| `planning` | Planning system updates (ROADMAP, STATE, phases) | planning: add Phase 5 action items |
+| `planning` | Planning system updates (ROADMAP, STATE, releases) | planning: add Release 5 action items |
 | `retrospective` | Retrospective analysis and action items | retrospective: R002 analysis with 3 new patterns |
 
 **4. Craft commit message:**
@@ -1092,7 +1092,7 @@ git commit -m "{type}: {concise task description}
 **Examples:**
 
 ```bash
-# Standard plan task
+# Standard change task
 git commit -m "feature: create user registration endpoint
 
 - POST /auth/register validates email and password
@@ -1108,7 +1108,7 @@ git commit -m "bugfix: correct email validation regex
 "
 ```
 
-**Note:** TDD plans have their own commit pattern (test/feature/refactor for RED/GREEN/REFACTOR phases). See `<tdd_plan_execution>` section above.
+**Note:** TDD changes have their own commit pattern (test/feature/refactor for RED/GREEN/REFACTOR releases). See `<tdd_plan_execution>` section above.
 
 **5. Record commit hash:**
 
@@ -1237,10 +1237,10 @@ If user chose "Skip", note it in SUMMARY.md under "Issues Encountered".
 Record execution end time and calculate duration:
 
 ```bash
-PLAN_END_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-PLAN_END_EPOCH=$(date +%s)
+CHANGE_END_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+CHANGE_END_EPOCH=$(date +%s)
 
-DURATION_SEC=$(( PLAN_END_EPOCH - PLAN_START_EPOCH ))
+DURATION_SEC=$(( CHANGE_END_EPOCH - CHANGE_START_EPOCH ))
 DURATION_MIN=$(( DURATION_SEC / 60 ))
 
 if [[ $DURATION_MIN -ge 60 ]]; then
@@ -1256,25 +1256,25 @@ Pass timing data to SUMMARY.md creation.
 </step>
 
 <step name="create_summary">
-Create `{phase}-{plan}-SUMMARY.md` as specified in the prompt's `<output>` section.
+Create `{release}-{change}-SUMMARY.md` as specified in the prompt's `<output>` section.
 Use ~/.claude/cat/templates/summary.md for structure.
 
-**File location:** `.planning/phases/XX-name/{phase}-{plan}-SUMMARY.md`
+**File location:** `.planning/releases/XX-name/{release}-{change}-SUMMARY.md`
 
 **Frontmatter population:**
 
 Before writing summary content, populate frontmatter fields from execution context:
 
 1. **Basic identification:**
-   - phase: From PLAN.md frontmatter
-   - plan: From PLAN.md frontmatter
-   - subsystem: Categorize based on phase focus (auth, payments, ui, api, database, infra, testing, etc.)
+   - release: From CHANGE.md frontmatter
+   - change: From CHANGE.md frontmatter
+   - subsystem: Categorize based on release focus (auth, payments, ui, api, database, infra, testing, etc.)
    - tags: Extract tech keywords (libraries, frameworks, tools used)
 
 2. **Dependency graph:**
-   - requires: List prior phases this built upon (check PLAN.md context section for referenced prior summaries)
+   - requires: List prior releases this built upon (check CHANGE.md context section for referenced prior summaries)
    - provides: Extract from accomplishments - what was delivered
-   - affects: Infer from phase description/goal what future phases might need this
+   - affects: Infer from release description/goal what future releases might need this
 
 3. **Tech tracking:**
    - tech-stack.added: New libraries from package.json changes or requirements
@@ -1292,11 +1292,11 @@ Before writing summary content, populate frontmatter fields from execution conte
 
 7. **Metrics:**
    - duration: From $DURATION variable
-   - completed: From $PLAN_END_TIME (date only, format YYYY-MM-DD)
+   - completed: From $CHANGE_END_TIME (date only, format YYYY-MM-DD)
 
-Note: If subsystem/affects are unclear, use best judgment based on phase name and accomplishments. Can be refined later.
+Note: If subsystem/affects are unclear, use best judgment based on release name and accomplishments. Can be refined later.
 
-**Title format:** `# Phase [X] Plan [Y]: [Name] Summary`
+**Title format:** `# Release [X] Change [Y]: [Name] Summary`
 
 The one-liner must be SUBSTANTIVE:
 
@@ -1306,49 +1306,49 @@ The one-liner must be SUBSTANTIVE:
 **Include performance data:**
 
 - Duration: `$DURATION`
-- Started: `$PLAN_START_TIME`
-- Completed: `$PLAN_END_TIME`
+- Started: `$CHANGE_START_TIME`
+- Completed: `$CHANGE_END_TIME`
 - Tasks completed: (count from execution)
 - Files modified: (count from execution)
 
 **Next Step section:**
 
-- If more plans exist in this phase: "Ready for {phase}-{next-plan}-{slug}-PLAN.md"
-- If this is the last plan: "Phase complete, ready for transition"
+- If more changes exist in this release: "Ready for {release}-{next-change}-{slug}-CHANGE.md"
+- If this is the last change: "Release complete, ready for transition"
   </step>
 
 <step name="update_current_position">
-Update Current Position section in STATE.md to reflect plan completion.
+Update Current Position section in STATE.md to reflect change completion.
 
 **Format:**
 
 ```markdown
-Phase: [current] of [total] ([phase name])
-Plan: [just completed] of [total in phase]
-Status: [In progress / Phase complete]
-Last activity: [today] - Completed {phase}-{plan}-{slug}-PLAN.md
+Release: [current] of [total] ([release name])
+Change: [just completed] of [total in release]
+Status: [In progress / Release complete]
+Last activity: [today] - Completed {release}-{change}-{slug}-CHANGE.md
 
 Progress: [progress bar]
 ```
 
 **Calculate progress bar:**
 
-- Count total plans across all phases (from ROADMAP.md or ROADMAP.md)
-- Count completed plans (count SUMMARY.md files that exist)
+- Count total changes across all releases (from ROADMAP.md or ROADMAP.md)
+- Count completed changes (count SUMMARY.md files that exist)
 - Progress = (completed / total) × 100%
 - Render: ░ for incomplete, █ for complete
 
-**Example - completing 02-01-setup-jwt-PLAN.md (plan 5 of 10 total):**
+**Example - completing 02-01-setup-jwt-CHANGE.md (change 5 of 10 total):**
 
 Before:
 
 ```markdown
 ## Current Position
 
-Phase: 2 of 4 (Authentication)
-Plan: Not started
+Release: 2 of 4 (Authentication)
+Change: Not started
 Status: Ready to execute
-Last activity: 2025-01-18 - Phase 1 complete
+Last activity: 2025-01-18 - Release 1 complete
 
 Progress: ██████░░░░ 40%
 ```
@@ -1358,21 +1358,21 @@ After:
 ```markdown
 ## Current Position
 
-Phase: 2 of 4 (Authentication)
-Plan: 1 of 2 in current phase
+Release: 2 of 4 (Authentication)
+Change: 1 of 2 in current release
 Status: In progress
-Last activity: 2025-01-19 - Completed 02-01-setup-jwt-PLAN.md
+Last activity: 2025-01-19 - Completed 02-01-setup-jwt-CHANGE.md
 
 Progress: ███████░░░ 50%
 ```
 
 **Step complete when:**
 
-- [ ] Phase number shows current phase (X of total)
-- [ ] Plan number shows plans complete in current phase (N of total-in-phase)
-- [ ] Status reflects current state (In progress / Phase complete)
-- [ ] Last activity shows today's date and the plan just completed
-- [ ] Progress bar calculated correctly from total completed plans
+- [ ] Release number shows current release (X of total)
+- [ ] Change number shows changes complete in current release (N of total-in-release)
+- [ ] Status reflects current state (In progress / Release complete)
+- [ ] Last activity shows today's date and the change just completed
+- [ ] Progress bar calculated correctly from total completed changes
       </step>
 
 <step name="extract_decisions_and_issues">
@@ -1383,7 +1383,7 @@ Extract decisions, issues, and concerns from SUMMARY.md into STATE.md accumulate
 - Read SUMMARY.md "## Decisions Made" section
 - If content exists (not "None"):
   - Add each decision to STATE.md Decisions table
-  - Format: `| [phase number] | [decision summary] | [rationale] |`
+  - Format: `| [release number] | [decision summary] | [rationale] |`
 
 **Deferred Issues:**
 
@@ -1393,7 +1393,7 @@ Extract decisions, issues, and concerns from SUMMARY.md into STATE.md accumulate
 
 **Blockers/Concerns:**
 
-- Read SUMMARY.md "## Next Phase Readiness" section
+- Read SUMMARY.md "## Next Release Readiness" section
 - If contains blockers or concerns:
   - Add to STATE.md "Blockers/Concerns Carried Forward"
     </step>
@@ -1405,7 +1405,7 @@ Update Session Continuity section in STATE.md to enable resumption in future ses
 
 ```markdown
 Last session: [current date and time]
-Stopped at: Completed {phase}-{plan}-{slug}-PLAN.md
+Stopped at: Completed {release}-{change}-{slug}-CHANGE.md
 Resume file: [path to .continue-here if exists, else "None"]
 ```
 
@@ -1441,25 +1441,25 @@ Update the roadmap file:
 ROADMAP_FILE=".planning/ROADMAP.md"
 ```
 
-**If more plans remain in this phase:**
+**If more changes remain in this release:**
 
-- Update plan count: "2/3 plans complete"
-- Keep phase status as "In progress"
+- Update change count: "2/3 changes complete"
+- Keep release status as "In progress"
 
-**If this was the last plan in the phase:**
+**If this was the last change in the release:**
 
-- Mark phase complete: status → "Complete"
+- Mark release complete: status → "Complete"
 - Add completion date
   </step>
 
 <step name="verify_plan_completion">
-Verify plan execution is complete:
+Verify change execution is complete:
 
 **All tasks committed:** Each task should have been committed with its implementation + STATE.md update.
 
 **Final task included:** The final task commit should include SUMMARY.md and ROADMAP.md updates.
 
-**Git log after plan execution:**
+**Git log after change execution:**
 
 ```
 def456g feature: add email confirmation flow
@@ -1475,11 +1475,11 @@ For commit message conventions, see ~/.claude/cat/references/git-integration.md
 <step name="update_codebase_map">
 **If .planning/codebase/ exists:**
 
-Check what changed across all task commits in this plan:
+Check what changed across all task commits in this change:
 
 ```bash
 # Get first commit hash from SUMMARY.md (recorded per task)
-FIRST_TASK=$(grep -m1 "^- \`[a-f0-9]\{7\}\`" .planning/phases/XX-name/{phase}-{plan}-SUMMARY.md 2>/dev/null | grep -o '\`[a-f0-9]\{7\}\`' | tr -d '\`')
+FIRST_TASK=$(grep -m1 "^- \`[a-f0-9]\{7\}\`" .planning/releases/XX-name/{release}-{change}-SUMMARY.md 2>/dev/null | grep -o '\`[a-f0-9]\{7\}\`' | tr -d '\`')
 
 # Get all changes from first task through now
 git diff --name-only ${FIRST_TASK}^..HEAD 2>/dev/null
@@ -1514,19 +1514,19 @@ Skip this step.
 </step>
 
 <step name="check_phase_issues">
-**Check if issues were created during this phase:**
+**Check if issues were created during this release:**
 
 ```bash
-# Check if ISSUES.md exists and has issues from current phase
+# Check if ISSUES.md exists and has issues from current release
 if [ -f .planning/ISSUES.md ]; then
-  grep -E "Phase ${PHASE}.*Task" .planning/ISSUES.md | grep -v "^#" || echo "NO_ISSUES_THIS_PHASE"
+  grep -E "Release ${RELEASE}.*Task" .planning/ISSUES.md | grep -v "^#" || echo "NO_ISSUES_THIS_RELEASE"
 fi
 ```
 
-**If issues were created during this phase:**
+**If issues were created during this release:**
 
 ```
-📋 Issues logged during this phase:
+📋 Issues logged during this release:
 - ISS-XXX: [brief description]
 - ISS-YYY: [brief description]
 
@@ -1534,8 +1534,8 @@ Review these now?
 ```
 
 Use AskUserQuestion:
-- header: "Phase Issues"
-- question: "[N] issues were logged during this phase. Review now?"
+- header: "Release Issues"
+- question: "[N] issues were logged during this release. Review now?"
 - options:
   - "Review issues" - Analyze with /cat:consider-issues
   - "Continue" - Address later, proceed to next work
@@ -1548,12 +1548,12 @@ Use AskUserQuestion:
 - Proceed to offer_next step
 
 **In YOLO mode:**
-- Note issues were logged but don't prompt: `📋 [N] issues logged this phase (review later with /cat:consider-issues)`
+- Note issues were logged but don't prompt: `📋 [N] issues logged this release (review later with /cat:consider-issues)`
 - Continue to offer_next automatically
 </step>
 
 <step name="release_execution_lock">
-Release execution lock after plan completion:
+Release execution lock after change completion:
 
 ```bash
 LOCK_DIR="${LOCK_DIR:-.claude/locks}"
@@ -1572,63 +1572,63 @@ fi
 <step name="offer_next">
 **MANDATORY: Verify remaining work before presenting next steps.**
 
-Do NOT skip this verification. Do NOT assume phase or milestone completion without checking.
+Do NOT skip this verification. Do NOT assume release or milestone completion without checking.
 
-**Step 1: Count plans and summaries in current phase**
+**Step 1: Count changes and summaries in current release**
 
-List files in the phase directory:
+List files in the release directory:
 
 ```bash
-ls -1 .planning/phases/[current-phase-dir]/*-PLAN.md 2>/dev/null | wc -l
-ls -1 .planning/phases/[current-phase-dir]/*-SUMMARY.md 2>/dev/null | wc -l
+ls -1 .planning/releases/[current-release-dir]/*-CHANGE.md 2>/dev/null | wc -l
+ls -1 .planning/releases/[current-release-dir]/*-SUMMARY.md 2>/dev/null | wc -l
 ```
 
-State the counts: "This phase has [X] plans and [Y] summaries."
+State the counts: "This release has [X] changes and [Y] summaries."
 
-**Step 2: Route based on plan completion**
+**Step 2: Route based on change completion**
 
 Compare the counts from Step 1:
 
 | Condition | Meaning | Action |
 |-----------|---------|--------|
-| summaries < plans | More plans remain | Go to **Route A** |
-| summaries = plans | Phase complete | Go to Step 3 |
+| summaries < changes | More changes remain | Go to **Route A** |
+| summaries = changes | Release complete | Go to Step 3 |
 
 ---
 
-**Route A: More plans remain in this phase**
+**Route A: More changes remain in this release**
 
-Identify the next unexecuted plan:
-- Find the first PLAN.md file that has no matching SUMMARY.md
+Identify the next unexecuted change:
+- Find the first CHANGE.md file that has no matching SUMMARY.md
 - Read its `<objective>` section
 
 <if mode="yolo">
 ```
-Plan {phase}-{plan} complete.
-Summary: .planning/phases/{phase-dir}/{phase}-{plan}-SUMMARY.md
+Change {release}-{change} complete.
+Summary: .planning/releases/{release-dir}/{release}-{change}-SUMMARY.md
 
-{Y} of {X} plans complete for Phase {Z}.
+{Y} of {X} changes complete for Release {Z}.
 
-⚡ Auto-continuing: Execute next plan ({phase}-{next-plan})
+⚡ Auto-continuing: Execute next change ({release}-{next-change})
 ```
 
 Loop back to identify_plan step automatically.
 </if>
 
-<if mode="interactive" OR="custom with gates.execute_next_plan true">
+<if mode="interactive" OR="custom with gates.execute_next_change true">
 ```
-Plan {phase}-{plan} complete.
-Summary: .planning/phases/{phase-dir}/{phase}-{plan}-SUMMARY.md
+Change {release}-{change} complete.
+Summary: .planning/releases/{release-dir}/{release}-{change}-SUMMARY.md
 
-{Y} of {X} plans complete for Phase {Z}.
+{Y} of {X} changes complete for Release {Z}.
 
 ---
 
 ## ▶ Next Up
 
-**{phase}-{next-plan}-{slug}: [Plan Name]** — [objective from next PLAN.md]
+**{release}-{next-change}-{slug}: [Change Name]** — [objective from next CHANGE.md]
 
-`/cat:execute-plan .planning/phases/{phase-dir}/{phase}-{next-plan}-{slug}-PLAN.md`
+`/cat:execute-change .planning/releases/{release-dir}/{release}-{next-change}-{slug}-CHANGE.md`
 
 <sub>`/clear` first → fresh context window</sub>
 
@@ -1647,77 +1647,77 @@ Wait for user to clear and run next command.
 
 ---
 
-**Step 3: Check milestone status (only when all plans in phase are complete)**
+**Step 3: Check milestone status (only when all changes in release are complete)**
 
 Read ROADMAP.md and extract:
-1. Current phase number (from the plan just completed)
-2. All phase numbers listed in the current milestone section
+1. Current release number (from the change just completed)
+2. All release numbers listed in the current milestone section
 
-To find phases in the current milestone, look for:
-- Phase headers: lines starting with `### Phase` or `#### Phase`
-- Phase list items: lines like `- [ ] **Phase X:` or `- [x] **Phase X:`
+To find releases in the current milestone, look for:
+- Release headers: lines starting with `### Release` or `#### Release`
+- Release list items: lines like `- [ ] **Release X:` or `- [x] **Release X:`
 
-Count total phases in the current milestone and identify the highest phase number.
+Count total releases in the current milestone and identify the highest release number.
 
-State: "Current phase is {X}. Milestone has {N} phases (highest: {Y})."
+State: "Current release is {X}. Milestone has {N} releases (highest: {Y})."
 
 **Step 4: Route based on milestone status**
 
 | Condition | Meaning | Action |
 |-----------|---------|--------|
-| current phase < highest phase | More phases remain | Go to **Route B** |
-| current phase = highest phase | Milestone complete | Go to **Route C** |
+| current release < highest release | More releases remain | Go to **Route B** |
+| current release = highest release | Milestone complete | Go to **Route C** |
 
 ---
 
-**Route B: Phase complete, more phases remain in milestone**
+**Route B: Release complete, more releases remain in milestone**
 
-Read ROADMAP.md to get the next phase's name and goal.
+Read ROADMAP.md to get the next release's name and goal.
 
 ```
-Plan {phase}-{plan} complete.
-Summary: .planning/phases/{phase-dir}/{phase}-{plan}-SUMMARY.md
+Change {release}-{change} complete.
+Summary: .planning/releases/{release-dir}/{release}-{change}-SUMMARY.md
 
-## ✓ Phase {Z}: {Phase Name} Complete
+## ✓ Release {Z}: {Release Name} Complete
 
-All {Y} plans finished.
+All {Y} changes finished.
 
 ---
 
 ## ▶ Next Up
 
-**Phase {Z+1}: {Next Phase Name}** — {Goal from ROADMAP.md}
+**Release {Z+1}: {Next Release Name}** — {Goal from ROADMAP.md}
 
-`/cat:plan-phase {Z+1}`
+`/cat:change-release {Z+1}`
 
 <sub>`/clear` first → fresh context window</sub>
 
 ---
 
 **Also available:**
-- `/cat:discuss-phase {Z+1}` — gather context first
-- `/cat:research-phase {Z+1}` — investigate unknowns
-- Review phase accomplishments before continuing
+- `/cat:discuss-release {Z+1}` — gather context first
+- `/cat:research-release {Z+1}` — investigate unknowns
+- Review release accomplishments before continuing
 
 ---
 ```
 
 ---
 
-**Route C: Milestone complete (all phases done)**
+**Route C: Milestone complete (all releases done)**
 
 ```
 🎉 MILESTONE COMPLETE!
 
-Plan {phase}-{plan} complete.
-Summary: .planning/phases/{phase-dir}/{phase}-{plan}-SUMMARY.md
+Change {release}-{change} complete.
+Summary: .planning/releases/{release-dir}/{release}-{change}-SUMMARY.md
 
-## ✓ Phase {Z}: {Phase Name} Complete
+## ✓ Release {Z}: {Release Name} Complete
 
-All {Y} plans finished.
+All {Y} changes finished.
 
 ════════════════════════════════════════
-All {N} phases complete!
+All {N} releases complete!
 Milestone is 100% done.
 ════════════════════════════════════════
 
@@ -1734,7 +1734,7 @@ Milestone is 100% done.
 ---
 
 **Also available:**
-- `/cat:add-phase <description>` — add another phase before completing
+- `/cat:add-release <description>` — add another release before completing
 - Review accomplishments before archiving
 
 ---
@@ -1746,7 +1746,7 @@ Milestone is 100% done.
 
 <success_criteria>
 
-- All tasks from PLAN.md completed
+- All tasks from CHANGE.md completed
 - All verifications pass
 - SUMMARY.md created with substantive content
 - STATE.md updated (position, decisions, issues, session)

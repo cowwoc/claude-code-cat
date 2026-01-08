@@ -13,84 +13,84 @@ Template for `.planning/ROADMAP.md`.
 
 ## Domain Expertise
 
-[Paths to domain skills that inform planning. These SKILL.md files serve as indexes - during phase planning, read them to find relevant references for each phase type.]
+[Paths to domain skills that inform planning. These SKILL.md files serve as indexes - during release planning, read them to find relevant references for each release type.]
 
 - ~/.claude/skills/expertise/[domain]/SKILL.md
 [Add additional domains if project spans multiple (e.g., ISF shaders + macOS app)]
 
 Or: None
 
-## Phases
+## Releases
 
-**Phase Numbering:**
-- Integer phases (1, 2, 3): Planned milestone work
-- Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
+**Release Numbering:**
+- Integer releases (1, 2, 3): Planned milestone work
+- Decimal releases (2.1, 2.2): Urgent insertions (marked with INSERTED)
 
-Decimal phases appear between their surrounding integers in numeric order.
+Decimal releases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: [Name]** - [One-line description]
-- [ ] **Phase 2: [Name]** - [One-line description]
-- [ ] **Phase 3: [Name]** - [One-line description]
-- [ ] **Phase 4: [Name]** - [One-line description]
+- [ ] **Release 1: [Name]** - [One-line description]
+- [ ] **Release 2: [Name]** - [One-line description]
+- [ ] **Release 3: [Name]** - [One-line description]
+- [ ] **Release 4: [Name]** - [One-line description]
 
-## Phase Details
+## Release Details
 
-### Phase 1: [Name]
-**Goal**: [What this phase delivers]
-**Depends on**: Nothing (first phase)
+### Release 1: [Name]
+**Goal**: [What this release delivers]
+**Depends on**: Nothing (first release)
 **Research**: Unlikely (established patterns)
-**Plans**: [Number of plans, e.g., "3 plans" or "TBD"]
+**Changes**: [Number of changes, e.g., "3 changes" or "TBD"]
 
-Plans:
-- [ ] 01-01: [Brief description of first plan]
-- [ ] 01-02: [Brief description of second plan]
-- [ ] 01-03: [Brief description of third plan]
+Changes:
+- [ ] 01-01: [Brief description of first change]
+- [ ] 01-02: [Brief description of second change]
+- [ ] 01-03: [Brief description of third change]
 
-### Phase 2: [Name]
-**Goal**: [What this phase delivers]
-**Depends on**: Phase 1
+### Release 2: [Name]
+**Goal**: [What this release delivers]
+**Depends on**: Release 1
 **Research**: Likely (new integration)
 **Research topics**: [What needs investigating]
-**Plans**: [Number of plans]
+**Changes**: [Number of changes]
 
-Plans:
+Changes:
 - [ ] 02-01: [Brief description]
 - [ ] 02-02: [Brief description]
 
-### Phase 2.1: Critical Fix (INSERTED)
-**Goal**: [Urgent work inserted between phases]
-**Depends on**: Phase 2
-**Plans**: 1 plan
+### Release 2.1: Critical Fix (INSERTED)
+**Goal**: [Urgent work inserted between releases]
+**Depends on**: Release 2
+**Changes**: 1 change
 
-Plans:
+Changes:
 - [ ] 2.1-01: [Description]
 
-### Phase 3: [Name]
-**Goal**: [What this phase delivers]
-**Depends on**: Phase 2
+### Release 3: [Name]
+**Goal**: [What this release delivers]
+**Depends on**: Release 2
 **Research**: Likely (external API)
 **Research topics**: [What needs investigating]
-**Plans**: [Number of plans]
+**Changes**: [Number of changes]
 
-Plans:
+Changes:
 - [ ] 03-01: [Brief description]
 - [ ] 03-02: [Brief description]
 
-### Phase 4: [Name]
-**Goal**: [What this phase delivers]
-**Depends on**: Phase 3
+### Release 4: [Name]
+**Goal**: [What this release delivers]
+**Depends on**: Release 3
 **Research**: Unlikely (internal patterns)
-**Plans**: [Number of plans]
+**Changes**: [Number of changes]
 
-Plans:
+Changes:
 - [ ] 04-01: [Brief description]
 
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 2 → 2.1 → 2.2 → 3 → 3.1 → 4
+Releases execute in numeric order: 2 → 2.1 → 2.2 → 3 → 3.1 → 4
 
-| Phase | Plans Complete | Status | Completed |
+| Release | Changes Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. [Name] | 0/3 | Not started | - |
 | 2. [Name] | 0/2 | Not started | - |
@@ -100,13 +100,13 @@ Phases execute in numeric order: 2 → 2.1 → 2.2 → 3 → 3.1 → 4
 
 <guidelines>
 **Initial planning (v1.0):**
-- Phase count depends on depth setting (quick: 3-5, standard: 5-8, comprehensive: 8-12)
-- Each phase delivers something coherent
-- Phases can have 1+ plans (split if >3 tasks or multiple subsystems)
-- Plans use naming: {phase}-{plan}-{slug}-PLAN.md (e.g., 01-02-setup-auth-PLAN.md)
+- Release count depends on depth setting (quick: 3-5, standard: 5-8, comprehensive: 8-12)
+- Each release delivers something coherent
+- Releases can have 1+ changes (split if >3 tasks or multiple subsystems)
+- Changes use naming: {release}-{change}-{slug}-CHANGE.md (e.g., 01-02-setup-auth-CHANGE.md)
 - No time estimates (this isn't enterprise PM)
 - Progress table updated by execute workflow
-- Plan count can be "TBD" initially, refined during planning
+- Change count can be "TBD" initially, refined during planning
 
 **Research flags:**
 - `Research: Likely` - External APIs, new libraries, architectural decisions
@@ -117,7 +117,7 @@ Phases execute in numeric order: 2 → 2.1 → 2.2 → 3 → 3.1 → 4
 **After milestones ship:**
 - Collapse completed milestones in `<details>` tags
 - Add new milestone sections for upcoming work
-- Keep continuous phase numbering (never restart at 01)
+- Keep continuous release numbering (never restart at 01)
 </guidelines>
 
 <status_values>
@@ -136,25 +136,25 @@ After completing first milestone, reorganize with milestone groupings:
 
 ## Milestones
 
-- ✅ **v1.0 MVP** - Phases 1-4 (shipped YYYY-MM-DD)
-- 🚧 **v1.1 [Name]** - Phases 5-6 (in progress)
-- 📋 **v2.0 [Name]** - Phases 7-10 (planned)
+- ✅ **v1.0 MVP** - Releases 1-4 (shipped YYYY-MM-DD)
+- 🚧 **v1.1 [Name]** - Releases 5-6 (in progress)
+- 📋 **v2.0 [Name]** - Releases 7-10 (planned)
 
-## Phases
+## Releases
 
 <details>
-<summary>✅ v1.0 MVP (Phases 1-4) - SHIPPED YYYY-MM-DD</summary>
+<summary>✅ v1.0 MVP (Releases 1-4) - SHIPPED YYYY-MM-DD</summary>
 
-### Phase 1: [Name]
-**Goal**: [What this phase delivers]
-**Plans**: 3 plans
+### Release 1: [Name]
+**Goal**: [What this release delivers]
+**Changes**: 3 changes
 
-Plans:
+Changes:
 - [x] 01-01: [Brief description]
 - [x] 01-02: [Brief description]
 - [x] 01-03: [Brief description]
 
-[... remaining v1.0 phases ...]
+[... remaining v1.0 releases ...]
 
 </details>
 
@@ -162,26 +162,26 @@ Plans:
 
 **Milestone Goal:** [What v1.1 delivers]
 
-#### Phase 5: [Name]
-**Goal**: [What this phase delivers]
-**Depends on**: Phase 4
-**Plans**: 2 plans
+#### Release 5: [Name]
+**Goal**: [What this release delivers]
+**Depends on**: Release 4
+**Changes**: 2 changes
 
-Plans:
+Changes:
 - [ ] 05-01: [Brief description]
 - [ ] 05-02: [Brief description]
 
-[... remaining v1.1 phases ...]
+[... remaining v1.1 releases ...]
 
 ### 📋 v2.0 [Name] (Planned)
 
 **Milestone Goal:** [What v2.0 delivers]
 
-[... v2.0 phases ...]
+[... v2.0 releases ...]
 
 ## Progress
 
-| Phase | Milestone | Plans Complete | Status | Completed |
+| Release | Milestone | Changes Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 1. Foundation | v1.0 | 3/3 | Complete | YYYY-MM-DD |
 | 2. Features | v1.0 | 2/2 | Complete | YYYY-MM-DD |
@@ -192,5 +192,5 @@ Plans:
 - Milestone emoji: ✅ shipped, 🚧 in progress, 📋 planned
 - Completed milestones collapsed in `<details>` for readability
 - Current/future milestones expanded
-- Continuous phase numbering (01-99)
+- Continuous release numbering (01-99)
 - Progress table includes milestone column

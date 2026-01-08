@@ -1,49 +1,49 @@
 <purpose>
-Surface Claude's assumptions about a phase before planning, enabling users to correct misconceptions early.
+Surface Claude's assumptions about a release before planning, enabling users to correct misconceptions early.
 
-Key difference from discuss-phase: This is ANALYSIS of what Claude thinks, not INTAKE of what user knows. No file output - purely conversational to prompt discussion.
+Key difference from discuss-release: This is ANALYSIS of what Claude thinks, not INTAKE of what user knows. No file output - purely conversational to prompt discussion.
 </purpose>
 
 <process>
 
 <step name="validate_phase" priority="first">
-Phase number: $ARGUMENTS (required)
+Release number: $ARGUMENTS (required)
 
 **If argument missing:**
 
 ```
-Error: Phase number required.
+Error: Release number required.
 
-Usage: /cat:list-phase-assumptions [phase-number]
-Example: /cat:list-phase-assumptions 3
+Usage: /cat:list-release-assumptions [release-number]
+Example: /cat:list-release-assumptions 3
 ```
 
 Exit workflow.
 
 **If argument provided:**
-Validate phase exists in roadmap:
+Validate release exists in roadmap:
 
 ```bash
-cat .planning/ROADMAP.md | grep -i "Phase ${PHASE}"
+cat .planning/ROADMAP.md | grep -i "Release ${RELEASE}"
 ```
 
-**If phase not found:**
+**If release not found:**
 
 ```
-Error: Phase ${PHASE} not found in roadmap.
+Error: Release ${RELEASE} not found in roadmap.
 
-Available phases:
-[list phases from roadmap]
+Available releases:
+[list releases from roadmap]
 ```
 
 Exit workflow.
 
-**If phase found:**
-Parse phase details from roadmap:
+**If release found:**
+Parse release details from roadmap:
 
-- Phase number
-- Phase name
-- Phase description/goal
+- Release number
+- Release name
+- Release description/goal
 - Any scope details mentioned
 
 Continue to analyze_phase.
@@ -66,8 +66,8 @@ What would Claude build first, second, third?
 
 **3. Scope Boundaries:**
 What's included vs excluded in Claude's interpretation?
-- "This phase includes: A, B, C"
-- "This phase does NOT include: D, E, F"
+- "This release includes: A, B, C"
+- "This release does NOT include: D, E, F"
 - "Boundary ambiguities: G could go either way"
 
 **4. Risk Areas:**
@@ -78,7 +78,7 @@ Where does Claude expect complexity or challenges?
 
 **5. Dependencies:**
 What does Claude assume exists or needs to be in place?
-- "This assumes X from previous phases"
+- "This assumes X from previous releases"
 - "External dependencies: Y, Z"
 - "This will be consumed by..."
 
@@ -92,7 +92,7 @@ Be honest about uncertainty. Mark assumptions with confidence levels:
 Present assumptions in a clear, scannable format:
 
 ```
-## My Assumptions for Phase ${PHASE}: ${PHASE_NAME}
+## My Assumptions for Release ${RELEASE}: ${RELEASE_NAME}
 
 ### Technical Approach
 [List assumptions about how to implement]
@@ -109,9 +109,9 @@ Present assumptions in a clear, scannable format:
 [List anticipated challenges]
 
 ### Dependencies
-**From prior phases:** [what's needed]
+**From prior releases:** [what's needed]
 **External:** [third-party needs]
-**Feeds into:** [what future phases need from this]
+**Feeds into:** [what future releases need from this]
 
 ---
 
@@ -153,8 +153,8 @@ Present next steps:
 
 ```
 What's next?
-1. Discuss context (/cat:discuss-phase ${PHASE}) - Let me ask you questions to build comprehensive context
-2. Plan this phase (/cat:plan-phase ${PHASE}) - Create detailed execution plans
+1. Discuss context (/cat:discuss-release ${RELEASE}) - Let me ask you questions to build comprehensive context
+2. Change this release (/cat:change-release ${RELEASE}) - Create detailed execution changes
 3. Re-examine assumptions - I'll analyze again with your corrections
 4. Done for now
 ```
@@ -162,14 +162,14 @@ What's next?
 Wait for user selection.
 
 If "Discuss context": Note that CONTEXT.md will incorporate any corrections discussed here
-If "Plan this phase": Proceed knowing assumptions are understood
+If "Change this release": Proceed knowing assumptions are understood
 If "Re-examine": Return to analyze_phase with updated understanding
 </step>
 
 </process>
 
 <success_criteria>
-- Phase number validated against roadmap
+- Release number validated against roadmap
 - Assumptions surfaced across five areas: technical approach, implementation order, scope, risks, dependencies
 - Confidence levels marked where appropriate
 - "What do you think?" prompt presented
