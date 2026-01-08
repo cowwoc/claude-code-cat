@@ -1,8 +1,41 @@
 {
   "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/echo-session-id.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/restore-todowrite.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/check-retrospective-due.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/inject-claudemd-section.sh"
+          }
+        ]
+      }
+    ],
     "UserPromptSubmit": [
       {
-        "matcher": "",
         "hooks": [
           {
             "type": "command",
@@ -11,11 +44,36 @@
         ]
       },
       {
-        "matcher": "",
         "hooks": [
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/detect-giving-up.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/verify-destructive-operations.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/detect-user-reported-issue.sh"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/save-todowrite.sh"
           }
         ]
       }
@@ -27,17 +85,49 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/validate-git-operations.sh"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/validate-git-filter-branch.sh"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/block-main-rebase.sh"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/remind-git-squash-skill.sh"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/block-reflog-destruction.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Read|Glob|Grep",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/predict-batch-opportunity.sh"
           }
         ]
       }
     ],
     "PostToolUse": [
       {
-        "matcher": "",
         "hooks": [
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/auto-learn-from-mistakes.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/detect-assistant-giving-up.sh"
           }
         ]
       },
@@ -47,42 +137,38 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/detect-failures.sh"
-          }
-        ]
-      }
-    ],
-    "SessionStart": [
-      {
-        "matcher": "",
-        "hooks": [
+          },
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/echo-session-id.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/detect-concatenated-commit-message.sh"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/validate-rebase-target.sh"
           }
         ]
       },
       {
-        "matcher": "",
+        "matcher": "Write|Edit",
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/check-retrospective-due.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/remind-restart-after-skill-modification.sh"
           }
         ]
       },
       {
-        "matcher": "",
+        "matcher": "Read|Glob|Grep|WebFetch|WebSearch",
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/inject-claudemd-section.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/detect-sequential-tools.sh"
           }
         ]
       }
     ],
     "SessionEnd": [
       {
-        "matcher": "",
         "hooks": [
           {
             "type": "command",
