@@ -1,0 +1,13 @@
+{
+  "name": "claude-code-cat",
+  "owner": {
+    "name": "cowwoc"
+  },
+  "plugins": [
+    {
+      "name": "cat",
+      "source": "./",
+      "description": "Spec-driven development with quality gates for Claude Code"
+    }
+  ]
+}

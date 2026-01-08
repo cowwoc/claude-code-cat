@@ -1,0 +1,19 @@
+{
+  "name": "claude-code-plugin",
+  "version": "1.0.0",
+  "description": "Quality skills and hooks for Claude Code",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cowwoc/claude-code-plugin.git"
+  },
+  "keywords": [
+    "claude",
+    "claude-code",
+    "ai",
+    "skills",
+    "hooks",
+    "plugin"
+  ],
+  "author": "cowwoc",
+  "license": "Apache-2.0"
+}

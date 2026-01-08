@@ -1,0 +1,11 @@
+{
+  "name": "cat",
+  "description": "Spec-driven development with quality gates for Claude Code",
+  "version": "1.0.0",
+  "author": {
+    "name": "cowwoc"
+  },
+  "repository": "https://github.com/cowwoc/claude-code-cat",
+  "license": "MIT",
+  "hooks": "./hooks/hooks.json"
+}
