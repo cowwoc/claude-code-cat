@@ -100,7 +100,7 @@ WORKTREE_PATH="<path>"
 git worktree remove "$WORKTREE_PATH" --force
 
 # Remove associated lock file
-PLAN_ID="<extracted-from-path>"  # e.g., "02-01" from "myapp-m1-02-01"
+PLAN_ID="<extracted-from-path>"  # e.g., "02-01" from ".worktrees/m1-02-01"
 rm -f ".cat-plan-${PLAN_ID}.lock"
 
 # Remove orphaned branch (AFTER worktree removal)

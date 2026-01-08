@@ -5,8 +5,8 @@
 # Usage: source scripts/worktree-setup.sh <PLAN_PATH> [SESSION_ID]
 # Output: Sets EXECUTION_DIR variable for where to run commands
 #
-# Worktree naming: project-m{milestone}-{phase}-{plan}
-# Example: myapp-m1-02-01 (milestone 1, phase 02, plan 01)
+# Worktree location: .worktrees/m{milestone}-{plan_id}
+# Example: .worktrees/m1-02-01-setup-jwt (milestone 1, plan 02-01-setup-jwt)
 #
 # Session tracking: Each plan has a lock file tracking which session owns it
 
@@ -21,12 +21,20 @@ if [[ -z "$PLAN_PATH" ]]; then
 fi
 
 LOCK_FILE=".cat-execution.lock"
-PROJECT_DIR="${CLAUDE_PROJECT_DIR:-$(pwd)}"
-PROJECT_NAME=$(basename "$PROJECT_DIR")
+
+if [[ -z "${CLAUDE_PROJECT_DIR:-}" ]]; then
+  echo "ERROR: CLAUDE_PROJECT_DIR environment variable is not set."
+  echo "This script must be run from a Claude Code hook context."
+  echo "See: https://code.claude.com/docs/en/hooks#project-specific-hook-scripts"
+  exit 1
+fi
+
+PROJECT_DIR="$CLAUDE_PROJECT_DIR"
+WORKTREES_DIR="${PROJECT_DIR}/.worktrees"
 
 # Extract identifiers from plan path (e.g., .planning/phases/02-auth/02-01-setup-jwt-PLAN.md)
-PLAN_ID=$(basename "$PLAN_PATH" | grep -oE '^[0-9]+(\.[0-9]+)?-[0-9]+' || echo "unknown")
-PHASE_NUM=$(echo "$PLAN_ID" | cut -d'-' -f1)
+PLAN_ID=$(basename "$PLAN_PATH" | sed 's/-PLAN\.md$//')  # e.g., "02-01-setup-jwt"
+PHASE_NUM=$(echo "$PLAN_ID" | grep -oE '^[0-9]+(\.[0-9]+)?' | head -1)  # e.g., "02" or "02.1"
 PHASE_NAME=$(basename "$(dirname "$PLAN_PATH")" | sed 's/^[0-9.]*-//')
 
 # Plan-specific lock file
@@ -51,9 +59,9 @@ echo "$SESSION_ID" > "$PLAN_LOCK_FILE"
 # Get current milestone from STATE.md or default to 1
 MILESTONE=$(grep -oE 'Milestone: [0-9]+' "${PROJECT_DIR}/.planning/STATE.md" 2>/dev/null | grep -oE '[0-9]+' || echo "1")
 
-# Deterministic worktree name: project-m1-02-01
+# Deterministic worktree name: m1-02-01-setup-jwt
 WORKTREE_ID="m${MILESTONE}-${PLAN_ID}"
-WORKTREE_PATH="../${PROJECT_NAME}-${WORKTREE_ID}"
+WORKTREE_PATH="${WORKTREES_DIR}/${WORKTREE_ID}"
 PHASE_BRANCH="phase/${PHASE_NUM}-${PHASE_NAME}"
 WORKTREE_BRANCH="${PHASE_BRANCH}/${WORKTREE_ID}"
 
@@ -61,6 +69,13 @@ WORKTREE_BRANCH="${PHASE_BRANCH}/${WORKTREE_ID}"
 if [[ -f "$LOCK_FILE" ]]; then
   LOCK_SESSION=$(cat "$LOCK_FILE")
   echo "Another instance active (session: $LOCK_SESSION), creating worktree..."
+
+  # Ensure worktrees directory exists and is gitignored
+  mkdir -p "$WORKTREES_DIR"
+  if ! grep -qxF '.worktrees/' "${PROJECT_DIR}/.gitignore" 2>/dev/null; then
+    echo '.worktrees/' >> "${PROJECT_DIR}/.gitignore"
+    echo "Added .worktrees/ to .gitignore"
+  fi
 
   # Try to create worktree with deterministic name
   if ! git worktree add "$WORKTREE_PATH" -b "$WORKTREE_BRANCH" 2>/dev/null; then
@@ -70,9 +85,6 @@ if [[ -f "$LOCK_FILE" ]]; then
     rm -f "$PLAN_LOCK_FILE"
     exit 1
   fi
-
-  # Copy planning state to worktree
-  cp -r "${PROJECT_DIR}/.planning" "$WORKTREE_PATH/.planning"
 
   # Move plan lock to worktree
   mv "$PLAN_LOCK_FILE" "$WORKTREE_PATH/$PLAN_LOCK_FILE"

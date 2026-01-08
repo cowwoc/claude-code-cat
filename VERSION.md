@@ -11,9 +11,18 @@
 |-----------|---------|------|
 | Upstream (glittercowboy/get-shit-done) | 1.3.27 | 2026-01-07 |
 | Task Protocol Enhancements | 1.0.0 | 2026-01-07 |
-| Combined Plugin (CAT) | 1.0.1 | 2026-01-08 |
+| Combined Plugin (CAT) | 1.0.2 | 2026-01-08 |
 
 ## Sync History
+
+### 2026-01-08: v1.0.2
+
+**Fix:** Worktrees now created inside project directory
+- Changed worktree location from `../${PROJECT}-${ID}` to `.worktrees/${ID}`
+- Fixes sandbox permission issues when `CLAUDE_PROJECT_DIR` is workspace root
+- Worktree ID now includes full plan slug (e.g., `m1-02-01-setup-jwt`)
+- Auto-adds `.worktrees/` to `.gitignore` on first worktree creation
+- Removed unnecessary `.planning/` copy (already in committed branch)
 
 ### 2026-01-08: v1.0.1
 
