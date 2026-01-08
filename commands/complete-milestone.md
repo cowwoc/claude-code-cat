@@ -74,7 +74,7 @@ Output: Milestone archived, roadmap reorganized, git tagged.
 6. **Commit and tag:**
 
    - Stage: MILESTONES.md, PROJECT.md, ROADMAP.md, STATE.md, archive file
-   - Commit: `chore: archive v{{version}} milestone`
+   - Commit: `planning: archive v{{version}} milestone`
    - Tag: `git tag -a v{{version}} -m "[milestone summary]"`
    - Ask about pushing tag
 

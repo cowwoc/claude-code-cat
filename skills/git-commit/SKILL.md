@@ -89,19 +89,37 @@ feat(auth): add login form with validation and error handling
 - Loading states and error display
 ```
 
-## Good Verbs for Subject Lines
+## Commit Types (MANDATORY)
+
+**CRITICAL:** When working in a CAT-managed project, use ONLY these types from execute-release.md:
+
+| Type | When to Use | Example |
+|------|-------------|---------|
+| `feature` | New functionality, endpoint, component | `feature: add user registration` |
+| `bugfix` | Bug fix, error correction | `bugfix: correct email validation` |
+| `test` | Test-only changes | `test: add failing test for hashing` |
+| `refactor` | Code cleanup, no behavior change | `refactor: extract validation helper` |
+| `performance` | Performance improvement | `performance: add database index` |
+| `docs` | User-facing docs (README, API docs) | `docs: add API documentation` |
+| `style` | Formatting, linting fixes | `style: format auth module` |
+| `config` | Config, tooling, deps, Claude-facing docs | `config: add bcrypt dependency` |
+| `planning` | Planning system updates (ROADMAP, STATE) | `planning: add Release 5 summary` |
+| `retrospective` | Retrospective analysis | `retrospective: R002 analysis` |
+
+**NOT VALID:** `chore`, `build`, `ci` - these are NOT in execute-release.md
+
+**Format:** `{type}: {description}`
+
+## Good Verbs for Description
 
 | Verb | Use For |
 |------|---------|
-| **Add** | New feature, file, function |
-| **Fix** | Bug fix or correction |
-| **Update** | Modify existing feature (non-breaking) |
-| **Remove** | Delete feature, file, or code |
-| **Refactor** | Restructure without changing behavior |
-| **Improve** | Enhance existing feature |
-| **Document** | Documentation only |
-| **Test** | Add or update tests |
-| **Chore** | Maintenance (deps, build, config) |
+| **add** | New feature, file, function |
+| **fix** | Bug fix or correction |
+| **update** | Modify existing feature (non-breaking) |
+| **remove** | Delete feature, file, or code |
+| **refactor** | Restructure without changing behavior |
+| **improve** | Enhance existing feature |
 
 ## Anti-Patterns to Avoid
 

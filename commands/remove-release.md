@@ -254,7 +254,7 @@ Stage and commit the removal:
 
 ```bash
 git add .planning/
-git commit -m "chore: remove release {target} ({original-release-name})"
+git commit -m "planning: remove release {target} ({original-release-name})"
 ```
 
 The commit message preserves the historical record of what was removed.
@@ -270,7 +270,7 @@ Changes:
 - Deleted: .planning/releases/{target}-{slug}/
 - Renumbered: Releases {first-renumbered}-{last-old} → {first-renumbered-1}-{last-new}
 - Updated: ROADMAP.md, STATE.md
-- Committed: chore: remove release {target} ({original-name})
+- Committed: planning: remove release {target} ({original-name})
 
 Current roadmap: {total-remaining} releases
 Current position: Release {current} of {new-total}

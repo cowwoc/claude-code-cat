@@ -541,7 +541,7 @@ git add .planning/milestones/v[X.Y]-ROADMAP.md
 
 # Commit with descriptive message
 git commit -m "$(cat <<'EOF'
-chore: complete v[X.Y] milestone
+planning: complete v[X.Y] milestone
 
 - Added MILESTONES.md entry
 - Evolved PROJECT.md with validated requirements
@@ -553,7 +553,7 @@ EOF
 )"
 ```
 
-Confirm: "Committed: chore: complete v[X.Y] milestone"
+Confirm: "Committed: planning: complete v[X.Y] milestone"
 
 </step>
 

@@ -109,4 +109,4 @@ Compare with versions listed above. If different, review changes and determine w
 3. Merge relevant changes to this plugin
 4. Rename gsd→cat, get-shit-done→cat
 5. Update this VERSION.md with new sync entry
-6. Commit with message: `chore: sync with upstream gsd vX.Y.Z`
+6. Commit with message: `config: sync with upstream gsd vX.Y.Z`
