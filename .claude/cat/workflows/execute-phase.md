@@ -631,6 +631,43 @@ User questions like "Why are we doing X?" or "Isn't Y redundant?" often signal p
 
 </user_initiated_plan_changes>
 
+<implementation_discovery_changes>
+
+## Handling Discoveries During Implementation
+
+**When implementation reveals the plan was based on incorrect assumptions:**
+
+Before implementing a task, if you discover existing code/APIs that differ from plan assumptions:
+
+**Protocol:**
+
+1. **Stop before implementing**
+
+2. **Announce the discovery**:
+   ```
+   ## Implementation Discovery
+
+   **Plan assumed**: [what the plan said]
+   **Code actually**: [what the existing code does]
+   **Impact**: [how this affects the implementation]
+   ```
+
+3. **Update the PLAN.md** to reflect the actual implementation approach
+
+4. **Ask user if unclear**: If the discovery significantly changes scope or approach, confirm before proceeding
+
+**Examples:**
+- Plan says "default: available processors" but existing API uses memory-based calculation
+- Plan says "add new method" but similar method already exists
+- Plan says "modify X" but X was refactored/renamed since planning
+
+**Why this matters:**
+- Plans are written before deep codebase investigation
+- Implementation often reveals assumptions were wrong
+- User should know what's actually being implemented
+
+</implementation_discovery_changes>
+
 <deviation_rules>
 
 ## Automatic Deviation Handling
