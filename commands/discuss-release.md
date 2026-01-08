@@ -1,7 +1,7 @@
 ---
 name: cat:discuss-release
 description: Gather release context through adaptive questioning before planning
-argument-hint: "[release]"
+argument-hint: "[release] (optional - auto-detects latest incomplete)"
 ---
 
 <objective>
@@ -18,7 +18,7 @@ Output: {release}-CONTEXT.md capturing the user's vision for the release
 </execution_context>
 
 <context>
-Release number: $ARGUMENTS (required)
+Release number: $ARGUMENTS (optional - auto-detects if omitted)
 
 **Load project state first:**
 @.planning/STATE.md
@@ -28,8 +28,14 @@ Release number: $ARGUMENTS (required)
 </context>
 
 <process>
-1. Validate release number argument (error if missing or invalid)
-2. Check if release exists in roadmap
+1. Determine release number:
+   - If $ARGUMENTS provided: use that release number
+   - If $ARGUMENTS empty: auto-detect the latest incomplete release
+     * Scan releases in order (5, 6, 7...)
+     * For each release, count CHANGE.md files vs SUMMARY.md files
+     * First release where summaries < changes is the target
+     * If all releases complete, inform user and exit
+2. Validate release exists in roadmap
 3. Check if CONTEXT.md already exists (offer to update if yes)
 4. Follow discuss-release.md workflow with **ALL questions using AskUserQuestion**:
    - Present release from roadmap

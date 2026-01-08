@@ -46,10 +46,16 @@ Change path: $ARGUMENTS
 
 <process>
 1. Check .planning/ directory exists (error if not - user should run /cat:new-project)
-2. Verify change at $ARGUMENTS exists
+2. Identify change to execute:
+   - If $ARGUMENTS provided: use that path
+   - If $ARGUMENTS empty: find first CHANGE.md without matching SUMMARY.md
 3. Check if SUMMARY.md already exists (change already executed?)
-4. Load workflow config for mode (interactive/yolo)
-5. Follow execute-release.md workflow:
+4. **Release context gate**: If this is the first change in a release (change number is 01):
+   - Check if CONTEXT.md exists for this release
+   - If no CONTEXT.md, ask user: "This is the first change in Release X. Would you like to discuss context first?"
+   - Options: "Discuss context first" → invoke /cat:discuss-release X, "Execute directly" → proceed
+5. Load workflow config for mode (interactive/yolo)
+6. Follow execute-release.md workflow:
    - Parse change and determine execution strategy (A/B/C)
    - Execute tasks (via subagent or main context as appropriate)
    - Handle checkpoints and deviations

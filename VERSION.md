@@ -11,7 +11,7 @@
 |-----------|---------|------|
 | Upstream (glittercowboy/get-shit-done) | 1.3.31 | 2026-01-08 |
 | Workflow Enhancements | 1.0.0 | 2026-01-07 |
-| Combined Plugin (CAT) | 1.1.1 | 2026-01-08 |
+| Combined Plugin (CAT) | 1.1.4 | 2026-01-08 |
 
 ## Sync History
 
