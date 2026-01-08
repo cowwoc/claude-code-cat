@@ -32,6 +32,9 @@ trap 'echo "ERROR in auto-learn-from-mistakes.sh at line $LINENO: Command failed
 #                 and other data format parsing failures
 #   - 2025-12-22: Added Pattern 14 (bash parse errors) for detecting shell parse errors
 #                 from command substitution $(...) in multi-line commands
+#   - 2026-01-08: Fixed Pattern 7 and Pattern 11 false positives - added exclusions for
+#                 git log output (commit hashes, headers, indented messages), diff lines,
+#                 and JSON content
 
 # Read input from stdin (hook context JSON for PostToolUse)
 HOOK_CONTEXT=$(cat)
@@ -121,11 +124,12 @@ if [[ "$TOOL_NAME" == "Skill" ]] && echo "$TOOL_RESULT" | grep -qiE "\bERROR\b|\
 fi
 
 # Pattern 7: Git operation failures (HIGH)
-# Note: Excludes JSON content (matches inside quotes) to avoid false positives when
-# grepping session history or other JSON files
-if echo "$TOOL_RESULT" | grep -vE '^\s*"' | grep -qiE "^fatal:|^error:|git.*failed|rebase.*failed|merge.*failed"; then
+# Note: Excludes JSON content, diff output, and git log output to avoid false positives
+# Real git errors have "fatal:" or "error:" at line start, not in code/docs
+# Exclusions: JSON (starts with "), diff lines (+/-/@), commit hashes (7+ hex chars)
+if echo "$TOOL_RESULT" | grep -vE '^\s*"|^[+-@]|^[a-f0-9]{7,}' | grep -qE "^fatal:|^error: " | head -1 | grep -q .; then
   MISTAKE_TYPE="git_operation_failure"
-  MISTAKE_DETAILS=$(echo "$TOOL_RESULT" | grep -vE '^\s*"' | grep -B2 -A3 -iE "fatal:|error:|failed" | head -15)
+  MISTAKE_DETAILS=$(echo "$TOOL_RESULT" | grep -vE '^\s*"|^[+-@]' | grep -B2 -A3 -E "^fatal:|^error: " | head -15)
 fi
 
 # Pattern 8: Missing cleanup after successful operations (MEDIUM)
@@ -155,9 +159,11 @@ fi
 #
 # ENHANCED 2025-11-12: Now also checks assistant text messages via conversation log
 # Searches both tool results AND recent assistant messages for error acknowledgments
-if echo "$TOOL_RESULT" | grep -qiE "CRITICAL (DISASTER|MISTAKE|ERROR|FAILURE|BUG|PROBLEM|ISSUE)|catastrophic|devastating"; then
+# Note: Excludes git log output to avoid false positives from commit messages
+# Exclusions: JSON, diff lines, commit hashes, git log headers, indented commit messages (4 spaces)
+if echo "$TOOL_RESULT" | grep -vE '^\s*"|^[+-@]|^[a-f0-9]{7,}|^commit |^Author:|^Date:|^    ' | grep -qiE "CRITICAL (DISASTER|MISTAKE|ERROR|FAILURE|BUG|PROBLEM|ISSUE)|catastrophic|devastating"; then
   MISTAKE_TYPE="critical_self_acknowledgment"
-  MISTAKE_DETAILS=$(echo "$TOOL_RESULT" | grep -B3 -A5 -iE "CRITICAL|catastrophic|devastating" | head -20)
+  MISTAKE_DETAILS=$(echo "$TOOL_RESULT" | grep -vE '^\s*"|^[+-@]|^[a-f0-9]{7,}|^commit |^Author:|^Date:|^    ' | grep -B3 -A5 -iE "CRITICAL|catastrophic|devastating" | head -20)
 fi
 
 # Pattern 12: Wrong working directory (HIGH)
