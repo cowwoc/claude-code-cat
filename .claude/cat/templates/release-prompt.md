@@ -15,7 +15,7 @@ change: 01
 type: execute
 domain: [optional - if domain skill loaded]
 
-# Task Protocol Enhancements
+# Risk and Status
 risk: LOW  # AUTO-CALCULATED or manual override: HIGH | MEDIUM | LOW
 status: READY  # READY | BLOCKED | IN_PROGRESS | COMPLETE
 
@@ -217,7 +217,7 @@ change: 01
 type: execute
 domain: next-js
 
-# Task Protocol Enhancements
+# Risk and Status
 risk: MEDIUM  # Auth code requires review
 status: READY
 

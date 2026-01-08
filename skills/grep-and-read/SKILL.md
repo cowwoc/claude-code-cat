@@ -171,12 +171,12 @@ Skill: grep-and-read
 
 ### Example 3: Documentation Research
 
-**Goal**: Find all documentation mentioning "task protocol"
+**Goal**: Find all documentation mentioning "error handling"
 
 **Command**:
 ```bash
 Skill: grep-and-read
-  pattern="task protocol"
+  pattern="error handling"
   path="/path/to/project/docs"
   glob="*.md"
   case_sensitive=false
@@ -328,13 +328,13 @@ For very large result sets:
 **batch-read**: Use when you KNOW which files to read
 ```bash
 # You already know the files
-batch-read: "task-protocol" --type md --max-files 5
+batch-read: "error-handling" --type md --max-files 5
 ```
 
 **grep-and-read**: Use when you need to FIND files first
 ```bash
 # You need to discover the files
-grep-and-read: pattern="task protocol" glob="*.md"
+grep-and-read: pattern="error handling" glob="*.md"
 ```
 
 ### Complements Grep Tool

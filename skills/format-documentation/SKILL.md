@@ -119,12 +119,12 @@ When editing Claude-facing docs:
 **YAML Frontmatter - Before/After**:
 ```yaml
 # BEFORE (violation):
-description: Systematic audit of session for task protocol compliance violations with documentation fix recommendations
+description: Comprehensive guide for formatting markdown documentation with proper line wrapping and YAML syntax
 
 # AFTER (correct):
 description: >
-  Systematic audit of session for task protocol compliance violations with
-  documentation fix recommendations
+  Comprehensive guide for formatting markdown documentation with proper line
+  wrapping and YAML syntax
 ```
 
 **Markdown Prose - Before/After**:

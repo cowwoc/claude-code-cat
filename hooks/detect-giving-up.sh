@@ -233,7 +233,6 @@ detect_constraint_rationalization()
 	[[ "$text_lower" == *"rather than diving deeper into this complex issue"* ]] && return 0
 	[[ "$text_lower" == *"instead of implementing the full solution"* ]] && return 0
 	[[ "$text_lower" == *"this appears to be beyond the current scope"* ]] && return 0
-	[[ "$text_lower" == *"let me focus on completing the task protocol instead"* ]] && return 0
 	[[ "$text_lower" == *"let me focus on features that provide more immediate value"* ]] && return 0
 	[[ "$text_lower" == *"let me move on to easier tasks"* ]] && return 0
 

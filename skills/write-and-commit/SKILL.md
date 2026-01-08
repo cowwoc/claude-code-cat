@@ -28,7 +28,6 @@ allowed-tools: Bash, Write
 - Creating multiple related files that should be in **one commit together**
 - File is **part of larger refactoring** (commit all changes together)
 - You need to **review the file** before committing
-- Creating files in **task protocol states** that require agent delegation
 
 ## Performance Comparison
 
@@ -280,11 +279,6 @@ git commit -m "Add related files"
 
 **❌ Wrong**: Commit immediately if unsure about content
 **✅ Correct**: Create with Write tool, review, then commit manually
-
-### Task Protocol States
-
-**❌ Wrong**: Main agent creates source files in IMPLEMENTATION state
-**✅ Correct**: Delegate to stakeholder agents via Task tool
 
 ## Frequency and Impact
 

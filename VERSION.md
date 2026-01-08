@@ -10,7 +10,7 @@
 | Component | Version | Date |
 |-----------|---------|------|
 | Upstream (glittercowboy/get-shit-done) | 1.3.31 | 2026-01-08 |
-| Task Protocol Enhancements | 1.0.0 | 2026-01-07 |
+| Workflow Enhancements | 1.0.0 | 2026-01-07 |
 | Combined Plugin (CAT) | 1.1.1 | 2026-01-08 |
 
 ## Sync History
@@ -73,7 +73,7 @@
   - find-next-change.sh
   - worktree-setup.sh
 
-**Task Protocol Enhancements:**
+**Workflow Enhancements:**
 - Risk classification system (HIGH/MEDIUM/LOW)
 - Multi-agent peer review (architect, security, quality, style, performance)
 - Mandatory approval gates (change, review, merge)
