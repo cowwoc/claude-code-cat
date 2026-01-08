@@ -66,13 +66,13 @@ completed: YYYY-MM-DD
 
 Each task was committed atomically:
 
-1. **Task 1: [task name]** - `abc123f` (feat/fix/test/refactor)
-2. **Task 2: [task name]** - `def456g` (feat/fix/test/refactor)
-3. **Task 3: [task name]** - `hij789k` (feat/fix/test/refactor)
+1. **Task 1: [task name]** - `abc123f` (feature/bugfix/test/docs/config/planning)
+2. **Task 2: [task name]** - `def456g` (feature/bugfix/test/docs/config/planning)
+3. **Task 3: [task name]** - `hij789k` (feature/bugfix/test/docs/config/planning)
 
 **Change metadata:** `lmn012o` (docs: complete change)
 
-_Note: TDD tasks may have multiple commits (test → feat → refactor)_
+_Note: TDD tasks may have multiple commits (test → feature → refactor)_
 
 ## Files Created/Modified
 - `path/to/file.ts` - What it does

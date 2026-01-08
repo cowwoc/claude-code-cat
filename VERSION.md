@@ -11,9 +11,16 @@
 |-----------|---------|------|
 | Upstream (glittercowboy/get-shit-done) | 1.3.27 | 2026-01-07 |
 | Task Protocol Enhancements | 1.0.0 | 2026-01-07 |
-| Combined Plugin (CAT) | 1.1.0 | 2026-01-08 |
+| Combined Plugin (CAT) | 1.1.1 | 2026-01-08 |
 
 ## Sync History
+
+### 2026-01-08: v1.1.1
+
+**Improvements:**
+- learn-from-mistakes: Added explicit Step 5 (Implement) and Step 6 (Verify) for clearer workflow
+- learn-from-mistakes: Renumbered steps 1-7 sequentially, removed awkward "Step 4a" sub-numbering
+- Removed deprecated session-lock.sh hook (lock acquisition moved to execute-release workflow)
 
 ### 2026-01-08: v1.1.0
 

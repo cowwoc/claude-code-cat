@@ -986,47 +986,125 @@ See `~/.claude/cat/references/tdd.md` for TDD change structure.
 
 **Before committing implementation work, offer user the opportunity to review.**
 
-**Protocol:**
+### Branch Strategy
 
-After tasks complete but BEFORE committing:
+**MANDATORY:** All change work MUST be on a dedicated branch, NOT main.
+
+**Branch naming:** `change/{release}-{change}-{slug}`
+Example: `change/05-02-fix-switch-expression-case-parsing`
+
+**At change start:**
+```bash
+git checkout -b change/{release}-{change}-{slug}
+```
+
+**Before review:** Squash commits by type (see below).
+
+### Commit Squashing by Type
+
+Before presenting review, squash all working commits into logical commits by type:
+
+| Type | Contains | Example Message |
+|------|----------|-----------------|
+| `feature` | New functionality, implementation | `feature: add array type pattern support` |
+| `bugfix` | Bug fixes | `bugfix: correct email validation` |
+| `test` | Test additions/modifications | `test: add switch expression array pattern tests` |
+| `docs` | User-facing documentation (README, API docs, guides) | `docs: add API endpoint documentation` |
+| `config` | Config, tooling, dependencies, Claude-facing docs | `config: update skill with documentation-first prevention` |
+| `planning` | Planning files (STATE, SUMMARY, ROADMAP) | `planning: add 05-02 SUMMARY` |
+
+**Squashing process:**
+1. Count commits by type in working branch
+2. Interactive rebase to squash: `git rebase -i main`
+3. Squash related commits, keeping one per type
+4. Result: 2-4 clean commits, one per type present
+
+**Commit ordering:** Order commits by dependency - each commit should only depend on previous commits, never on later ones.
+
+Example order:
+1. `config:` - Setup, dependencies, Claude-facing docs (no dependencies)
+2. `docs:` - User-facing documentation (may depend on config)
+3. `feature:` or `bugfix:` - The main deliverable
+4. `test:` - Test additions (depends on feature/bugfix being present)
+
+**Planning metadata:**
+- **CHANGE.md**: Update as progress is made. Mark tasks complete in the commit that completes them. Check verification boxes in the commit that verifies them.
+- **SUMMARY.md**: Update in the final commit of the change (typically the test commit). The SUMMARY documents what was accomplished and serves as the completion record.
+
+### Review Summary Format
+
+Present a detailed multi-line summary with branch and commit info:
 
 ```
-## Implementation Complete
+## Implementation Summary: {change-slug}
 
-**Files modified:**
-- path/to/file1.java - [brief description]
-- path/to/file2.java - [brief description]
+**Branch:** `change/{release}-{change}-{slug}`
+**Commits for review:** (list in dependency order)
+- `abc1234` config: {description}
+- `def5678` feature: {description}
+- `ghi9012` test: {description}
 
-**Key changes:**
-- [Change 1]
-- [Change 2]
+---
 
-Would you like to review the implementation before I commit?
+### Code Changes
+
+**path/to/file1.java**
+- [Specific change 1]
+- [Specific change 2]
+
+**path/to/file2.java**
+- [Specific change 1]
+- [Specific change 2]
+
+### Documentation Updates (if any)
+
+**path/to/doc.md** (lines X-Y)
+- [What was updated and why]
+
+### Test Changes (if any)
+
+**path/to/test.java**
+- Added `testMethodName` covering [scenario]
+- Deleted duplicate tests (already covered in OtherTest.java)
+
+### Verification
+
+\`\`\`bash
+./mvnw test -pl module
+Tests run: X, Failures: 0, Errors: 0, Skipped: 0
+\`\`\`
+
+---
 ```
+
+**IMPORTANT:** Present the detailed summary FIRST, then use AskUserQuestion with a simple question.
+Do NOT attempt to fit the summary into the AskUserQuestion tool parameters.
 
 Use AskUserQuestion:
-- header: "Review"
-- question: "Review implementation before commit?"
+- header: "Pre-commit"
+- question: "Approve merging branch `change/{slug}` to main?"
 - options:
-  - "Commit now" - Proceed with commit
-  - "Show changes" - Display diffs for review
-  - "Show specific file" - Let user specify which file
+  - "Approve and merge" - Merge to main
+  - "Show full diffs" - Display diffs for review
+  - "Discuss issues" - Address concerns before merging
 
-**If user selects "Show changes":**
-- Run `git diff` for modified files
+**If user selects "Show full diffs":**
+- Run `git diff main...HEAD` to show all changes
 - Wait for user feedback
-- Address any concerns before committing
+- Address any concerns before merging
 
-**If user selects "Commit now":**
-- Proceed to task_commit protocol
+**If user selects "Approve and merge":**
+- Merge to main: `git checkout main && git merge --no-ff change/{slug}`
+- Delete branch: `git branch -d change/{slug}`
 
 **In YOLO mode:**
-- Skip this checkpoint, commit directly
-- Note: `⚡ Auto-committed (yolo mode)`
+- Skip this checkpoint, merge directly
+- Note: `⚡ Auto-merged (yolo mode)`
 
 **Why this matters:**
-- User maintains oversight of code entering repository
-- Catches issues before they're committed
+- User maintains oversight of code entering main
+- Clear branch and commit history for review
+- Each commit type reviewable independently
 - Collaborative workflow, not autonomous
 
 </pre_commit_review>
@@ -1070,9 +1148,9 @@ git add .planning/ROADMAP.md
 | `test` | Test-only changes (TDD RED release) | test: add failing test for password hashing |
 | `refactor` | Code cleanup, no behavior change (TDD REFACTOR release) | refactor: extract validation to helper |
 | `performance` | Performance improvement | performance: add database index for user lookups |
-| `docs` | Documentation changes | docs: add API endpoint documentation |
+| `docs` | User-facing documentation (README, API docs, guides) | docs: add API endpoint documentation |
 | `style` | Formatting, linting fixes | style: format auth module |
-| `config` | Config, tooling, dependencies | config: add bcrypt dependency |
+| `config` | Config, tooling, dependencies, Claude-facing docs | config: add bcrypt dependency |
 | `planning` | Planning system updates (ROADMAP, STATE, releases) | planning: add Release 5 action items |
 | `retrospective` | Retrospective analysis and action items | retrospective: R002 analysis with 3 new patterns |
 

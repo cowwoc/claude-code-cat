@@ -147,12 +147,6 @@ Features:
 - Removes lock file if it exists when session ends
 - Fallback cleanup for locks not released on change completion
 
-## Deprecated Hooks
-
-#### session-lock.sh
-Was previously triggered on SessionStart. Lock acquisition now happens in
-execute-release.md workflow when /cat:execute-change is invoked.
-
 ## Customization
 
 Each hook has configuration variables at the top of the file. Edit these to match your project's needs:
