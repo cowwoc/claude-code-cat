@@ -121,9 +121,11 @@ if [[ "$TOOL_NAME" == "Skill" ]] && echo "$TOOL_RESULT" | grep -qiE "\bERROR\b|\
 fi
 
 # Pattern 7: Git operation failures (HIGH)
-if echo "$TOOL_RESULT" | grep -qiE "fatal:|error:|git.*failed|rebase.*failed|merge.*failed"; then
+# Note: Excludes JSON content (matches inside quotes) to avoid false positives when
+# grepping session history or other JSON files
+if echo "$TOOL_RESULT" | grep -vE '^\s*"' | grep -qiE "^fatal:|^error:|git.*failed|rebase.*failed|merge.*failed"; then
   MISTAKE_TYPE="git_operation_failure"
-  MISTAKE_DETAILS=$(echo "$TOOL_RESULT" | grep -B2 -A3 -iE "fatal:|error:|failed" | head -15)
+  MISTAKE_DETAILS=$(echo "$TOOL_RESULT" | grep -vE '^\s*"' | grep -B2 -A3 -iE "fatal:|error:|failed" | head -15)
 fi
 
 # Pattern 8: Missing cleanup after successful operations (MEDIUM)
