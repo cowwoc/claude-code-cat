@@ -1067,7 +1067,6 @@ git add .planning/ROADMAP.md
 |------|-------------|---------|
 | `feature` | New feature, endpoint, component, functionality | feature: create user registration endpoint |
 | `bugfix` | Bug fix, error correction | bugfix: correct email validation regex |
-| `fix` | Quick fix, minor correction (alias for bugfix) | fix: correct typo in error message |
 | `test` | Test-only changes (TDD RED phase) | test: add failing test for password hashing |
 | `refactor` | Code cleanup, no behavior change (TDD REFACTOR phase) | refactor: extract validation to helper |
 | `performance` | Performance improvement | performance: add database index for user lookups |
