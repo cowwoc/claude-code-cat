@@ -599,6 +599,38 @@ These are normal gates, not errors.
 - Document them as normal flow, separate from deviations
   </authentication_gates>
 
+<user_initiated_plan_changes>
+
+## Handling User Feedback That Changes the Plan
+
+**When user feedback during execution changes the plan design:**
+
+User questions like "Why are we doing X?" or "Isn't Y redundant?" often signal plan improvements.
+
+**Protocol:**
+
+1. **Acknowledge the feedback**: "You're right, that's a valid point."
+
+2. **Explicitly announce the plan change**:
+   ```
+   Based on your feedback, I'm modifying the plan:
+
+   **Before**: [original approach]
+   **After**: [new approach]
+   **Reason**: [user's insight]
+   ```
+
+3. **Update the PLAN.md file immediately** to reflect the change
+
+4. **Continue execution** with the modified plan
+
+**Why this matters:**
+- User should always know what's being implemented vs. what was planned
+- Plan document should be source of truth (not conversation history)
+- Prevents confusion about actual deliverables
+
+</user_initiated_plan_changes>
+
 <deviation_rules>
 
 ## Automatic Deviation Handling
@@ -910,6 +942,57 @@ After TDD plan completion, ensure:
 
 See `~/.claude/cat/references/tdd.md` for TDD plan structure.
 </tdd_plan_execution>
+
+<pre_commit_review>
+
+## Pre-Commit Review Checkpoint
+
+**Before committing implementation work, offer user the opportunity to review.**
+
+**Protocol:**
+
+After tasks complete but BEFORE committing:
+
+```
+## Implementation Complete
+
+**Files modified:**
+- path/to/file1.java - [brief description]
+- path/to/file2.java - [brief description]
+
+**Key changes:**
+- [Change 1]
+- [Change 2]
+
+Would you like to review the implementation before I commit?
+```
+
+Use AskUserQuestion:
+- header: "Review"
+- question: "Review implementation before commit?"
+- options:
+  - "Commit now" - Proceed with commit
+  - "Show changes" - Display diffs for review
+  - "Show specific file" - Let user specify which file
+
+**If user selects "Show changes":**
+- Run `git diff` for modified files
+- Wait for user feedback
+- Address any concerns before committing
+
+**If user selects "Commit now":**
+- Proceed to task_commit protocol
+
+**In YOLO mode:**
+- Skip this checkpoint, commit directly
+- Note: `⚡ Auto-committed (yolo mode)`
+
+**Why this matters:**
+- User maintains oversight of code entering repository
+- Catches issues before they're committed
+- Collaborative workflow, not autonomous
+
+</pre_commit_review>
 
 <task_commit>
 ## Task Commit Protocol
