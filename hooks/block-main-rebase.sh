@@ -20,6 +20,12 @@ trap 'echo "ERROR in block-main-rebase.sh at line $LINENO: Command failed: $BASH
 # - Rebasing on feature branches (for squashing before merge)
 # - Any non-rebase git operations on main
 
+# Require CLAUDE_PROJECT_DIR
+if [[ -z "${CLAUDE_PROJECT_DIR:-}" ]]; then
+    echo "ERROR: CLAUDE_PROJECT_DIR not set" >&2
+    exit 1
+fi
+
 # Read JSON from stdin with timeout to prevent hanging
 JSON_INPUT=""
 if [ -t 0 ]; then

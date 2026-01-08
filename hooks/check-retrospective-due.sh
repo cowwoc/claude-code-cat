@@ -8,9 +8,11 @@ set -euo pipefail
 
 trap 'echo "ERROR in check-retrospective-due.sh at line $LINENO: $BASH_COMMAND" >&2; exit 1' ERR
 
-# Use CLAUDE_PROJECT_DIR for project files, CLAUDE_PLUGIN_ROOT for plugin files
-# CLAUDE_PROJECT_DIR = absolute path to project root
-# CLAUDE_PLUGIN_ROOT = absolute path to plugin installation
+# Require CLAUDE_PROJECT_DIR
+if [[ -z "${CLAUDE_PROJECT_DIR:-}" ]]; then
+    echo "ERROR: CLAUDE_PROJECT_DIR not set" >&2
+    exit 1
+fi
 
 # Early exit if not in a CAT project (no .planning directory)
 if [[ ! -d "${CLAUDE_PROJECT_DIR}/.planning" ]]; then

@@ -6,8 +6,14 @@
 set -euo pipefail
 trap 'echo "ERROR in session-unlock.sh at line $LINENO: Command failed: $BASH_COMMAND" >&2; exit 1' ERR
 
+# Require CLAUDE_PROJECT_DIR
+if [[ -z "${CLAUDE_PROJECT_DIR:-}" ]]; then
+    echo "ERROR: CLAUDE_PROJECT_DIR not set" >&2
+    exit 1
+fi
+
 # Configuration (must match session-lock.sh)
-LOCK_DIR="${LOCK_DIR:-.claude/locks}"
+LOCK_DIR="${CLAUDE_PROJECT_DIR}/.claude/locks"
 PROJECT_NAME="${PWD##*/}"
 LOCK_FILE="$LOCK_DIR/${PROJECT_NAME}.lock"
 

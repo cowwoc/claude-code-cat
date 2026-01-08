@@ -17,7 +17,7 @@ description: Analyze mistakes, identify root causes, and implement prevention
 
 ## Root Cause Analysis Framework
 
-### Step 0: Verify Event Sequence (MANDATORY)
+### Step 1: Verify Event Sequence (MANDATORY)
 
 **BEFORE any analysis**, invoke `get-history` skill to access the raw conversation log.
 
@@ -37,7 +37,7 @@ cat /home/node/.config/projects/-workspace/${SESSION_ID}.jsonl | jq -r 'select(.
 - Who initiated changes (user feedback vs. code discovery)
 - What was actually said/done vs. what is remembered
 
-### Step 1: Document the Mistake
+### Step 2: Document the Mistake
 
 ```markdown
 **What happened**: [Describe the error]
@@ -46,7 +46,7 @@ cat /home/node/.config/projects/-workspace/${SESSION_ID}.jsonl | jq -r 'select(.
 **How discovered**: [How was it caught]
 ```
 
-### Step 2: Ask "Why" 5 Times
+### Step 3: Ask "Why" 5 Times
 
 ```markdown
 1. Why did this happen?
@@ -65,7 +65,7 @@ cat /home/node/.config/projects/-workspace/${SESSION_ID}.jsonl | jq -r 'select(.
    → [Root cause]
 ```
 
-### Step 3: Identify Prevention
+### Step 4: Identify Prevention
 
 Choose the most effective prevention (prefer earlier options):
 
@@ -111,6 +111,17 @@ Choose the most effective prevention (prefer earlier options):
 
 ## Implementation Checklist
 
+**MANDATORY EXECUTION ORDER** (no exceptions):
+
+1. Identify mistake and root cause (Steps 1-3)
+2. Identify prevention approach (Step 4)
+3. **Implement the prevention** (code/hook/validation/doc)
+4. **Verify prevention works** (test the fix, confirm hook blocks, etc.)
+5. Log to mistakes.json (Step 5)
+6. **ONLY THEN** return to original task
+
+**DO NOT** offer to continue with original work until prevention is fully implemented and verified.
+
 After identifying prevention:
 
 - [ ] Implement the fix (code/hook/validation/doc)
@@ -136,7 +147,7 @@ After identifying prevention:
 **Symptom**: Error not caught, causes later confusion
 **Fix**: Add verification step with clear error message
 
-## Step 4: Log to Retrospectives (MANDATORY)
+## Step 5: Log to Retrospectives (MANDATORY)
 
 **AFTER implementing prevention**, log the mistake to `${CLAUDE_PROJECT_DIR}/.claude/retrospectives/mistakes.json`.
 
@@ -175,10 +186,10 @@ logical_error, git_operation_failure, giving_up, documentation_violation, other
 
 ## Success Criteria
 
-- [ ] Event sequence verified via get-history (Step 0)
+- [ ] Event sequence verified via get-history (Step 1)
 - [ ] Mistake documented with context
 - [ ] Root cause identified (not just symptom)
 - [ ] Prevention implemented at appropriate level
 - [ ] Prevention tested and verified
-- [ ] Mistake logged to retrospectives/mistakes.json (Step 4)
+- [ ] Mistake logged to retrospectives/mistakes.json (Step 5)
 - [ ] Same mistake won't happen again
