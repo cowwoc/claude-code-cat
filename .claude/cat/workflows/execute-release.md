@@ -1094,18 +1094,19 @@ Use AskUserQuestion:
 - Address any concerns before merging
 
 **If user selects "Approve and merge":**
-- Merge to main: `git checkout main && git merge --no-ff change/{slug}`
+- Rebase onto main for linear history: `git rebase main`
+- Fast-forward merge: `git checkout main && git merge --ff-only change/{slug}`
 - Delete branch: `git branch -d change/{slug}`
 
 **In YOLO mode:**
-- Skip this checkpoint, merge directly
+- Skip this checkpoint, merge directly with ff-only
 - Note: `⚡ Auto-merged (yolo mode)`
 
-**Why this matters:**
-- User maintains oversight of code entering main
-- Clear branch and commit history for review
-- Each commit type reviewable independently
-- Collaborative workflow, not autonomous
+**Why linear history (no merge commits):**
+- Clean, readable git log without merge noise
+- Each commit stands alone with full context
+- Easier bisect, revert, and cherry-pick operations
+- Commit order reflects dependency order
 
 </pre_commit_review>
 

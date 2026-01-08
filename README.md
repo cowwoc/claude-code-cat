@@ -1,4 +1,4 @@
-# CAT
+# <img src="docs/cat-logo.svg" height="36" alt="CAT logo"> CAT
 
 A Claude Code plugin for specification-driven development with quality gates.
 
