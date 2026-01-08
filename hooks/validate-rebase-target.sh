@@ -30,7 +30,7 @@ else
 fi
 
 # Source JSON parsing library
-source "$CLAUDE_PROJECT_DIR/.claude/hooks/lib/json-parser.sh"
+source "${CLAUDE_PROJECT_DIR}/.claude/hooks/lib/json-parser.sh"
 
 # Extract tool name and command from JSON
 TOOL_NAME=$(extract_json_value "$JSON_INPUT" "tool_name")

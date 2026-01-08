@@ -29,7 +29,7 @@ if [[ -z "${CLAUDE_PROJECT_DIR:-}" ]]; then
   exit 1
 fi
 
-PROJECT_DIR="$CLAUDE_PROJECT_DIR"
+PROJECT_DIR="${CLAUDE_PROJECT_DIR}"
 WORKTREES_DIR="${PROJECT_DIR}/.worktrees"
 
 # Extract identifiers from plan path (e.g., .planning/phases/02-auth/02-01-setup-jwt-PLAN.md)

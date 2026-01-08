@@ -29,7 +29,7 @@ else
 fi
 
 # Source JSON parsing library
-source "$CLAUDE_PROJECT_DIR/.claude/hooks/lib/json-parser.sh"
+source "${CLAUDE_PROJECT_DIR}/.claude/hooks/lib/json-parser.sh"
 
 # Source helper for proper hook blocking
 source /workspace/.claude/scripts/json-output.sh

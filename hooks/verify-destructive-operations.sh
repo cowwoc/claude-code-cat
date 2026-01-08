@@ -30,7 +30,7 @@ if [[ -z "$JSON_INPUT" ]]; then
 fi
 
 # Source JSON parsing library
-source "$CLAUDE_PROJECT_DIR/.claude/hooks/lib/json-parser.sh"
+source "${CLAUDE_PROJECT_DIR}/.claude/hooks/lib/json-parser.sh"
 
 # Parse all common fields at once
 parse_hook_json "$JSON_INPUT"

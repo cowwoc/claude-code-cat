@@ -57,6 +57,26 @@ EOF
   exit 0
 fi
 
+# Warn about git filter-branch usage (deprecated, use git-filter-repo instead)
+if echo "$COMMAND" | grep -qE '(^|;|&&|\|)\s*git\s+filter-branch'; then
+  cat >&2 <<EOF
+⚠️  WARNING: git filter-branch is DEPRECATED
+
+**Recommended**: Use git-filter-repo instead (faster, safer, maintained)
+
+  ❌ DEPRECATED:
+  git filter-branch --index-filter 'git rm --cached file' HEAD
+
+  ✅ MODERN:
+  git filter-repo --path file --invert-paths
+
+**Install**: pip install git-filter-repo
+**Skill**: /cat:git-rewrite-history
+
+Proceeding with filter-branch (not blocked, but not recommended)...
+EOF
+fi
+
 # Allow command
 echo "{}"
 exit 0
