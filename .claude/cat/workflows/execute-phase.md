@@ -1067,12 +1067,15 @@ git add .planning/ROADMAP.md
 |------|-------------|---------|
 | `feature` | New feature, endpoint, component, functionality | feature: create user registration endpoint |
 | `bugfix` | Bug fix, error correction | bugfix: correct email validation regex |
+| `fix` | Quick fix, minor correction (alias for bugfix) | fix: correct typo in error message |
 | `test` | Test-only changes (TDD RED phase) | test: add failing test for password hashing |
 | `refactor` | Code cleanup, no behavior change (TDD REFACTOR phase) | refactor: extract validation to helper |
 | `performance` | Performance improvement | performance: add database index for user lookups |
 | `docs` | Documentation changes | docs: add API endpoint documentation |
 | `style` | Formatting, linting fixes | style: format auth module |
 | `config` | Config, tooling, dependencies | config: add bcrypt dependency |
+| `planning` | Planning system updates (ROADMAP, STATE, phases) | planning: add Phase 5 action items |
+| `retrospective` | Retrospective analysis and action items | retrospective: R002 analysis with 3 new patterns |
 
 **4. Craft commit message:**
 
