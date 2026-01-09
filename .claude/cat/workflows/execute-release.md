@@ -77,24 +77,54 @@ echo "Execution lock acquired: $LOCK_FILE"
 </step>
 
 <step name="identify_plan">
-Find the next change to execute:
-- Check roadmap for "In progress" release
-- Find changes in that release directory
-- Identify first change without corresponding SUMMARY
+Find the next change to execute by scanning releases sequentially and verifying STATUS markers.
+
+**Step 1: Scan actual files to determine release completion status**
 
 ```bash
-cat .planning/ROADMAP.md
-# Look for release with "In progress" status
-# Then find changes in that release
-ls .planning/releases/XX-name/*-CHANGE.md 2>/dev/null | sort
-ls .planning/releases/XX-name/*-SUMMARY.md 2>/dev/null | sort
+# For each release, check if all CHANGEs have SUMMARYs
+for release_dir in $(ls -d .planning/releases/*/ 2>/dev/null | sort -V); do
+    release_name=$(basename "$release_dir")
+    change_count=$(ls "$release_dir"*-CHANGE.md 2>/dev/null | wc -l || echo 0)
+    summary_count=$(ls "$release_dir"*-SUMMARY.md 2>/dev/null | wc -l || echo 0)
+
+    if [[ "$change_count" -gt 0 && "$change_count" -eq "$summary_count" ]]; then
+        echo "$release_name: COMPLETE ($change_count/$change_count)"
+    elif [[ "$change_count" -gt 0 ]]; then
+        echo "$release_name: IN PROGRESS ($summary_count/$change_count)"
+    fi
+done
+```
+
+**Step 2: Verify STATUS markers match actual state**
+
+Compare the scan results with STATUS markers in STATE.md. If mismatch found:
+
+- Release shows "Complete" but has incomplete CHANGEs → Re-open it
+- Release shows "In Progress" or "Next" but all CHANGEs complete → Mark complete
+
+**Correct mismatches immediately** before proceeding. This keeps STATUS markers authoritative.
+
+**Step 3: Find first incomplete CHANGE**
+
+```bash
+# Find first CHANGE without SUMMARY
+for release_dir in $(ls -d .planning/releases/*/ 2>/dev/null | sort -V); do
+    for change_file in $(ls "$release_dir"*-CHANGE.md 2>/dev/null | sort); do
+        summary_file="${change_file%-CHANGE.md}-SUMMARY.md"
+        if [[ ! -f "$summary_file" ]]; then
+            echo "$change_file"
+            break 2
+        fi
+    done
+done
 ```
 
 **Logic:**
 
-- If `01-01-setup-auth-CHANGE.md` exists but `01-01-setup-auth-SUMMARY.md` doesn't → execute 01-01
-- If `01-01-setup-auth-SUMMARY.md` exists but `01-02-*-SUMMARY.md` doesn't → execute 01-02
-- Pattern: Find first CHANGE file without matching SUMMARY file (match by change ID prefix)
+- Scan releases in numerical order (01, 02, 03... or 01, 01.1, 02...)
+- Verify and correct STATUS markers to match actual file state
+- Find first CHANGE without matching SUMMARY - that's the one to execute
 
 **Decimal release handling:**
 

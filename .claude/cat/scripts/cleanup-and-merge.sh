@@ -37,9 +37,9 @@ if [[ -f .cat-execution-context ]]; then
   source .cat-execution-context
 fi
 
-# Handle worktree cleanup if running in parallel instance
+# Handle worktree cleanup (all instances use worktrees for isolation)
 if [[ -n "${WORKTREE_PATH:-}" ]]; then
-  echo "Merging parallel work from worktree..."
+  echo "Merging work from worktree..."
 
   # Go to main project
   cd "$MAIN_PROJECT"

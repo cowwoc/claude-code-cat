@@ -1,6 +1,6 @@
 #!/bin/bash
 # CAT Worktree Setup Script
-# Creates worktrees for parallel Claude instances using deterministic naming
+# Creates worktrees for ALL Claude instances (even single instance) for isolation
 #
 # Usage: source scripts/worktree-setup.sh <CHANGE_PATH> [SESSION_ID]
 # Output: Sets EXECUTION_DIR variable for where to run commands
@@ -65,32 +65,36 @@ WORKTREE_PATH="${WORKTREES_DIR}/${WORKTREE_ID}"
 RELEASE_BRANCH="release/${RELEASE_NUM}-${RELEASE_NAME}"
 WORKTREE_BRANCH="${RELEASE_BRANCH}/${WORKTREE_ID}"
 
-# Check for active execution in main directory (general lock file)
-if [[ -f "$LOCK_FILE" ]]; then
-  LOCK_SESSION=$(cat "$LOCK_FILE")
-  echo "Another instance active (session: $LOCK_SESSION), creating worktree..."
+# Always work in a worktree for isolation (even single instance)
+echo "Creating worktree for change $CHANGE_ID..."
 
-  # Ensure worktrees directory exists and is gitignored
-  mkdir -p "$WORKTREES_DIR"
-  if ! grep -qxF '.worktrees/' "${PROJECT_DIR}/.gitignore" 2>/dev/null; then
-    echo '.worktrees/' >> "${PROJECT_DIR}/.gitignore"
-    echo "Added .worktrees/ to .gitignore"
-  fi
+# Ensure worktrees directory exists and is gitignored
+mkdir -p "$WORKTREES_DIR"
+if ! grep -qxF '.worktrees/' "${PROJECT_DIR}/.gitignore" 2>/dev/null; then
+  echo '.worktrees/' >> "${PROJECT_DIR}/.gitignore"
+  echo "Added .worktrees/ to .gitignore"
+fi
 
-  # Try to create worktree with deterministic name
-  if ! git worktree add "$WORKTREE_PATH" -b "$WORKTREE_BRANCH" 2>/dev/null; then
-    echo "ERROR: Worktree $WORKTREE_PATH already exists or branch $WORKTREE_BRANCH exists"
-    echo "Another instance may already be working on this change."
-    # Clean up change lock since we're failing
-    rm -f "$CHANGE_LOCK_FILE"
-    exit 1
-  fi
+# Ensure release branch exists (create from main/current if needed)
+if ! git show-ref --verify --quiet "refs/heads/$RELEASE_BRANCH"; then
+  git branch "$RELEASE_BRANCH"
+  echo "Created release branch: $RELEASE_BRANCH"
+fi
 
-  # Move change lock to worktree
-  mv "$CHANGE_LOCK_FILE" "$WORKTREE_PATH/$CHANGE_LOCK_FILE"
+# Try to create worktree with deterministic name, based on release branch
+if ! git worktree add "$WORKTREE_PATH" -b "$WORKTREE_BRANCH" "$RELEASE_BRANCH" 2>/dev/null; then
+  echo "ERROR: Worktree $WORKTREE_PATH already exists or branch $WORKTREE_BRANCH exists"
+  echo "Another instance may already be working on this change."
+  # Clean up change lock since we're failing
+  rm -f "$CHANGE_LOCK_FILE"
+  exit 1
+fi
 
-  # Record context for cleanup
-  cat > "$WORKTREE_PATH/.cat-execution-context" <<EOF
+# Move change lock to worktree
+mv "$CHANGE_LOCK_FILE" "$WORKTREE_PATH/$CHANGE_LOCK_FILE"
+
+# Record context for cleanup
+cat > "$WORKTREE_PATH/.cat-execution-context" <<EOF
 WORKTREE_PATH=$WORKTREE_PATH
 WORKTREE_BRANCH=$WORKTREE_BRANCH
 MAIN_PROJECT=$PROJECT_DIR
@@ -99,34 +103,11 @@ CHANGE_ID=$CHANGE_ID
 SESSION_ID=$SESSION_ID
 EOF
 
-  # Create general lock in worktree
-  echo "$SESSION_ID" > "$WORKTREE_PATH/$LOCK_FILE"
+# Create general lock in worktree
+echo "$SESSION_ID" > "$WORKTREE_PATH/$LOCK_FILE"
 
-  echo "Created worktree at: $WORKTREE_PATH"
-  EXECUTION_DIR="$WORKTREE_PATH"
-else
-  # First instance - work in main directory, create lock
-  echo "$SESSION_ID" > "$LOCK_FILE"
-
-  # Create/switch to release branch
-  CURRENT_BRANCH=$(git branch --show-current)
-
-  if [[ "$CURRENT_BRANCH" != "$RELEASE_BRANCH" ]]; then
-    if git show-ref --verify --quiet "refs/heads/$RELEASE_BRANCH"; then
-      git checkout "$RELEASE_BRANCH"
-    else
-      git checkout -b "$RELEASE_BRANCH"
-    fi
-  fi
-
-  cat > .cat-execution-context <<EOF
-RELEASE_BRANCH=$RELEASE_BRANCH
-CHANGE_ID=$CHANGE_ID
-SESSION_ID=$SESSION_ID
-EOF
-
-  EXECUTION_DIR="$PROJECT_DIR"
-fi
+echo "Created worktree at: $WORKTREE_PATH"
+EXECUTION_DIR="$WORKTREE_PATH"
 
 echo "EXECUTION_DIR=$EXECUTION_DIR"
 echo "Change $CHANGE_ID locked by session: $SESSION_ID"
