@@ -429,6 +429,41 @@ This ensures every CHANGE.md gets optimal context automatically assembled via de
 For multi-change releases: each change has focused scope, references previous change summaries (via frontmatter selection), last change's success criteria includes "Release X complete".
 </step>
 
+<step name="update_markers">
+Update STATUS markers to reflect new changes:
+
+**1. Update ROADMAP.md task count:**
+
+Find the release line and update the task count:
+```bash
+# Count CHANGE files in the release directory
+CHANGE_COUNT=$(ls .planning/releases/${RELEASE}-*/*-CHANGE.md 2>/dev/null | wc -l)
+
+# Update ROADMAP.md: "Release X: Name (N tasks)" → "Release X: Name (${CHANGE_COUNT} tasks)"
+```
+
+**2. Update STATE.md release status (if needed):**
+
+If the release was marked "Complete" but now has new incomplete changes:
+- Change `✅ Complete` → `🔄 In Progress`
+- Update task count column
+
+```bash
+# Check if release is marked Complete in STATE.md
+if grep -q "| ${RELEASE} |.*Complete" .planning/STATE.md; then
+    # Re-open: Change Complete → In Progress
+    # Update task count
+fi
+```
+
+**3. Stage marker files:**
+```bash
+git add .planning/ROADMAP.md .planning/STATE.md
+```
+
+This ensures STATUS markers stay synchronized with actual CHANGE files.
+</step>
+
 <step name="git_commit">
 Commit release change(s):
 
