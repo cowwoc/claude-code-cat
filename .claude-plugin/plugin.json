@@ -6,6 +6,5 @@
     "name": "cowwoc"
   },
   "repository": "https://github.com/cowwoc/claude-code-cat",
-  "license": "MIT",
-  "hooks": "./hooks/hooks.json"
+  "license": "MIT"
 }
