@@ -2,6 +2,28 @@
 Execute a release prompt (CHANGE.md) and create the outcome summary (SUMMARY.md).
 </purpose>
 
+<mandatory_subagent_usage>
+## CRITICAL: Subagent Usage is MANDATORY for Quality
+
+**This is a QUALITY requirement, NOT optional optimization.**
+
+Executing change tasks in the main context causes quality degradation as context accumulates. Fresh
+subagent context (200k tokens, 0% used) provides peak performance for autonomous work.
+
+**Evidence**: Quality degrades in main context due to:
+- Accumulated context reduces attention to new information
+- More likely to miss protocol steps, user messages, TDD requirements
+- Errors compound as context fills
+
+**Enforcement**:
+- Pattern A (no checkpoints) → MUST spawn subagent for entire change
+- Pattern B (verify checkpoints) → MUST spawn subagent for each autonomous segment
+- Pattern C (decision checkpoints) → Execute in main (decisions affect subsequent tasks)
+
+**NEVER execute autonomous tasks in main context.** The only exception is Pattern C where checkpoint
+decisions directly affect following task parameters.
+</mandatory_subagent_usage>
+
 <required_reading>
 Read STATE.md before any operation to load project context.
 </required_reading>
@@ -498,9 +520,32 @@ Execute each task in the prompt. **Deviations are normal** - handle them automat
 
    **If `type="auto"`:**
 
+   **MANDATORY TDD Gate (testable changes):**
+
+   Before implementing ANY fix or feature, check if TDD applies:
+
+   ```
+   TDD REQUIRED when ALL conditions are true:
+   1. Change involves fixing a bug OR adding testable behavior
+   2. Behavior can be expressed as: expect(fn(input)).toBe(output)
+
+   TDD WORKFLOW (MUST follow in order):
+   1. RED: Write test(s) that capture the expected behavior
+   2. RUN: Execute test - it MUST FAIL (proves test captures the issue)
+   3. GREEN: Implement the fix/feature
+   4. RUN: Execute test - it MUST PASS
+   5. VERIFY: Test against ORIGINAL use-case that exposed the problem
+      - If original still fails: test didn't capture real bug → back to RED
+   6. REFACTOR: Clean up if needed (tests must still pass)
+
+   SKIP TDD for: UI/config changes, glue code, exploratory work
+   ```
+
+   **If TDD applies**: Invoke `tdd-implementation` skill BEFORE writing any production code.
+
    **Before executing:** Check if task has `tdd="true"` attribute:
    - If yes: Follow TDD execution flow (see `<tdd_execution>`) - RED → GREEN → REFACTOR cycle with atomic commits per stage
-   - If no: Standard implementation
+   - If no but TDD gate applies (see above): Follow TDD workflow anyway
 
    - Work toward task completion
    - **If CLI/API returns authentication error:** Handle as authentication gate (see below)
