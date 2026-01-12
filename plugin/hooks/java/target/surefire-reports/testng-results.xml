@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results ignored="0" total="11" passed="11" failed="0" skipped="0">
+  <reporter-output>
+  </reporter-output>
+  <suite started-at="2026-01-29T12:54:54 UTC" name="Surefire suite" finished-at="2026-01-29T12:54:54 UTC" duration-ms="278">
+    <groups>
+    </groups>
+    <test started-at="2026-01-29T12:54:54 UTC" name="Surefire test" finished-at="2026-01-29T12:54:54 UTC" duration-ms="278">
+      <class name="io.github.cowwoc.cat.hooks.test.HookEntryPointTest">
+        <test-method signature="getBashPosttoolReturnsEmptyJsonForNonBashTool()[pri:0, instance:io.github.cowwoc.cat.hooks.test.HookEntryPointTest@5b12b668]" started-at="2026-01-29T12:54:54 UTC" name="getBashPosttoolReturnsEmptyJsonForNonBashTool" finished-at="2026-01-29T12:54:54 UTC" duration-ms="187" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getBashPosttoolReturnsEmptyJsonForNonBashTool -->
+        <test-method signature="getBashPretoolReturnsEmptyJsonForNonBashTool()[pri:0, instance:io.github.cowwoc.cat.hooks.test.HookEntryPointTest@5b12b668]" started-at="2026-01-29T12:54:54 UTC" name="getBashPretoolReturnsEmptyJsonForNonBashTool" finished-at="2026-01-29T12:54:54 UTC" duration-ms="5" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getBashPretoolReturnsEmptyJsonForNonBashTool -->
+        <test-method signature="getBashPretoolReturnsEmptyJsonWhenNoCommand()[pri:0, instance:io.github.cowwoc.cat.hooks.test.HookEntryPointTest@5b12b668]" started-at="2026-01-29T12:54:54 UTC" name="getBashPretoolReturnsEmptyJsonWhenNoCommand" finished-at="2026-01-29T12:54:54 UTC" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getBashPretoolReturnsEmptyJsonWhenNoCommand -->
+        <test-method signature="getBashPretoolReturnsEmptyJsonWithCommand()[pri:0, instance:io.github.cowwoc.cat.hooks.test.HookEntryPointTest@5b12b668]" started-at="2026-01-29T12:54:54 UTC" name="getBashPretoolReturnsEmptyJsonWithCommand" finished-at="2026-01-29T12:54:54 UTC" duration-ms="3" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getBashPretoolReturnsEmptyJsonWithCommand -->
+        <test-method signature="getPosttoolReturnsEmptyJsonForEmptyInput()[pri:0, instance:io.github.cowwoc.cat.hooks.test.HookEntryPointTest@5b12b668]" started-at="2026-01-29T12:54:54 UTC" name="getPosttoolReturnsEmptyJsonForEmptyInput" finished-at="2026-01-29T12:54:54 UTC" duration-ms="3" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getPosttoolReturnsEmptyJsonForEmptyInput -->
+        <test-method signature="getPosttoolReturnsEmptyJsonWithToolName()[pri:0, instance:io.github.cowwoc.cat.hooks.test.HookEntryPointTest@5b12b668]" started-at="2026-01-29T12:54:54 UTC" name="getPosttoolReturnsEmptyJsonWithToolName" finished-at="2026-01-29T12:54:54 UTC" duration-ms="4" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getPosttoolReturnsEmptyJsonWithToolName -->
+        <test-method signature="getReadPosttoolReturnsEmptyJsonForGrepTool()[pri:0, instance:io.github.cowwoc.cat.hooks.test.HookEntryPointTest@5b12b668]" started-at="2026-01-29T12:54:54 UTC" name="getReadPosttoolReturnsEmptyJsonForGrepTool" finished-at="2026-01-29T12:54:54 UTC" duration-ms="20" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getReadPosttoolReturnsEmptyJsonForGrepTool -->
+        <test-method signature="getReadPretoolReturnsEmptyJsonForReadTool()[pri:0, instance:io.github.cowwoc.cat.hooks.test.HookEntryPointTest@5b12b668]" started-at="2026-01-29T12:54:54 UTC" name="getReadPretoolReturnsEmptyJsonForReadTool" finished-at="2026-01-29T12:54:54 UTC" duration-ms="4" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getReadPretoolReturnsEmptyJsonForReadTool -->
+        <test-method signature="getReadPretoolReturnsEmptyJsonForUnsupportedTool()[pri:0, instance:io.github.cowwoc.cat.hooks.test.HookEntryPointTest@5b12b668]" started-at="2026-01-29T12:54:54 UTC" name="getReadPretoolReturnsEmptyJsonForUnsupportedTool" finished-at="2026-01-29T12:54:54 UTC" duration-ms="2" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getReadPretoolReturnsEmptyJsonForUnsupportedTool -->
+        <test-method signature="getSkillOutputReturnsEmptyJsonForEmptyInput()[pri:0, instance:io.github.cowwoc.cat.hooks.test.HookEntryPointTest@5b12b668]" started-at="2026-01-29T12:54:54 UTC" name="getSkillOutputReturnsEmptyJsonForEmptyInput" finished-at="2026-01-29T12:54:54 UTC" duration-ms="4" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getSkillOutputReturnsEmptyJsonForEmptyInput -->
+        <test-method signature="getSkillOutputReturnsEmptyJsonWhenNoMessage()[pri:0, instance:io.github.cowwoc.cat.hooks.test.HookEntryPointTest@5b12b668]" started-at="2026-01-29T12:54:54 UTC" name="getSkillOutputReturnsEmptyJsonWhenNoMessage" finished-at="2026-01-29T12:54:54 UTC" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getSkillOutputReturnsEmptyJsonWhenNoMessage -->
+      </class> <!-- io.github.cowwoc.cat.hooks.test.HookEntryPointTest -->
+    </test> <!-- Surefire test -->
+  </suite> <!-- Surefire suite -->
+</testng-results>

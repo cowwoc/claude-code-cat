@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="io.github.cowwoc.cat.hooks.test.HookEntryPointTest" time="0.787" tests="11" errors="0" skipped="0" failures="0">
+  <properties>
+    <property name="java.specification.version" value="25"/>
+    <property name="sun.jnu.encoding" value="ANSI_X3.4-1968"/>
+    <property name="java.class.path" value="/workspace/plugin/hooks/java/target/test-classes:/workspace/plugin/hooks/java/target/classes:/home/node/.m2/repository/tools/jackson/core/jackson-databind/3.0.3/jackson-databind-3.0.3.jar:/home/node/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.20/jackson-annotations-2.20.jar:/home/node/.m2/repository/tools/jackson/core/jackson-core/3.0.3/jackson-core-3.0.3.jar:/home/node/.m2/repository/org/testng/testng/7.10.2/testng-7.10.2.jar:/home/node/.m2/repository/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar:/home/node/.m2/repository/com/beust/jcommander/1.82/jcommander-1.82.jar:/home/node/.m2/repository/org/webjars/jquery/3.7.1/jquery-3.7.1.jar:/home/node/.m2/repository/ch/qos/logback/logback-classic/1.2.13/logback-classic-1.2.13.jar:/home/node/.m2/repository/ch/qos/logback/logback-core/1.2.13/logback-core-1.2.13.jar:/home/node/.m2/repository/io/github/cowwoc/requirements/requirements-java/13.2/requirements-java-13.2.jar:/home/node/.m2/repository/io/github/cowwoc/requirements/requirements-annotation/13.2/requirements-annotation-13.2.jar:/home/node/.m2/repository/io/github/java-diff-utils/java-diff-utils/4.16/java-diff-utils-4.16.jar:/home/node/.m2/repository/io/github/cowwoc/pouch/pouch-core/10.3/pouch-core-10.3.jar:"/>
+    <property name="java.vm.vendor" value="Azul Systems, Inc."/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.vendor.url" value="http://www.azul.com/"/>
+    <property name="user.timezone" value="Etc/UTC"/>
+    <property name="os.name" value="Linux"/>
+    <property name="java.vm.specification.version" value="25"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="user.country" value="US"/>
+    <property name="sun.boot.library.path" value="/home/node/.sdkman/candidates/java/25-zulu/lib"/>
+    <property name="sun.java.command" value="/workspace/plugin/hooks/java/target/surefire/surefirebooter-20260129125454071_3.jar /workspace/plugin/hooks/java/target/surefire 2026-01-29T12-54-53_970-jvmRun1 surefire-20260129125454071_1tmp surefire_0-20260129125454071_2tmp"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="surefire.test.class.path" value="/workspace/plugin/hooks/java/target/test-classes:/workspace/plugin/hooks/java/target/classes:/home/node/.m2/repository/tools/jackson/core/jackson-databind/3.0.3/jackson-databind-3.0.3.jar:/home/node/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.20/jackson-annotations-2.20.jar:/home/node/.m2/repository/tools/jackson/core/jackson-core/3.0.3/jackson-core-3.0.3.jar:/home/node/.m2/repository/org/testng/testng/7.10.2/testng-7.10.2.jar:/home/node/.m2/repository/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar:/home/node/.m2/repository/com/beust/jcommander/1.82/jcommander-1.82.jar:/home/node/.m2/repository/org/webjars/jquery/3.7.1/jquery-3.7.1.jar:/home/node/.m2/repository/ch/qos/logback/logback-classic/1.2.13/logback-classic-1.2.13.jar:/home/node/.m2/repository/ch/qos/logback/logback-core/1.2.13/logback-core-1.2.13.jar:/home/node/.m2/repository/io/github/cowwoc/requirements/requirements-java/13.2/requirements-java-13.2.jar:/home/node/.m2/repository/io/github/cowwoc/requirements/requirements-annotation/13.2/requirements-annotation-13.2.jar:/home/node/.m2/repository/io/github/java-diff-utils/java-diff-utils/4.16/java-diff-utils-4.16.jar:/home/node/.m2/repository/io/github/cowwoc/pouch/pouch-core/10.3/pouch-core-10.3.jar:"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="/home/node"/>
+    <property name="user.language" value="en"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.version.date" value="2025-09-16"/>
+    <property name="java.home" value="/home/node/.sdkman/candidates/java/25-zulu"/>
+    <property name="file.separator" value="/"/>
+    <property name="basedir" value="/workspace/plugin/hooks/java"/>
+    <property name="java.vm.compressedOopsMode" value="Zero based"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="surefire.real.class.path" value="/workspace/plugin/hooks/java/target/surefire/surefirebooter-20260129125454071_3.jar"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="java.runtime.version" value="25+36-LTS"/>
+    <property name="user.name" value="node"/>
+    <property name="stdout.encoding" value="ANSI_X3.4-1968"/>
+    <property name="path.separator" value=":"/>
+    <property name="os.version" value="6.6.87.2-microsoft-standard-WSL2"/>
+    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+    <property name="java.vendor.version" value="Zulu25.28+85-CA"/>
+    <property name="localRepository" value="/home/node/.m2/repository"/>
+    <property name="java.vendor.url.bug" value="http://www.azul.com/support/"/>
+    <property name="java.io.tmpdir" value="/tmp"/>
+    <property name="java.version" value="25"/>
+    <property name="user.dir" value="/workspace/plugin/hooks/java"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="native.encoding" value="ANSI_X3.4-1968"/>
+    <property name="java.library.path" value="/usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib"/>
+    <property name="java.vm.info" value="mixed mode, sharing"/>
+    <property name="stderr.encoding" value="ANSI_X3.4-1968"/>
+    <property name="java.vendor" value="Azul Systems, Inc."/>
+    <property name="java.vm.version" value="25+36-LTS"/>
+    <property name="stdin.encoding" value="ANSI_X3.4-1968"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="java.class.version" value="69.0"/>
+  </properties>
+  <testcase name="getBashPosttoolReturnsEmptyJsonForNonBashTool" classname="io.github.cowwoc.cat.hooks.test.HookEntryPointTest" time="0.186"/>
+  <testcase name="getBashPretoolReturnsEmptyJsonForNonBashTool" classname="io.github.cowwoc.cat.hooks.test.HookEntryPointTest" time="0.003"/>
+  <testcase name="getBashPretoolReturnsEmptyJsonWhenNoCommand" classname="io.github.cowwoc.cat.hooks.test.HookEntryPointTest" time="0.001"/>
+  <testcase name="getBashPretoolReturnsEmptyJsonWithCommand" classname="io.github.cowwoc.cat.hooks.test.HookEntryPointTest" time="0.003"/>
+  <testcase name="getPosttoolReturnsEmptyJsonForEmptyInput" classname="io.github.cowwoc.cat.hooks.test.HookEntryPointTest" time="0.002"/>
+  <testcase name="getPosttoolReturnsEmptyJsonWithToolName" classname="io.github.cowwoc.cat.hooks.test.HookEntryPointTest" time="0.005"/>
+  <testcase name="getReadPosttoolReturnsEmptyJsonForGrepTool" classname="io.github.cowwoc.cat.hooks.test.HookEntryPointTest" time="0.02"/>
+  <testcase name="getReadPretoolReturnsEmptyJsonForReadTool" classname="io.github.cowwoc.cat.hooks.test.HookEntryPointTest" time="0.005"/>
+  <testcase name="getReadPretoolReturnsEmptyJsonForUnsupportedTool" classname="io.github.cowwoc.cat.hooks.test.HookEntryPointTest" time="0.001"/>
+  <testcase name="getSkillOutputReturnsEmptyJsonForEmptyInput" classname="io.github.cowwoc.cat.hooks.test.HookEntryPointTest" time="0.003"/>
+  <testcase name="getSkillOutputReturnsEmptyJsonWhenNoMessage" classname="io.github.cowwoc.cat.hooks.test.HookEntryPointTest" time="0.002"/>
+</testsuite>
