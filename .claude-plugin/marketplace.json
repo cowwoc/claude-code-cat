@@ -1,0 +1,11 @@
+{
+  "name": "claude-code-cat",
+  "owner": { "name": "cowwoc" },
+  "plugins": [
+    {
+      "name": "cat",
+      "source": "./",
+      "description": "Multi-agent orchestration for Git-based projects"
+    }
+  ]
+}
