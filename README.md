@@ -102,7 +102,7 @@ your-project/
         ├── STATE.md            # Major version state & progress
         ├── PLAN.md             # Business-level objectives
         ├── CHANGELOG.md        # What was accomplished
-        └── v1.0/               # Minor version 1.0
+        └── v1.0/               # Version 1.0 (major 1, minor 0)
             ├── STATE.md        # Minor version state
             ├── PLAN.md         # Feature-level plan
             ├── CHANGELOG.md    # Minor changelog
