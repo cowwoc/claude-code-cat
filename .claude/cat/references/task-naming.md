@@ -57,7 +57,7 @@ Branch: 1.0-parse-switch-statements
 
 Tasks must be unique within their minor version:
 ```
-.claude/cat/v1/v1.0/task/parse-tokens/     # OK
-.claude/cat/v1/v1.0/task/parse-tokens/     # CONFLICT
-.claude/cat/v1/v1.1/task/parse-tokens/     # OK (different minor)
+.claude/cat/v1/v1.0/parse-tokens/     # OK
+.claude/cat/v1/v1.0/parse-tokens/     # CONFLICT
+.claude/cat/v1/v1.1/parse-tokens/     # OK (different minor)
 ```

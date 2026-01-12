@@ -70,7 +70,7 @@ The plugin enables a main agent to orchestrate multiple subagents working concur
         ├── STATE.md                        # Minor version state
         ├── PLAN.md                         # Minor version plan (feature-level)
         ├── CHANGELOG.md                    # Minor version changelog
-        └── task/<task-name>/
+        └── <task-name>/
             ├── STATE.md                    # Task state
             ├── PLAN.md                     # Task plan (technical-level)
             └── CHANGELOG.md                # Task changelog
@@ -79,7 +79,7 @@ The plugin enables a main agent to orchestrate multiple subagents working concur
 ### Example Path
 
 ```
-.claude/cat/v1/v1.0/task/parse-switch-statements/STATE.md
+.claude/cat/v1/v1.0/parse-switch-statements/STATE.md
 ```
 
 ### Version Semantics
@@ -720,7 +720,7 @@ All skills, hooks, and scripts from `/workspace/claude-code-cat/` adapted to MAJ
 | Roadmap | `.claude/cat/ROADMAP.md` |
 | Major state | `.claude/cat/v{n}/STATE.md` |
 | Minor state | `.claude/cat/v{n}/v{n}.{m}/STATE.md` |
-| Task state | `.claude/cat/v{n}/v{n}.{m}/task/{name}/STATE.md` |
+| Task state | `.claude/cat/v{n}/v{n}.{m}/{name}/STATE.md` |
 
 ### Command Quick Reference
 

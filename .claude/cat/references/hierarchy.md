@@ -44,7 +44,7 @@ Creating MAJOR vs MINOR is a user decision:
 ## Example Path
 
 ```
-.claude/cat/v1/v1.0/task/parse-switch-statements/STATE.md
+.claude/cat/v1/v1.0/parse-switch-statements/STATE.md
 ```
 
 Components:
