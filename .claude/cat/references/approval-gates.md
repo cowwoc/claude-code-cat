@@ -1,134 +1,66 @@
-# Mandatory Approval Gates
+# Approval Gates
 
-User approval checkpoints at critical transitions.
+## Operating Modes
 
-## Gate Types
+### Interactive Mode (Default)
+Approval required at task completion before merge to main.
 
-### Change Approval Gate
-**When:** After change creation, before execution
-**Required for:** HIGH (mandatory), MEDIUM (mandatory), LOW (optional based on config)
+### Yolo Mode
+All approval gates skipped. Tasks auto-proceed and auto-merge.
 
-**Prompt:**
-```
-════════════════════════════════════════
-APPROVAL REQUIRED: Change Execution
-════════════════════════════════════════
-
-Change: {release}-{change}-CHANGE.md
-Risk Level: {risk_level}
-Reason: {risk_reason}
-
-Tasks: {task_count}
-Files affected: {file_list}
-Estimated scope: {scope_estimate}
-
-Review the change and approve to proceed.
-
-Options:
-- approve: Execute the change as written
-- adjust: Request modifications before execution
-- cancel: Abort this change
-
-════════════════════════════════════════
-```
-
-### Review Approval Gate
-**When:** After agent reviews complete, before marking as done
-**Required for:** HIGH (mandatory), MEDIUM (mandatory), LOW (skip in yolo mode)
-
-**Prompt:**
-```
-════════════════════════════════════════
-APPROVAL REQUIRED: Review Complete
-════════════════════════════════════════
-
-Change: {release}-{change}
-Review Status: {all_pass ? "ALL PASS" : "ISSUES FOUND"}
-
-Agent Results:
-{agent_results_summary}
-
-{if issues}
-Issues to address:
-{issue_list}
-{endif}
-
-Options:
-- approve: Accept changes as reviewed
-- fix: Address issues before approval
-- cancel: Reject changes
-
-════════════════════════════════════════
-```
-
-### Merge Approval Gate
-**When:** Before merging completed work to main branch
-**Required for:** ALL risk levels (can auto-approve LOW in yolo mode)
-
-**Prompt:**
-```
-════════════════════════════════════════
-APPROVAL REQUIRED: Merge to Main
-════════════════════════════════════════
-
-Change: {release}-{change}
-Branch: {feature_branch} → main
-
-Changes:
-- {commit_count} commits
-- {files_changed} files changed
-- {insertions}+ / {deletions}-
-
-Verification: {verification_status}
-Review: {review_status}
-
-Options:
-- merge: Proceed with merge
-- cancel: Keep changes on branch
-
-════════════════════════════════════════
-```
-
-## Gate Behavior by Risk Level
-
-| Gate | HIGH | MEDIUM | LOW (interactive) | LOW (yolo) |
-|------|------|--------|-------------------|------------|
-| Change Approval | Required | Required | Required | Auto-approve |
-| Review Approval | Required | Required | Required | Skip |
-| Merge Approval | Required | Required | Required | Auto-approve |
-
-## Configuration
-
-In `.planning/config.json`:
-
+Enable via `cat-config.json`:
 ```json
 {
-  "gates": {
-    "change_approval": true,
-    "review_approval": true,
-    "merge_approval": true
-  },
-  "auto_approve": {
-    "low_risk_changes": false,
-    "low_risk_reviews": false,
-    "low_risk_merges": false
-  }
+  "yoloMode": true
 }
 ```
 
-## Gate Timeout Behavior
+## Approval Flow (Interactive Mode)
 
-If user doesn't respond within session:
-1. Gate remains pending
-2. State saved to STATE.md
-3. Next session resumes at gate
-4. No automatic progression without approval
-
-## Bypassing Gates (Emergency Only)
-
-Gates can be bypassed with explicit user command:
 ```
-/cat:force-approve {gate_type} --reason "{justification}"
+Task work complete
+        |
+        v
+Squash commits by type
+        |
+        v
+Present to user:
+  - Overview of changes
+  - Branch name for review
+  - Files changed summary
+        |
+        v
+User decision:
+  - Request changes -> iterate
+  - Approve -> merge to main
 ```
 
-Bypass is logged in audit trail with timestamp and reason.
+## Information Presented
+
+At approval gate, user sees:
+
+1. **Summary**: What was accomplished
+2. **Branch**: `{major}.{minor}-{task-name}` for review
+3. **Files Changed**: Count and list of modified files
+4. **Commits**: Squashed commits by type
+5. **Test Results**: Pass/fail status
+
+## User Options
+
+| Action | Result |
+|--------|--------|
+| Approve | Merge to main, cleanup worktrees |
+| Request changes | Return to task execution |
+| Reject | Mark task blocked, escalate |
+
+## Commit Squashing
+
+Before approval, commits are squashed by type:
+- One commit per: `feature`, `bugfix`, `refactor`, `docs`, `test`, `config`
+
+Example result:
+```
+feature: add token tracking to subagent execution
+bugfix: resolve merge conflict in parser module
+refactor: simplify worktree cleanup logic
+```

@@ -1,10 +1,10 @@
 #!/bin/bash
-# Injects session ID at SessionStart (including after compaction)
-# Simplified bash port of ensure-session-id.py
-set -euo pipefail
+# Hook: echo-session-id.sh
+# Trigger: SessionStart
+# Purpose: Inject session ID into context (including after compaction)
 
-# Error handler - output helpful message to stderr on failure
-trap 'echo "ERROR in echo-session-id.sh at line $LINENO: Command failed: $BASH_COMMAND" >&2; exit 1' ERR
+set -euo pipefail
+trap 'echo "ERROR in $(basename "$0") line $LINENO: $BASH_COMMAND" >&2; exit 1' ERR
 
 # Read stdin
 if [ -t 0 ]; then

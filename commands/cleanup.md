@@ -1,4 +1,5 @@
 ---
+name: cat:cleanup
 description: Clean up abandoned worktrees, lock files, and orphaned branches
 allowed-tools:
   - Bash

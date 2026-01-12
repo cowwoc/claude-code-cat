@@ -1,17 +1,16 @@
 {
-  "name": "claude-code-plugin",
-  "version": "1.1.6",
-  "description": "Quality skills and hooks for Claude Code",
+  "name": "claude-code-cat",
+  "version": "2.0.0",
+  "description": "Multi-agent task orchestration with comprehensive planning and quality gates",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cowwoc/claude-code-plugin.git"
+    "url": "https://github.com/cowwoc/claude-code-cat.git"
   },
   "keywords": [
     "claude",
     "claude-code",
-    "ai",
-    "skills",
-    "hooks",
+    "multi-agent",
+    "orchestration",
     "plugin"
   ],
   "author": "cowwoc",

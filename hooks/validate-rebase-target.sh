@@ -21,12 +21,6 @@ trap 'echo "ERROR in validate-rebase-target.sh at line $LINENO: Command failed: 
 # ADDED: 2026-01-07 after agent used origin/main instead of local main
 # when user said "rebase on main"
 
-# Require CLAUDE_PROJECT_DIR
-if [[ -z "${CLAUDE_PROJECT_DIR:-}" ]]; then
-    echo "ERROR: CLAUDE_PROJECT_DIR not set" >&2
-    exit 1
-fi
-
 # Read JSON from stdin with timeout to prevent hanging
 JSON_INPUT=""
 if [ -t 0 ]; then
@@ -36,7 +30,7 @@ else
 fi
 
 # Source JSON parsing library
-source "${CLAUDE_PROJECT_DIR}/.claude/hooks/lib/json-parser.sh"
+source "$CLAUDE_PROJECT_DIR/.claude/hooks/lib/json-parser.sh"
 
 # Extract tool name and command from JSON
 TOOL_NAME=$(extract_json_value "$JSON_INPUT" "tool_name")

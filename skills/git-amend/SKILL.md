@@ -70,15 +70,15 @@ git commit --amend -m "Better commit message"
 ## Dangerous Situations
 
 ```bash
-# ❌ NEVER amend if already pushed
+# NEVER amend if already pushed
 git push origin main
 git commit --amend  # Creates divergent history!
 
-# ❌ NEVER amend someone else's commit
+# NEVER amend someone else's commit
 git pull  # Pulls teammate's commit
 git commit --amend  # Rewrites their work!
 
-# ✅ If you must amend after push (with explicit permission):
+# If you must amend after push (with explicit permission):
 git commit --amend
 git push --force-with-lease  # Safer than --force
 ```

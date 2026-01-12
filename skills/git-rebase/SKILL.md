@@ -84,13 +84,13 @@ git rebase -i <base-commit>
 ## Dangerous Operations to Avoid
 
 ```bash
-# ❌ NEVER rebase shared/public branches
+# NEVER rebase shared/public branches
 git rebase main  # While ON main - rewrites shared history!
 
-# ❌ NEVER use --all flag
+# NEVER use --all flag
 git rebase --all  # Rewrites ALL branches!
 
-# ✅ SAFE - rebase feature branch onto main
+# SAFE - rebase feature branch onto main
 git checkout feature
 git rebase main
 ```

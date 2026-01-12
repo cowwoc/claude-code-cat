@@ -24,24 +24,24 @@ description: Validate git operations won't affect protected branches or cause da
 - Only fast-forward merges
 - No history rewriting
 
-### Release Branches
-- Treat as immutable after release
+### Task Branches
+- Treat as immutable after completion
 
 ## Dangerous Commands
 
 ```bash
-# ❌ NEVER use --all with history rewriting
+# NEVER use --all with history rewriting
 git filter-branch --all
 git rebase --all
 
-# ❌ NEVER force push without explicit request
+# NEVER force push without explicit request
 git push --force
 git push -f
 
-# ❌ NEVER delete version branches
+# NEVER delete version branches
 git branch -D v21
 
-# ❌ NEVER rebase shared branches
+# NEVER rebase shared branches
 git checkout main
 git rebase feature  # Rewrites main!
 ```
@@ -49,17 +49,17 @@ git rebase feature  # Rewrites main!
 ## Safe Alternatives
 
 ```bash
-# ✅ Target specific branch (not --all)
+# Target specific branch (not --all)
 git filter-branch main
 
-# ✅ Rebase feature onto main (not main onto feature)
+# Rebase feature onto main (not main onto feature)
 git checkout feature
 git rebase main
 
-# ✅ Use --force-with-lease instead of --force
+# Use --force-with-lease instead of --force
 git push --force-with-lease
 
-# ✅ Move version branch pointer forward (not rewrite)
+# Move version branch pointer forward (not rewrite)
 git branch -f v21 <new-commit>
 ```
 
@@ -83,19 +83,19 @@ COMMAND="git filter-branch --tree-filter 'rm secrets.txt' HEAD"
 
 # Check for dangerous flags
 if echo "$COMMAND" | grep -qE "(--all|--branches)"; then
-  echo "❌ BLOCKED: --all/--branches affects protected branches"
-  echo "Use: git filter-branch main"
+  echo "BLOCKED: --all/--branches affects protected branches"
+  echo "Use: git filter-branch <branch-name>"
   exit 1
 fi
 
 # Check target isn't version branch
 TARGET=$(echo "$COMMAND" | grep -oE "v[0-9]+")
 if [[ -n "$TARGET" ]]; then
-  echo "❌ BLOCKED: Cannot modify version branch $TARGET"
+  echo "BLOCKED: Cannot modify version branch $TARGET"
   exit 1
 fi
 
-echo "✅ Command appears safe"
+echo "Command appears safe"
 ```
 
 ## Recovery If Protected Branch Modified

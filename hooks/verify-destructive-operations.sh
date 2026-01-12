@@ -29,14 +29,8 @@ if [[ -z "$JSON_INPUT" ]]; then
 	exit 0  # Non-blocking exit
 fi
 
-# Require CLAUDE_PROJECT_DIR
-if [[ -z "${CLAUDE_PROJECT_DIR:-}" ]]; then
-    echo "ERROR: CLAUDE_PROJECT_DIR not set" >&2
-    exit 1
-fi
-
 # Source JSON parsing library
-source "${CLAUDE_PROJECT_DIR}/.claude/hooks/lib/json-parser.sh"
+source "$CLAUDE_PROJECT_DIR/.claude/hooks/lib/json-parser.sh"
 
 # Parse all common fields at once
 parse_hook_json "$JSON_INPUT"

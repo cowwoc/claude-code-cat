@@ -20,16 +20,12 @@ trap 'echo "ERROR in inject-claudemd-section.sh at line $LINENO: $BASH_COMMAND" 
 
 SECTION_MARKER="## MANDATORY MISTAKE HANDLING"
 
-# Require CLAUDE_PROJECT_DIR
-if [[ -z "${CLAUDE_PROJECT_DIR:-}" ]]; then
-    echo "ERROR: CLAUDE_PROJECT_DIR not set" >&2
-    exit 1
-fi
-
-# Find CLAUDE.md
+# Find CLAUDE.md - check common locations
 CLAUDE_MD=""
-if [[ -f "${CLAUDE_PROJECT_DIR}/CLAUDE.md" ]]; then
+if [[ -n "${CLAUDE_PROJECT_DIR:-}" ]] && [[ -f "${CLAUDE_PROJECT_DIR}/CLAUDE.md" ]]; then
     CLAUDE_MD="${CLAUDE_PROJECT_DIR}/CLAUDE.md"
+elif [[ -f "./CLAUDE.md" ]]; then
+    CLAUDE_MD="./CLAUDE.md"
 fi
 
 # If no CLAUDE.md found, exit silently (project may not use CLAUDE.md)

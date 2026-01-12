@@ -1,19 +1,69 @@
 # Version Tracking
 
-## Upstream Source
+## Inspiration Sources
 
-**Repository:** [glittercowboy/get-shit-done](https://github.com/glittercowboy/get-shit-done)
-**Package:** get-shit-done-cc
+**Primary Influences:**
+- [glittercowboy/get-shit-done](https://github.com/glittercowboy/get-shit-done) - Original workflow concepts (v1.x)
+- Multi-agent orchestration (v2.x)
+- Claude prompt engineering best practices
 
 ## Current Version
 
 | Component | Version | Date |
 |-----------|---------|------|
-| Upstream (glittercowboy/get-shit-done) | 1.3.31 | 2026-01-08 |
-| Workflow Enhancements | 1.0.0 | 2026-01-07 |
-| Combined Plugin (CAT) | 1.1.4 | 2026-01-08 |
+| Combined Plugin (CAT) | 2.0.0 | 2026-01-12 |
 
-## Sync History
+## Version History
+
+### 2026-01-12: v2.0.0
+
+**Major Rewrite:** Multi-agent orchestration system
+
+CAT v2.0 is a complete reimagining of the plugin, loosely based on ideas from get-shit-done and other plugins, introducing:
+
+**New Architecture:**
+- **MAJOR → MINOR → TASK** hierarchy (replaces MILESTONE → RELEASE → CHANGE)
+- Multi-agent orchestration with parallel subagent execution
+- Main agent coordinates, subagents execute in dedicated worktrees
+- Token-aware task decomposition to prevent context overflow
+
+**New Commands:**
+- `/cat:init` - Initialize CAT structure (new or existing project)
+- `/cat:execute-task` - Execute task (continues incomplete work)
+- `/cat:status` - Show hierarchy status with visual tree
+- `/cat:add-task`, `/cat:add-minor-version`, `/cat:add-major-version`
+- `/cat:remove-task`, `/cat:remove-minor-version`, `/cat:remove-major-version`
+
+**New Skills:**
+- `spawn-subagent` - Launch subagent with task context in isolated worktree
+- `monitor-subagents` - Check status of running subagents including token usage
+- `collect-results` - Gather results from completed subagents
+- `merge-subagent` - Merge subagent branch into task branch
+- `parallel-execute` - Orchestrate multiple independent subagents concurrently
+- `decompose-task` - Split oversized tasks based on token analysis
+- `token-report` - Generate detailed token usage report
+
+**New Document Types:**
+- `STATE.md` - Task metadata and status tracking
+- `PLAN.md` - Template-based planning (feature, bugfix, refactor)
+- `CHANGELOG.md` - Task completion record with commits
+- `ROADMAP.md` - Major/minor version overview
+- `PROJECT.md` - Project overview and goals
+
+**Configuration:**
+- `cat-config.json` with yoloMode, contextLimit, targetContextUsage settings
+- Interactive mode (default) with approval gates
+- Yolo mode for automatic progression
+
+**Quality Controls (preserved from v1.x):**
+- Comprehensive planning before each task
+- TDD integration to prevent regressions
+- Learn-from-mistakes with conversation length analysis
+- Git safety validation
+
+---
+
+## v1.x History (Archived)
 
 ### 2026-01-08: v1.1.1
 
@@ -87,26 +137,6 @@
   - READY/BLOCKED status
 
 **Renamed:**
-- `gsd` → `cat` 
+- `gsd` → `cat`
 - `get-shit-done` → `cat`
 - All commands: `/gsd:*` → `/cat:*`
-
-## Checking for Updates
-
-To check if upstream has updates:
-
-```bash
-# Check upstream version
-curl -s https://raw.githubusercontent.com/glittercowboy/get-shit-done/main/package.json | jq -r '.version'
-```
-
-Compare with versions listed above. If different, review changes and determine what to merge.
-
-## Update Process
-
-1. Check upstream version (commands above)
-2. If newer, review upstream changes
-3. Merge relevant changes to this plugin
-4. Rename gsd→cat, get-shit-done→cat
-5. Update this VERSION.md with new sync entry
-6. Commit with message: `config: sync with upstream gsd vX.Y.Z`

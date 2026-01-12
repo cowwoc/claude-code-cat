@@ -1,304 +1,224 @@
 ---
 name: cat:help
-description: Show available CAT commands and usage guide
+description: Quick reference for all CAT commands and skills
 ---
 
 <objective>
-Display the complete CAT command reference.
+
+Display the complete CAT command and skill reference.
 
 Output ONLY the reference content below. Do NOT add:
-
 - Project-specific analysis
 - Git status or file context
 - Next-step suggestions
 - Any commentary beyond the reference
-  </objective>
+
+</objective>
 
 <reference>
+
 # CAT Command Reference
 
-**CAT** creates hierarchical project changes optimized for solo agentic development with Claude Code.
+**CAT** enables hierarchical project planning with multi-agent task execution.
 
 ## Quick Start
 
-1. `/cat:new-project` - Initialize project with brief
-2. `/cat:create-roadmap` - Create roadmap and releases
-3. `/cat:change-release <number>` - Create detailed change for first release
-4. `/cat:execute-change <path>` - Execute the change
+1. `/cat:new-project` - Initialize project with PROJECT.md and ROADMAP.md
+2. `/cat:add-major-version` - Create first major version structure
+3. `/cat:add-task 1.0` - Add tasks to minor version 1.0
+4. `/cat:execute-task` - Execute the next available task
 
-## Core Workflow
+## Hierarchy Structure
 
 ```
-Initialization → Planning → Execution → Milestone Completion
+MAJOR -> MINOR -> TASK
+
+.claude/cat/
+├── PROJECT.md                    # Project overview
+├── ROADMAP.md                    # Version summaries
+├── cat-config.json               # Configuration
+└── v{n}/
+    ├── STATE.md                  # Major version state
+    ├── PLAN.md                   # Business-level plan
+    ├── CHANGELOG.md              # Major changelog
+    └── v{n}.{m}/
+        ├── STATE.md              # Minor version state
+        ├── PLAN.md               # Feature-level plan
+        ├── CHANGELOG.md          # Minor changelog
+        └── task/{name}/
+            ├── STATE.md          # Task state
+            ├── PLAN.md           # Technical-level plan
+            └── CHANGELOG.md      # Task changelog
 ```
+
+## Core Commands
 
 ### Project Initialization
 
 **`/cat:new-project`**
-Initialize new project with brief and configuration.
+Initialize a new CAT project.
+- Creates PROJECT.md, ROADMAP.md, cat-config.json
+- Asks for workflow mode (Interactive/YOLO)
+- Deep questioning to gather project context
 
-- Creates `.planning/PROJECT.md` (vision and requirements)
-- Creates `.planning/config.json` (workflow mode)
-- Asks for workflow mode (interactive/yolo) upfront
-- Commits initialization files to git
+**`/cat:existing-project`**
+Add CAT structure to an existing codebase.
+- Detects existing code patterns
+- Infers current state as validated requirements
+- Creates planning structure reflecting existing work
 
-Usage: `/cat:new-project`
+### Task Execution
 
-**`/cat:create-roadmap`**
-Create roadmap and state tracking for initialized project.
+**`/cat:execute-task [major.minor/task-name]`**
+Execute the next available task.
+- Creates worktree and task branch
+- Spawns subagent for execution
+- Monitors token usage
+- Runs approval gate (interactive mode)
+- Squashes commits by type
+- Merges to main
+- Cleans up worktrees
 
-- Creates `.planning/ROADMAP.md` (release breakdown)
-- Creates `.planning/STATE.md` (project memory)
-- Creates `.planning/releases/` directories
+### Status
 
-Usage: `/cat:create-roadmap`
+**`/cat:status`**
+Show complete hierarchy status.
+- Visual tree of all versions and tasks
+- Progress bar and percentages
+- Current position highlighted
+- Blocked tasks explained
+- Next action suggested
 
-**`/cat:map-codebase`**
-Map an existing codebase for brownfield projects.
+### Adding Structure
 
-- Analyzes codebase with parallel Explore agents
-- Creates `.planning/codebase/` with 7 focused documents
-- Covers stack, architecture, structure, conventions, testing, integrations, concerns
-- Use before `/cat:new-project` on existing codebases
+**`/cat:add-task [major.minor]`**
+Add a task to a minor version.
+- Discussion workflow generates PLAN.md
+- Validates task name (lowercase, hyphens, max 50 chars)
+- Checks uniqueness within minor version
 
-Usage: `/cat:map-codebase`
+**`/cat:add-minor-version [major]`**
+Add a minor version to a major.
+- Creates directory structure
+- Updates ROADMAP.md
 
-### Release Planning
+**`/cat:add-major-version`**
+Add a new major version.
+- Deep questioning for vision and scope
+- Creates major with initial minor (X.0)
+- Updates ROADMAP.md
 
-**`/cat:discuss-release <number>`**
-Help articulate your vision for a release before planning.
+### Removing Structure
 
-- Captures how you imagine this release working
-- Creates CONTEXT.md with your vision, essentials, and boundaries
-- Use when you have ideas about how something should look/feel
+**`/cat:remove-task [major.minor/task-name]`**
+Remove a task.
+- Validates no work in progress
+- Checks for dependent tasks
+- Confirms with user
 
-Usage: `/cat:discuss-release 2`
+**`/cat:remove-minor-version [major.minor]`**
+Remove a minor version.
+- Validates no incomplete tasks
+- Warns about implicit dependencies
+- Confirms with user
 
-**`/cat:research-release <number>`**
-Comprehensive ecosystem research for niche/complex domains.
+**`/cat:remove-major-version [major]`**
+Remove an entire major version.
+- Validates no incomplete work
+- Extra confirmation required
+- Provides git recovery instructions
 
-- Discovers standard stack, architecture patterns, pitfalls
-- Creates RESEARCH.md with "how experts build this" knowledge
-- Use for 3D, games, audio, shaders, ML, and other specialized domains
-- Goes beyond "which library" to ecosystem knowledge
+## CAT-Specific Skills
 
-Usage: `/cat:research-release 3`
-
-**`/cat:list-release-assumptions <number>`**
-See what Claude is planning to do before it starts.
-
-- Shows Claude's intended approach for a release
-- Lets you course-correct if Claude misunderstood your vision
-- No files created - conversational output only
-
-Usage: `/cat:list-release-assumptions 3`
-
-**`/cat:change-release <number>`**
-Create detailed execution change for a specific release.
-
-- Generates `.planning/releases/XX-release-name/XX-YY-CHANGE.md`
-- Breaks release into concrete, actionable tasks
-- Includes verification criteria and success measures
-- Multiple changes per release supported (XX-01, XX-02, etc.)
-
-Usage: `/cat:change-release 1`
-Result: Creates `.planning/releases/01-foundation/01-01-setup-project-CHANGE.md`
-
-### Execution
-
-**`/cat:execute-change <path>`**
-Execute a CHANGE.md file directly.
-
-- Runs change tasks sequentially
-- Creates SUMMARY.md after completion
-- Updates STATE.md with accumulated context
-- Fast execution without loading full skill context
-
-Usage: `/cat:execute-change .planning/releases/01-foundation/01-01-setup-project-CHANGE.md`
-
-### Roadmap Management
-
-**`/cat:add-release <description>`**
-Add new release to end of current milestone.
-
-- Appends to ROADMAP.md
-- Uses next sequential number
-- Updates release directory structure
-
-Usage: `/cat:add-release "Add admin dashboard"`
-
-**`/cat:insert-release <after> <description>`**
-Insert urgent work as decimal release between existing releases.
-
-- Creates intermediate release (e.g., 7.1 between 7 and 8)
-- Useful for discovered work that must happen mid-milestone
-- Maintains release ordering
-
-Usage: `/cat:insert-release 7 "Fix critical auth bug"`
-Result: Creates Release 7.1
-
-### Milestone Management
-
-**`/cat:discuss-milestone`**
-Figure out what you want to build in the next milestone.
-
-- Reviews what shipped in previous milestone
-- Helps you identify features to add, improve, or fix
-- Routes to /cat:new-milestone when ready
-
-Usage: `/cat:discuss-milestone`
-
-**`/cat:new-milestone <name>`**
-Create a new milestone with releases for an existing project.
-
-- Adds milestone section to ROADMAP.md
-- Creates release directories
-- Updates STATE.md for new milestone
-
-Usage: `/cat:new-milestone "v2.0 Features"`
-
-**`/cat:complete-milestone <version>`**
-Archive completed milestone and prepare for next version.
-
-- Creates MILESTONES.md entry with stats
-- Archives full details to milestones/ directory
-- Creates git tag for the release
-- Prepares workspace for next version
-
-Usage: `/cat:complete-milestone 1.0.0`
-
-### Progress Tracking
-
-**`/cat:progress`**
-Check project status and intelligently route to next action.
-
-- Shows visual progress bar and completion percentage
-- Summarizes recent work from SUMMARY files
-- Displays current position and what's next
-- Lists key decisions and open issues
-- Offers to execute next change or create it if missing
-- Detects 100% milestone completion
-
-Usage: `/cat:progress`
-
-### Session Management
-
-**`/cat:resume-work`**
-Resume work from previous session with full context restoration.
-
-- Reads STATE.md for project context
-- Shows current position and recent progress
-- Offers next actions based on project state
-
-Usage: `/cat:resume-work`
-
-**`/cat:pause-work`**
-Create context handoff when pausing work mid-release.
-
-- Creates .continue-here file with current state
-- Updates STATE.md session continuity section
-- Captures in-progress work context
-
-Usage: `/cat:pause-work`
-
-### Issue Management
-
-**`/cat:consider-issues`**
-Review deferred issues with codebase context.
-
-- Analyzes all open issues against current codebase state
-- Identifies resolved issues (can close)
-- Identifies urgent issues (should address now)
-- Identifies natural fits for upcoming releases
-- Offers batch actions (close, insert release, note for planning)
-
-Usage: `/cat:consider-issues`
-
-### Utility Commands
-
-**`/cat:help`**
-Show this command reference.
-
-## Files & Structure
-
-```
-.planning/
-├── PROJECT.md            # Project vision
-├── ROADMAP.md            # Current release breakdown
-├── STATE.md              # Project memory & context
-├── ISSUES.md             # Deferred enhancements (created when needed)
-├── config.json           # Workflow mode & gates
-├── codebase/             # Codebase map (brownfield projects)
-│   ├── STACK.md          # Languages, frameworks, dependencies
-│   ├── ARCHITECTURE.md   # Patterns, layers, data flow
-│   ├── STRUCTURE.md      # Directory layout, key files
-│   ├── CONVENTIONS.md    # Coding standards, naming
-│   ├── TESTING.md        # Test setup, patterns
-│   ├── INTEGRATIONS.md   # External services, APIs
-│   └── CONCERNS.md       # Tech debt, known issues
-└── releases/
-    ├── 01-foundation/
-    │   ├── 01-01-setup-project-CHANGE.md
-    │   └── 01-01-setup-project-SUMMARY.md
-    └── 02-core-features/
-        ├── 02-01-add-api-routes-CHANGE.md
-        └── 02-01-add-api-routes-SUMMARY.md
-```
+| Skill | Description |
+|-------|-------------|
+| `/cat:spawn-subagent` | Launch subagent with task context and token tracking |
+| `/cat:monitor-subagents` | Check status of running subagents |
+| `/cat:collect-results` | Gather results from completed subagents |
+| `/cat:merge-subagent` | Merge subagent branch into task branch |
+| `/cat:token-report` | Generate token usage report |
+| `/cat:decompose-task` | Split oversized task into smaller tasks |
+| `/cat:learn-from-mistakes` | Analyze mistakes with conversation length as factor |
+| `/cat:parallel-execute` | Orchestrate multiple subagents concurrently |
 
 ## Workflow Modes
 
-Set during `/cat:new-project`:
+Set during `/cat:new-project` in cat-config.json:
 
-**Interactive Mode**
-
-- Confirms each major decision
-- Pauses at checkpoints for approval
-- More guidance throughout
+**Interactive Mode** (default)
+- Approval gates at task completion
+- User confirms before merge to main
+- Pauses for review opportunities
 
 **YOLO Mode**
+- Skips approval gates
+- Auto-merges on task completion
+- Continuous execution
 
-- Auto-approves most decisions
-- Executes changes without confirmation
-- Only stops for critical checkpoints
+Change anytime by editing `.claude/cat/cat-config.json`
 
-Change anytime by editing `.planning/config.json`
+## Task Naming Rules
+
+- Lowercase letters and hyphens only
+- Maximum 50 characters
+- Must be unique within minor version
+
+**Valid:** `parse-tokens`, `fix-memory-leak`, `add-user-auth`
+**Invalid:** `Parse_Tokens`, `fix memory leak`, `add-very-long-task-name-that-exceeds-limit`
+
+## Branch Naming
+
+| Type | Pattern | Example |
+|------|---------|---------|
+| Task | `{major}.{minor}-{task-name}` | `1.0-parse-tokens` |
+| Subagent | `{major}.{minor}-{task-name}-sub-{uuid}` | `1.0-parse-tokens-sub-a1b2c3` |
 
 ## Common Workflows
 
 **Starting a new project:**
-
 ```
 /cat:new-project
-/cat:create-roadmap
-/cat:change-release 1
-/cat:execute-change .planning/releases/01-foundation/01-01-setup-project-CHANGE.md
+/cat:add-major-version
+/cat:add-task 1.0
+/cat:execute-task
 ```
 
-**Resuming work after a break:**
-
+**Checking progress:**
 ```
-/cat:progress  # See where you left off and continue
-```
-
-**Adding urgent mid-milestone work:**
-
-```
-/cat:insert-release 5 "Critical security fix"
-/cat:change-release 5.1
-/cat:execute-change .planning/releases/05.1-critical-security-fix/05.1-01-fix-auth-vuln-CHANGE.md
+/cat:status
 ```
 
-**Completing a milestone:**
-
+**Adding more work:**
 ```
-/cat:complete-milestone 1.0.0
-/cat:new-project  # Start next milestone
+/cat:add-task 1.0          # Add to existing minor
+/cat:add-minor-version 1   # Add new minor to major
+/cat:add-major-version     # Add new major version
+```
+
+**Removing planned work:**
+```
+/cat:remove-task 1.0/task-name
+/cat:remove-minor-version 1.0
+/cat:remove-major-version 1
+```
+
+## Configuration Options
+
+cat-config.json:
+```json
+{
+  "yoloMode": false,           // Skip approval gates
+  "contextLimit": 200000,      // Total context window
+  "targetContextUsage": 0.4,   // Soft limit (40%)
+  "autoCleanupWorktrees": true // Clean after merge
+}
 ```
 
 ## Getting Help
 
-- Read `.planning/PROJECT.md` for project vision
-- Read `.planning/STATE.md` for current context
-- Check `.planning/ROADMAP.md` for release status
-- Run `/cat:progress` to check where you're up to
-  </reference>
+- Read `.claude/cat/PROJECT.md` for project vision
+- Check `.claude/cat/ROADMAP.md` for version overview
+- Use `/cat:status` to see current state
+- Review individual STATE.md files for detailed progress
+
+</reference>

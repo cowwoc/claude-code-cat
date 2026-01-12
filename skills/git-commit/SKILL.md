@@ -12,12 +12,12 @@ description: Guide for writing clear, descriptive commit messages
 ### 1. Describe WHAT the Code Does, Not the Process
 
 ```
-# ❌ WRONG - Describes the process
+# WRONG - Describes the process
 Squashed commits
 Combined multiple commits
 Merged feature branch
 
-# ✅ CORRECT - Describes what the code does
+# CORRECT - Describes what the code does
 Add user authentication with JWT tokens
 Fix memory leak in connection pool
 Refactor parser to use visitor pattern
@@ -26,11 +26,11 @@ Refactor parser to use visitor pattern
 ### 2. Use Imperative Mood (Command Form)
 
 ```
-# ❌ WRONG
+# WRONG
 Added authentication
 Authentication was added
 
-# ✅ CORRECT
+# CORRECT
 Add user authentication
 Fix authentication timeout bug
 ```
@@ -63,7 +63,31 @@ Changes:
 - First major change
 - Second major change
 - Third major change
+
+Task ID: v{major}.{minor}-{task-name}
 ```
+
+## Task ID Footer (MANDATORY for CAT tasks)
+
+**Every commit for a CAT task MUST include the Task ID in the last line:**
+
+```
+feature: add yield statement parsing support
+
+Add YIELD_STATEMENT node type and parseYieldStatement() method
+for JDK 14+ switch expressions.
+
+- Added YIELD_STATEMENT to NodeType enum
+- Created parseYieldStatement() following parseThrowStatement() pattern
+- Updated ContextDetector exhaustive switch
+
+Task ID: v3.0-add-yield-statement-support
+```
+
+**Format**: `Task ID: v{major}.{minor}-{task-name}`
+
+**Why**: Enables reliable commit identification without storing commit hashes in documentation.
+Find all commits for a task: `git log --grep="Task ID: v3.0-add-yield-statement-support"`
 
 ## For Squashed Commits
 
@@ -72,26 +96,28 @@ Changes:
 git log --oneline base..HEAD
 ```
 
-**Synthesize into unified message**:
+**Synthesize into unified message with Task ID:**
 
 ```
-# ❌ WRONG - Concatenated messages
-feat(auth): add login form
-feat(auth): add validation
-feat(auth): add error handling
-fix(auth): fix typo
+# WRONG - Concatenated messages, no Task ID
+feature(auth): add login form
+feature(auth): add validation
+feature(auth): add error handling
+bugfix(auth): fix typo
 
-# ✅ CORRECT - Unified message
-feat(auth): add login form with validation and error handling
+# CORRECT - Unified message with Task ID footer
+feature: add login form with validation and error handling
 
 - Email/password form with client-side validation
 - Server-side validation with descriptive error messages
 - Loading states and error display
+
+Task ID: v2.1-implement-user-auth
 ```
 
 ## Commit Types (MANDATORY)
 
-**CRITICAL:** When working in a CAT-managed project, use ONLY these types from execute-release.md:
+**CRITICAL:** When working in a CAT-managed project, use ONLY these types:
 
 | Type | When to Use | Example |
 |------|-------------|---------|
@@ -103,10 +129,9 @@ feat(auth): add login form with validation and error handling
 | `docs` | User-facing docs (README, API docs) | `docs: add API documentation` |
 | `style` | Formatting, linting fixes | `style: format auth module` |
 | `config` | Config, tooling, deps, Claude-facing docs | `config: add bcrypt dependency` |
-| `planning` | Planning system updates (ROADMAP, STATE) | `planning: add Release 5 summary` |
-| `retrospective` | Retrospective analysis | `retrospective: R002 analysis` |
+| `planning` | Planning system updates | `planning: add task 5 summary` |
 
-**NOT VALID:** `chore`, `build`, `ci` - these are NOT in execute-release.md
+**NOT VALID:** `feat`, `fix`, `chore`, `build`, `ci`, `perf` - use full names instead
 
 **Format:** `{type}: {description}`
 
@@ -124,23 +149,23 @@ feat(auth): add login form with validation and error handling
 ## Anti-Patterns to Avoid
 
 ```
-# ❌ Meaningless
+# Meaningless
 WIP
 Fix stuff
 Updates
 .
 
-# ❌ Overly Generic
+# Overly Generic
 Update code
 Fix bugs
 Refactor
 
-# ❌ Just the Process
+# Just the Process
 Squashed commits
 Merged feature branch
 Combined work
 
-# ❌ Too Technical
+# Too Technical
 Change variable name from x to userCount
 Move function from line 45 to line 67
 ```
@@ -152,6 +177,7 @@ Move function from line 45 to line 67
 - [ ] Subject line is under 72 characters
 - [ ] Body explains WHAT and WHY, not HOW
 - [ ] For squashed commits: synthesized meaningful summary
+- [ ] **Task ID footer included** (for CAT tasks): `Task ID: vX.Y-task-name`
 - [ ] Message would make sense in git history 6 months from now
 
 ## Quick Test

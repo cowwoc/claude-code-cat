@@ -6,36 +6,10 @@ allowed-tools: Bash, Read
 
 # Git Linear Merge Skill
 
-<!-- PATTERN EVOLUTION:
-     - 2025-11-02: Added pre-merge and post-merge verification to prevent broken code in main
-     - 2026-01-06: Fixed cleanup order: remove worktree BEFORE deleting branch (git constraint)
--->
-
 **When to Use**:
-- After task branch has passed REVIEW release
+- After task branch has passed review
 - When merging completed task to main branch
 - To maintain clean, linear git history
-
-## ⚡ Performance: Optimized Script Available
-
-**RECOMMENDED**: Use the optimized batch script for 86% faster execution
-
-**Performance Comparison**:
-- Traditional workflow: 6-8 LLM round-trips, 30-60 seconds
-- Optimized script: 2-3 LLM round-trips, 3-8 seconds
-- Safety checks: All preserved (no reduction)
-
-**When to use optimized script**:
-- ✅ Simple linear merge (most common case)
-- ✅ Task branch has exactly 1 commit
-- ✅ Want atomic execution with minimal LLM involvement
-
-**When to use manual workflow**:
-- Need to understand each validation step
-- Learning the merge process
-- Debugging merge issues
-
-**Optimized Script**: `scripts/git-merge-linear-optimized.sh` (from CAT install directory)
 
 ## Prerequisites
 
@@ -80,7 +54,7 @@ if [[ "$COMMIT_COUNT" -ne 1 ]]; then
   exit 1
 fi
 
-echo "✅ Task branch ready for merge"
+echo "Task branch ready for merge"
 ```
 
 ### Step 2: Fast-Forward Merge
@@ -104,7 +78,7 @@ if [[ $? -ne 0 ]]; then
   exit 1
 fi
 
-echo "✅ Linear merge successful"
+echo "Linear merge successful"
 ```
 
 ### Step 3: Verification
@@ -125,7 +99,7 @@ if git log -1 --format=%p | grep -q " "; then
   exit 1
 fi
 
-echo "✅ Linear history verified"
+echo "Linear history verified"
 ```
 
 ### Step 4: Cleanup (Optional)
@@ -138,12 +112,12 @@ TASK_WORKTREE="/path/to/tasks/$TASK_BRANCH/code"
 if [[ -d "$TASK_WORKTREE" ]]; then
   git worktree remove "$TASK_WORKTREE"
   rm -rf "/path/to/tasks/$TASK_BRANCH"
-  echo "✅ Task worktree cleaned up"
+  echo "Task worktree cleaned up"
 fi
 
 # Delete task branch (after worktree removal)
 git branch -d "$TASK_BRANCH"
-echo "✅ Task branch deleted"
+echo "Task branch deleted"
 ```
 
 ## Complete Workflow Script
@@ -159,7 +133,7 @@ if [[ -z "$TASK_BRANCH" ]]; then
   exit 1
 fi
 
-echo "=== Linear Merge: $TASK_BRANCH → main ==="
+echo "=== Linear Merge: $TASK_BRANCH -> main ==="
 echo ""
 
 # Step 1: Validation
@@ -182,7 +156,7 @@ if [[ "$COMMIT_COUNT" -ne 1 ]]; then
   exit 1
 fi
 
-echo "✅ Validation passed"
+echo "Validation passed"
 echo ""
 
 # Step 2: Fast-Forward Merge
@@ -197,7 +171,7 @@ if ! git merge --ff-only "$TASK_BRANCH"; then
   exit 1
 fi
 
-echo "✅ Merge successful"
+echo "Merge successful"
 echo ""
 
 # Step 3: Verification
@@ -210,7 +184,7 @@ if git log -1 --format=%p | grep -q " "; then
   exit 1
 fi
 
-echo "✅ Linear history confirmed"
+echo "Linear history confirmed"
 echo ""
 
 # Step 4: Cleanup (Optional - ask user)
@@ -223,11 +197,11 @@ if [[ "$CLEANUP" == "y" ]]; then
   if [[ -d "$TASK_WORKTREE" ]]; then
     git worktree remove "$TASK_WORKTREE" 2>/dev/null || true
     rm -rf "/path/to/tasks/$TASK_BRANCH"
-    echo "✅ Task worktree removed"
+    echo "Task worktree removed"
   fi
 
   git branch -d "$TASK_BRANCH"
-  echo "✅ Task branch deleted"
+  echo "Task branch deleted"
 fi
 
 echo ""
@@ -236,61 +210,30 @@ echo "=== Linear merge complete ==="
 
 ## Usage Examples
 
-### Optimized Script (Recommended)
+### Standard Merge
 
 ```bash
 # Ensure you're on main branch
 git checkout main
 
-# Execute optimized merge (path relative to CAT install)
-scripts/git-merge-linear-optimized.sh \
-  implement-formatter-api \
-  --cleanup
-
-# Script executes atomically:
-# ✅ Validate on main branch
-# ✅ Verify task branch exists
-# ✅ Check working directory clean
-# ✅ Verify exactly 1 commit
-# ✅ Ensure fast-forward possible
-# ✅ Execute linear merge
-# ✅ Verify no merge commits
-# ✅ Optional: cleanup branch and worktree
-
-# Check result
-git log --oneline --graph -3
-```
-
-**Parameters**:
-- `task_branch` - Name of task branch to merge
-- `--cleanup` - Optional flag to delete branch and worktree after merge
-- `--no-cleanup` - Preserve branch and worktree (default)
-
-**Output**: JSON with status, duration, merge details
-
-### Manual Workflow
-
-```bash
-# From main branch, invoke the skill
-Skill: git-merge-linear
-
+# Execute merge
 # Follow the step-by-step workflow in this skill
 ```
 
 ### With Validation Only
 ```bash
 # Just validate without merging
-git rev-list --count main..implement-formatter-api
+git rev-list --count main..{major}.{minor}-{task-name}
 # Should output: 1
 ```
 
 ### Handling Rebase
 ```bash
 # If fast-forward fails
-git checkout implement-formatter-api
+git checkout {major}.{minor}-{task-name}
 git rebase main
 git checkout main
-git merge --ff-only implement-formatter-api
+git merge --ff-only {major}.{minor}-{task-name}
 ```
 
 ## Common Issues
@@ -307,16 +250,10 @@ git merge --ff-only implement-formatter-api
 **Cause**: This should never happen with --ff-only
 **Solution**: If it does, this is a bug - report immediately
 
-## Protocol References
-
-- git-workflow.md § Task Branch Squashing
-- task-protocol-core.md § REVIEW → COMPLETE (line 3886)
-- CLAUDE.md § Multi-Agent Architecture (merge requirements)
-
 ## Success Criteria
 
-✅ Task branch merged to main
-✅ History remains linear (no merge commits)
-✅ Exactly 1 commit added to main
-✅ All validations passed
-✅ Task branch optionally cleaned up
+- Task branch merged to main
+- History remains linear (no merge commits)
+- Exactly 1 commit added to main
+- All validations passed
+- Task branch optionally cleaned up

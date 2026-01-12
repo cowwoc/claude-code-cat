@@ -1,25 +1,22 @@
 # <img src="docs/cat-logo.svg" height="36" alt="CAT logo"> CAT
 
-A Claude Code plugin for specification-driven development with quality gates.
-
-Based on [get-shit-done](https://github.com/glittercowboy/get-shit-done) v1.3.31 with additional workflow enhancements.
+A Claude Code plugin for orchestrated multi-agent task execution with comprehensive planning and quality gates.
 
 ## Features
 
 ### Core Capabilities
-- **Specification-driven development**: PROJECT.md → ROADMAP.md → CHANGE.md → SUMMARY.md
-- **Context engineering**: Fresh 200k token contexts for task execution
-- **Atomic commits**: One commit per task for git bisect capability
+- **Multi-agent orchestration**: Main agent coordinates, subagents execute in parallel
+- **MAJOR → MINOR → TASK hierarchy**: Structured project planning
+- **Token-aware decomposition**: Automatic task splitting to prevent context overflow
+- **Comprehensive planning**: PLAN.md documents before execution
 
 ### Workflow Enhancements
-- **Deviation handling**: Automatic bug fixes, critical additions, architectural decisions
-- **TDD support**: RED → GREEN → REFACTOR cycle with dedicated changes
-- **Risk classification**: AUTO/HIGH/MEDIUM/LOW based on file patterns and keywords
-- **Multi-agent review**: 5 agents (architect, security, quality, style, performance)
-- **Approval gates**: Change, review, merge checkpoints with unanimous approval
-- **Build verification**: Project-type aware (Maven, Node, Python, Rust, Go)
-- **Protocol compliance**: State machine tracking with audit trail
-- **Dependency tracking**: Task-level dependencies with READY/BLOCKED status
+- **Parallel subagent execution**: Multiple tasks concurrently in isolated worktrees
+- **Automatic merge handling**: Main agent resolves conflicts and merges branches
+- **Quality gates**: Approval checkpoints in interactive mode
+- **TDD integration**: Test-driven development support
+- **Learn-from-mistakes**: Analysis with conversation length as potential cause
+- **Git safety validation**: Protected branch and operation validation
 
 ## Installation
 
@@ -44,111 +41,88 @@ In Claude Code, run:
 ### Core Workflow
 | Command | Description |
 |---------|-------------|
-| `/cat:new-project` | Initialize project with deep context gathering |
-| `/cat:create-roadmap` | Create roadmap with releases |
-| `/cat:map-codebase` | Analyze existing codebase for brownfield projects |
-| `/cat:change-release [N]` | Create detailed change for release N |
-| `/cat:execute-change [path]` | Execute a CHANGE.md file |
-| `/cat:verify-work [N]` | Guide manual UAT of recently built features |
-| `/cat:progress` | Check progress and route to next action |
-| `/cat:cleanup` | Clean up abandoned worktrees and locks |
+| `/cat:init` | Initialize CAT structure (new or existing project) |
+| `/cat:execute-task` | Execute task (continues incomplete work) |
+| `/cat:status` | Show hierarchy status with visual tree |
 | `/cat:help` | Show all available commands |
 
 ### Planning Commands
 | Command | Description |
 |---------|-------------|
-| `/cat:discuss-release [N]` | Gather context before planning release |
-| `/cat:research-release [N]` | Research unknowns before planning |
-| `/cat:list-release-assumptions [N]` | Surface assumptions about approach |
-| `/cat:plan-fix <N-M>` | Create fix change from UAT issues |
+| `/cat:add-task [major.minor]` | Add task to minor version |
+| `/cat:add-minor-version [major]` | Add minor version to major |
+| `/cat:add-major-version` | Add new major version |
 
-### Roadmap Management
+### Remove Commands
 | Command | Description |
 |---------|-------------|
-| `/cat:add-release` | Append release to end of current milestone |
-| `/cat:insert-release [N]` | Insert urgent work as decimal release (e.g., 72.1) |
-| `/cat:remove-release <N>` | Remove future release with automatic renumbering |
-| `/cat:consider-issues` | Review deferred issues, close resolved, identify urgent |
-
-### Milestone Lifecycle
-| Command | Description |
-|---------|-------------|
-| `/cat:new-milestone [name]` | Create new milestone with releases |
-| `/cat:discuss-milestone` | Gather context for upcoming milestone |
-| `/cat:complete-milestone` | Archive and prepare for next |
-
-### Session Management
-| Command | Description |
-|---------|-------------|
-| `/cat:pause-work` | Create context handoff when pausing |
-| `/cat:resume-work` | Resume with full context restoration |
+| `/cat:remove-task` | Remove a task |
+| `/cat:remove-minor-version` | Remove a minor version |
+| `/cat:remove-major-version` | Remove a major version |
 
 ## Project Structure
 
-After running `/cat:new-project`:
+After running `/cat:init`:
 
 ```
 your-project/
-├── .planning/
-│   ├── PROJECT.md        # Project definition and constraints
-│   ├── ROADMAP.md        # Releases and milestones
-│   ├── STATE.md          # Current position and context
-│   ├── ISSUES.md         # Deferred issues
-│   ├── config.json       # Workflow configuration
-│   └── releases/
-│       └── 01-foundation/
-│           ├── 01-01-setup-project-CHANGE.md
-│           └── 01-01-setup-project-SUMMARY.md
-└── .claude/
-    └── cat/
-        ├── references/   # Reference documentation
-        ├── templates/    # File templates
-        └── workflows/    # Workflow definitions
+└── .claude/cat/
+    ├── PROJECT.md              # Project overview and goals
+    ├── ROADMAP.md              # Major/minor version summaries
+    ├── cat-config.json         # Plugin configuration
+    └── v1/
+        ├── STATE.md            # Major version state
+        ├── PLAN.md             # Major version plan
+        ├── CHANGELOG.md        # Major version changelog
+        └── v1.0/
+            ├── STATE.md        # Minor version state
+            ├── PLAN.md         # Minor version plan
+            ├── CHANGELOG.md    # Minor version changelog
+            └── task/
+                └── {task-name}/
+                    ├── STATE.md    # Task state
+                    ├── PLAN.md     # Task plan
+                    └── CHANGELOG.md # Task changelog
 ```
 
 ## Configuration
 
-Edit `.planning/config.json` to customize behavior:
+Edit `.claude/cat/cat-config.json`:
 
 ```json
 {
-  "mode": "interactive",
-  "depth": "standard",
-  "gates": {
-    "confirm_releases": true,
-    "confirm_roadmap": true,
-    "confirm_transition": true,
-    "execute_next_change": true,
-    "issues_review": true
-  }
+  "yoloMode": false,
+  "contextLimit": 200000,
+  "targetContextUsage": 0.4,
+  "autoCleanupWorktrees": true
 }
 ```
 
 ### Options
 
-| Option | Values | Description |
-|--------|--------|-------------|
-| `mode` | `"interactive"`, `"yolo"` | **interactive**: Confirms each major decision. **yolo**: Auto-approves, only stops for critical checkpoints. |
-| `depth` | `"quick"`, `"standard"`, `"comprehensive"` | Controls release count and detail level. quick: 3-5 releases, standard: 5-8, comprehensive: 8-12. |
+| Option | Default | Description |
+|--------|---------|-------------|
+| `yoloMode` | `false` | Skip approval gates, auto-proceed |
+| `contextLimit` | `200000` | Total context window in tokens |
+| `targetContextUsage` | `0.4` | Target max usage (40% = 80K tokens) |
+| `autoCleanupWorktrees` | `true` | Clean worktrees after merge |
 
-### Gates
+### Operating Modes
 
-Gates control confirmation prompts. Set to `false` to skip that confirmation.
+**Interactive Mode (Default)**
+- Approval gates required at task level
+- Main agent proposes next task when dependencies met
+- Merge requires user acceptance
 
-| Gate | Description |
-|------|-------------|
-| `confirm_releases` | Confirm release breakdown before creating roadmap |
-| `confirm_roadmap` | Confirm full roadmap before saving |
-| `confirm_transition` | Confirm before transitioning between releases |
-| `execute_next_change` | Confirm before executing each change |
-| `issues_review` | Review deferred issues before continuing |
-
-In `yolo` mode, all gates are skipped regardless of their values.
+**Yolo Mode**
+- Approval gates skipped
+- Main agent begins immediately when dependencies met
+- Automatic merge on task completion
 
 ## Version Tracking
 
-See [VERSION.md](VERSION.md) for upstream version tracking and sync history.
+See [VERSION.md](VERSION.md) for version history.
 
 ## License
 
-MIT License - see [LICENSE](LICENSE)
+Apache-2.0 License - see [LICENSE](LICENSE)

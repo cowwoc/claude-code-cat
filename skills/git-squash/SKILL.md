@@ -51,28 +51,32 @@ git branch -D "$BACKUP"
 
 ### Position HEAD First
 ```bash
-# ❌ WRONG - HEAD beyond squash range
+# WRONG - HEAD beyond squash range
 git reset --soft <base>  # Squashes ALL commits to current HEAD!
 
-# ✅ CORRECT - Checkout last commit first
+# CORRECT - Checkout last commit first
 git checkout <last-commit>
 git reset --soft <base>  # Squashes only intended range
 ```
 
-### Write Meaningful Commit Messages
+### Write Meaningful Commit Messages with Task ID
 
 ```bash
-# ❌ WRONG - Concatenated messages
-feat(auth): add login
-feat(auth): add validation
-fix(auth): fix typo
+# WRONG - Concatenated messages, no Task ID
+feature(auth): add login
+feature(auth): add validation
+bugfix(auth): fix typo
 
-# ✅ CORRECT - Unified message
-feat(auth): add login form with validation
+# CORRECT - Unified message with Task ID footer
+feature: add login form with validation
 
 - Email/password form with client-side validation
 - Server-side validation with descriptive messages
+
+Task ID: v2.1-implement-user-auth
 ```
+
+**MANDATORY**: Include `Task ID: v{major}.{minor}-{task-name}` as the last line.
 
 See `git-commit` skill for detailed message guidance.
 

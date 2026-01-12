@@ -1,13 +1,11 @@
 {
   "name": "claude-code-cat",
-  "owner": {
-    "name": "cowwoc"
-  },
+  "owner": { "name": "cowwoc" },
   "plugins": [
     {
       "name": "cat",
       "source": "./",
-      "description": "Specification-driven development with quality gates for Claude Code"
+      "description": "Multi-agent orchestration for Git-based projects"
     }
   ]
 }

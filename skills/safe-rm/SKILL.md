@@ -20,7 +20,7 @@ If you delete the directory you're currently in, **all subsequent Bash commands 
 pwd
 
 # 2. Verify target is NOT current directory or ancestor
-# If deleting /path/to/workspace/test and pwd shows /path/to/workspace/test → DANGER!
+# If deleting /path/to/workspace/test and pwd shows /path/to/workspace/test -> DANGER!
 
 # 3. If in danger, change directory first
 cd /path/to/workspace  # or another safe location
@@ -32,23 +32,23 @@ rm -rf /path/to/workspace/test
 ## Safe Patterns
 
 ```bash
-# ✅ SAFE - Explicit cd before delete
+# SAFE - Explicit cd before delete
 cd /path/to/workspace && rm -rf /path/to/workspace/test-dir
 
-# ✅ SAFE - Delete from parent directory
+# SAFE - Delete from parent directory
 cd /path/to/workspace && rm -rf test-dir
 
-# ✅ SAFE - Use absolute paths after confirming pwd
+# SAFE - Use absolute paths after confirming pwd
 pwd  # Shows /path/to/workspace (not /path/to/workspace/test-dir)
 rm -rf /path/to/workspace/test-dir
 
-# ❌ DANGEROUS - Deleting without checking pwd
+# DANGEROUS - Deleting without checking pwd
 rm -rf /path/to/workspace/test-dir  # If pwd is /path/to/workspace/test-dir, shell breaks!
 
-# ❌ DANGEROUS - Deleting current directory
+# DANGEROUS - Deleting current directory
 rm -rf .  # Always breaks shell
 
-# ❌ DANGEROUS - Deleting parent of current directory
+# DANGEROUS - Deleting parent of current directory
 # pwd: /path/to/workspace/test-dir/subdir
 rm -rf /path/to/workspace/test-dir  # Breaks shell
 ```
