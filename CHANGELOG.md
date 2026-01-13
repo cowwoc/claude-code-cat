@@ -11,9 +11,19 @@
 
 | Component | Version | Date |
 |-----------|---------|------|
-| Combined Plugin (CAT) | 2.0.2 | 2026-01-13 |
+| Combined Plugin (CAT) | 2.0.3 | 2026-01-13 |
 
 ## Version History
+
+### 2026-01-13: v2.0.3
+
+**Maintenance Release**
+
+- Renamed VERSION.md to CHANGELOG.md for clarity
+- Merged v2.0.2 features into main branch
+- **Bugfix**: Fixed SESSION_ID usage in skills (M058) - skills now correctly instruct agents to read
+  SESSION_ID from conversation context (SessionStart system-reminder) instead of expecting a shell
+  environment variable
 
 ### 2026-01-13: v2.0.2
 
