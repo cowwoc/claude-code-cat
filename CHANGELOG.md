@@ -11,7 +11,7 @@
 
 | Component | Version | Date |
 |-----------|---------|------|
-| Combined Plugin (CAT) | 2.0.3 | 2026-01-13 |
+| Combined Plugin (CAT) | 2.0.4 | 2026-01-13 |
 
 ## Version History
 
