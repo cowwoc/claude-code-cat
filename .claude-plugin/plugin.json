@@ -1,8 +1,10 @@
 {
   "name": "cat",
   "description": "Multi-agent task orchestration with comprehensive planning and quality gates",
-  "version": "2.0.2",
-  "author": { "name": "cowwoc" },
+  "version": "2.0.3",
+  "author": {
+    "name": "cowwoc"
+  },
   "repository": "https://github.com/cowwoc/claude-code-cat",
   "license": "Apache-2.0"
 }
