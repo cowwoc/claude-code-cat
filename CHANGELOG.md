@@ -11,9 +11,18 @@
 
 | Component | Version | Date |
 |-----------|---------|------|
-| Combined Plugin (CAT) | 2.0.4 | 2026-01-13 |
+| Combined Plugin (CAT) | 2.0.5 | 2026-01-13 |
 
 ## Version History
+
+### 2026-01-13: v2.0.5
+
+**Orchestration Boundaries and Commit Validation**
+
+- **Main Agent Boundaries (M063)**: New section in execute-task.md enforcing that main agent is
+  orchestrator only - all code implementation must be delegated to subagents
+- **Commit Type Validation Hook**: New validate-commit-type.sh hook that blocks invalid commit types
+  (feat, fix, chore) and enforces CAT standard types (feature, bugfix, test, etc.)
 
 ### 2026-01-13: v2.0.3
 
