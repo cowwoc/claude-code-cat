@@ -2,6 +2,10 @@
 
 ## Version History
 
+### v2.0.9
+
+*In development*
+
 ### 2026-01-15: v2.0.8
 
 **Version Migration & Workflow Stability**
