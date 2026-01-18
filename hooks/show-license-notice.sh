@@ -11,11 +11,7 @@ set -euo pipefail
 
 trap 'echo "ERROR in show-license-notice.sh at line $LINENO: $BASH_COMMAND" >&2; exit 1' ERR
 
-# Output license notice directly to user
-echo ""
-echo "CAT is free for personal use and small organizations."
-echo "Commercial use requires a license: https://github.com/cowwoc/claude-code-cat/blob/main/LICENSE.md"
-echo ""
-
-# Return empty JSON (no additionalContext needed)
-echo '{}'
+# Output license notice to user via systemMessage (the documented way to display to users)
+cat <<'EOF'
+{"systemMessage":"╔══════════════════════════════════════════════════════════════════════════════╗\n║  CAT LICENSE                                                                 ║\n╠══════════════════════════════════════════════════════════════════════════════╣\n║  Free for personal use and small organizations.                              ║\n║  Commercial use requires a license.                                          ║\n║  https://github.com/cowwoc/claude-code-cat/blob/main/LICENSE.md              ║\n╚══════════════════════════════════════════════════════════════════════════════╝"}
+EOF
