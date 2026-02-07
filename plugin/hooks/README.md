@@ -18,7 +18,7 @@ includes only the modules needed for JSON processing (Jackson 3) and basic I/O o
 |------|---------|
 | `jlink-config.sh` | Build script for creating the custom runtime |
 | `session_start.sh` | SessionStart hook to bootstrap the JDK |
-| `java_runner.sh` | Intermediary script for invoking Java hooks |
+| `java.sh` | Intermediary script for invoking Java hooks |
 
 ## Building the Runtime
 
@@ -32,16 +32,16 @@ includes only the modules needed for JSON processing (Jackson 3) and basic I/O o
 
 ```bash
 # From plugin root
-./hooks/jdk/jlink-config.sh build --output-dir runtime/
+./hooks/jlink-config.sh build --output-dir runtime/
 
 # Or with explicit JDK
-JAVA_HOME=/path/to/jdk-25 ./hooks/jdk/jlink-config.sh build
+JAVA_HOME=/path/to/jdk-25 ./hooks/jlink-config.sh build
 ```
 
 ### Configuration Info
 
 ```bash
-./hooks/jdk/jlink-config.sh info
+./hooks/jlink-config.sh info
 ```
 
 ## Runtime Location
@@ -69,20 +69,20 @@ The `session_start.sh` hook runs at each Claude Code session start:
 1. Checks if custom runtime exists at expected path
 2. If missing, attempts to download pre-built bundle
 3. Falls back to building locally if JDK 25 is available
-4. Exports `CAT_JAVA_HOME` for `java_runner.sh`
+4. Exports `CAT_JAVA_HOME` for `java.sh`
 
 If all methods fail, a warning is logged but the session continues (Python hooks remain available).
 
 ## Running Java Hooks
 
-Java hooks are invoked through `java_runner.sh`:
+Java hooks are invoked through `java.sh`:
 
 ```bash
 # Direct invocation
-echo '{"tool":"Bash","input":"..."}' | ./java_runner.sh BashPreToolHandler
+echo '{"tool":"Bash","input":"..."}' | ./java.sh BashPreToolHandler
 
 # With environment
-CAT_JAVA_HOME=/path/to/runtime ./java_runner.sh ValidationHandler
+CAT_JAVA_HOME=/path/to/runtime ./java.sh ValidationHandler
 ```
 
 ### Handler Classes
@@ -109,7 +109,7 @@ CAT_JAVA_HOME=/path/to/runtime ./java_runner.sh ValidationHandler
 
 1. Ensure JDK 25 is installed: `java -version`
 2. Set JAVA_HOME: `export JAVA_HOME=/path/to/jdk-25`
-3. Or build the custom runtime: `./jlink-config.sh build`
+3. Or build the custom runtime: `./hooks/jlink-config.sh build`
 
 ### "Hook classpath not found"
 
