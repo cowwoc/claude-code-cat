@@ -1,7 +1,9 @@
 # State
 
-- **Status:** in-progress
-- **Progress:** 0%
+- **Status:** closed
+- **Resolution:** won't-fix
+- **Resolution Details:** Sub-tasks json-core-api-migration, json-complex-handler-migration, and build-optimize-validate closed as won't-fix. Only hook-sh-fix completed. Jackson-core migration deemed unnecessary since JVM startup time is overshadowed by LLM response time.
+- **Progress:** 25%
 - **Decomposed:** true
 - **Decomposed At:** 2026-02-10
 - **Reason:** Task scope (55 files, 265 jackson-databind occurrences) exceeds single-agent context capacity
