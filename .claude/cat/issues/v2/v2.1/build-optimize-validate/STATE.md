@@ -2,7 +2,7 @@
 
 - **Status:** closed
 - **Resolution:** won't-fix
-- **Resolution Details:** Dependencies json-core-api-migration and json-complex-handler-migration closed as won't-fix. Task assumed jackson-core migration would complete.
+- **Reason:** - **Reason:** optimize-hook-json-parser closed as won't fix.
 - **Progress:** 0%
 - **Created From:** optimize-hook-json-parser
 - **Dependencies:** [json-complex-handler-migration]
